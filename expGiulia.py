@@ -30,7 +30,7 @@ from psychopy.hardware import keyboard
 
 
 def runExp(participantId):
-    # Ensure that relative paths start from the same directory as this script
+    # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
 
