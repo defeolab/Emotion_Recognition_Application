@@ -4,6 +4,12 @@ from tkinter import ttk
 import expGiulia
 import expClinical
 import sys, os
+import vlc
+from time import sleep
+import webBrowser
+
+#from PyQt5.QtWebEngineWidgets import QWebEngineView
+
 
 class PatientWindow :
 
@@ -16,7 +22,7 @@ class PatientWindow :
         self.widgets = self.addWidgets()
 
     def browseFiles(self):
-        filename = filedialog.askopenfile(initialdir= os.getcwd() +"/data",
+        filename = filedialog.askopenfile(initialdir= os.getcwd() +"/data/"+ str(self.patientId),
                                               title="Select a File",
                                               filetypes=(("csv files",
                                                           "*.csv"),
@@ -40,22 +46,26 @@ class PatientWindow :
         experiments_frame = ttk.LabelFrame(self.parent)
         experiments_frame.columnconfigure(1, weight =1)
 
-        experiments_frame.grid(row=3, column=1, pady=3, padx=100 , sticky=tk.E + tk.W + tk.N + tk.S)
-        ttk.Label(experiments_frame, text="Patient n " + self.patientId, font='Times 18').grid(row =0, column=1)
+        experiments_frame.grid(row=1, column=1, rowspan = 2, pady=3, padx=100 , sticky=tk.E + tk.W + tk.N + tk.S)
+        ttk.Label(experiments_frame, text="Participant n " + self.patientId, font='Times 18').grid(row =0, column=1)
 
         widgets.append(experiments_frame)
 
         if self.environment == 0:
 
-            neuro_frame = ttk.LabelFrame(experiments_frame, text="NeuroMarketing experiments", relief=tk.RIDGE)
-            neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=100, pady=40)
+            neuro_frame = ttk.LabelFrame(experiments_frame, text="Experiments", relief=tk.RIDGE)
+            neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
             button1 = ttk.Button(neuro_frame, text="Giulia's Experiment", command=self.run_expGiulia)
-            button1.grid(row=1, column=1)
-            button2 = ttk.Button(neuro_frame, text="Alessia's Experiment")
-            button2.grid(row=2, column=1)
+            button1.grid(row=1, column=1, pady=15)
+            button2 = ttk.Button(neuro_frame, text="Alessia's Experiment", command=self.run_expAlessia)
+            button2.grid(row=2, column=1, pady=15)
+            neuro_frame.columnconfigure(1, weight=1)
 
-            widgets.extend([neuro_frame, button1, button2])
+            show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
+            show_data_but.grid(row=2, column=1, pady=30)
+
+            widgets.extend([neuro_frame, button1, button2, show_data_but])
 
         else:
 
@@ -80,17 +90,47 @@ class PatientWindow :
             expGiulia.runExp(self.patientId)
 
         except:
-            print("exit with "+str(sys.exc_info()[0]))
 
+            if(sys.exc_info()[1].__getattribute__('code') == 1):
+                self.run_expCamilla()
+            self.run_expCamilla()       #Da LEVARE POST PRESENTAZIONE
 
     def run_expClinical(self):
         try:
             if (self.patientId == None):
                 self.patientId = '';
-            expClinical.runExp(self.patientId)
             #os.system('expClinical.py')
 
         except:
             print("exit with " + str(sys.exc_info()[0]))
+
+    def run_expAlessia (self):
+        print("Non funzionante")
+        #
+        #
+        # # Instance = vlc.Instance('--fullscreen')
+        # Instance = vlc.Instance()
+        # player = Instance.media_player_new()
+        # Media = Instance.media_new('videos/filmato_Alessia.mp4')
+        # print(Media.get_mrl())
+        #
+        # root.bind("<Return>", (lambda event: print("Return")))
+        # root.bind("<Escape>", (lambda event: print("escape")))
+        #
+        # player.set_media(Media)
+        # player.set_fullscreen(True)
+        # player.play()
+        #
+        # def close_player():
+        #     player.stop()
+        #
+        # sleep(5)  # Or however long you expect it to take to open vlc
+        # while player.is_playing():
+        #     sleep(1)
+
+
+    def run_expCamilla(self):
+        webBrowser.launch_browser()
+
 
 

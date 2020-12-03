@@ -1,7 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import loginWindow as lw
-
+from random import randint
+import os
 
 
 import patientWindow as pw
@@ -14,12 +15,21 @@ class userWindow():
         self.environment = environment  # 0 = clinical, 1 = neuromarketing
         self.patientId = id
         self.window = None
-        self.createWindow()
         self.patient = None
+        self.participants = ['Participant n 1234', 'Participant n 5678', 'Participant n 3853', 'Participant n 6734']
+        self.dropdown = None
+
+        self.createWindow()
 
     def logout(self):
         self.window.destroy()
         application = lw.loginWindow()
+
+    def update_menu(self):
+        menu = self.dropdown["menu"]
+        menu.delete(0, "end")
+        for string in self.participants:
+            menu.add_command(label=string)
 
     def add_patient(self):
         top = Toplevel()
@@ -46,7 +56,21 @@ class userWindow():
 
         Label(top, text=' Other info???? ', font='Times 15').grid(row=6, column=1, pady=20)
 
-        Button(top, text='Add Patient', command=top.destroy).grid(row=7, column=3)
+
+        def add_to_participants():
+            id = randint(1000, 9999)
+            self.participants.append("Participant n " +str(id))
+            self.update_menu()
+
+            try:
+                path = os.getcwd()+'/data/'+str(id)
+                os.mkdir(path)
+            except OSError:
+                print("Creation of the directory %s failed" % path)
+
+            top.destroy()
+
+        Button(top, text='Add Patient', command=add_to_participants).grid(row=7, column=3)
 
     def createWindow(self):
         self.window = Tk()
@@ -71,19 +95,17 @@ class userWindow():
         tkvar = StringVar(self.window)
 
         # Dictionary with options
-        choices = ['n 1234', 'n 5678', 'n 3853', 'n 6734']
-        tkvar.set(choices[0])  # set the default option
+        tkvar.set(self.participants[0])  # set the default option
 
-        popupMenu = OptionMenu(mainframe, tkvar, *choices)
-        if self.environment==0:
-            Label(mainframe, text="Choose a patient", font='Times 16' ).grid(row=2, column=1, pady= 20)
-        else:
-            Label(mainframe, text="Choose a participant", font='Times 16').grid(row=2, column=1, pady= 20)
+        self.dropdown = OptionMenu(mainframe, tkvar, *self.participants)
 
-        popupMenu.grid(row=3, column=1)
+        Label(mainframe, text="Choose a participant", font='Times 16').grid(row=2, column=1, pady= 20)
+
+        self.dropdown.grid(row=3, column=1, sticky=(N, W, E, S))
 
 
-        add_but = ttk.Button(self.window, text="Add new Patient", command=self.add_patient).grid( row = 3, column=0, padx=10, pady = 50)
+        add_but = ttk.Button(mainframe, text="Add new Patient", command=self.add_patient).grid(row=4, column=1,
+                                                                                                 padx=10, pady=50)
 
         def selectPatient(str):
 
@@ -92,7 +114,7 @@ class userWindow():
                     w.destroy()
 
             #name_surname = str.get().split()
-            patient = str.get().split()[1]
+            patient = str.get().split()[2]
             self.patient = pw.PatientWindow(self.window, self.environment, patient)
 
         # on change dropdown value

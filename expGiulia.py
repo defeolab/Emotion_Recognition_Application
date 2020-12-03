@@ -27,6 +27,7 @@ import os  # handy system and path functions
 import sys  # to get file system encoding
 
 from psychopy.hardware import keyboard
+import threading
 
 
 def runExp(participantId):
@@ -47,7 +48,7 @@ def runExp(participantId):
     expInfo['psychopyVersion'] = psychopyVersion
 
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-    filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
+    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
 
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
@@ -279,5 +280,16 @@ def runExp(participantId):
     # make sure everything is closed down
     thisExp.abort()  # or data files will save again on exit
     win.close()
-    core.quit()
+    #core.quit()
+    logging.flush()
+
+    for thisThread in threading.enumerate():
+        if hasattr(thisThread, 'stop') and hasattr(thisThread, 'running'):
+            # this is one of our event threads - kill it and wait for success
+            thisThread.stop()
+            while thisThread.running == 0:
+                pass  # wait until it has properly finished polling
+
+    sys.exit(1)  # quits the python session entirely
+
 

@@ -31,6 +31,8 @@ class loginWindow:
         self.window.columnconfigure(3, weight=5)
         #self.parent.rowconfigure(1, weight=1)
 
+        self.window.bind("<Return>", lambda e: self.login_user())
+
         self.window.mainloop()
 
 
