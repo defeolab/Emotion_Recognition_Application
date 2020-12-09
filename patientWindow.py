@@ -100,6 +100,7 @@ class PatientWindow :
             if (self.patientId == None):
                 self.patientId = '';
             #os.system('expClinical.py')
+            expClinical.runExp(self.patientId)
 
         except:
             print("exit with " + str(sys.exc_info()[0]))

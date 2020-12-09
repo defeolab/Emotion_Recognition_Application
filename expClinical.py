@@ -51,7 +51,7 @@ def runExp(participantId):
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
                                      extraInfo=expInfo, runtimeInfo=None,
-                                     originPath='C:\\Users\\matti\\OneDrive\\Desktop\\Tesi\\ExpClinical_lastrun.py',
+                                     originPath=os.getcwd(),
                                      savePickle=True, saveWideText=True,
                                      dataFileName=filename)
     # save a log file for detail verbose info
@@ -108,107 +108,178 @@ def runExp(participantId):
 
     # Initialize components for Routine "Gert"
     GertClock = core.Clock()
-    happiness = visual.Polygon(
-        win=win, name='happiness',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(0.23, 0.32),
+    excited = visual.Polygon(
+        win=win, name='excited',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.10, 0.38),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=0.0, interpolate=True)
-    neutral = visual.Polygon(
-        win=win, name='neutral',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(0.43, 0.02),
+    delighted = visual.Polygon(
+        win=win, name='delighted',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.30, 0.25),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-1.0, interpolate=True)
-    surprise = visual.Polygon(
-        win=win, name='surprise',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(0.31, -0.30),
+    happy = visual.Polygon(
+        win=win, name='happy',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.47, 0.1),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-2.0, interpolate=True)
-    fear = visual.Polygon(
-        win=win, name='fear',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(-0.05, -0.35),
+    content = visual.Polygon(
+        win=win, name='content',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.47, -0.1),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-3.0, interpolate=True)
-    sadness = visual.Polygon(
-        win=win, name='sadness',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(-0.37, -0.20),
+    relaxed = visual.Polygon(
+        win=win, name='relaxed',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.30, -0.25),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-4.0, interpolate=True)
-    disgust = visual.Polygon(
-        win=win, name='disgust',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(-0.4, 0.12),
+    calm = visual.Polygon(
+        win=win, name='calm',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(0.10, -0.38),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-5.0, interpolate=True)
-    anger = visual.Polygon(
-        win=win, name='anger',
-        edges=1000, size=(0.25, 0.25),
-        ori=0, pos=(-0.15, 0.35),
+    tired = visual.Polygon(
+        win=win, name='tired',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.10, -0.38),
         lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
         fillColor=[1, 1, 1], fillColorSpace='rgb',
         opacity=1, depth=-6.0, interpolate=True)
-    text_happiness = visual.TextStim(win=win, name='text_happiness',
-                                     text='Happiness',
-                                     font='Arial',
-                                     pos=(0.23, 0.32), height=0.05, wrapWidth=None, ori=0,
-                                     color='black', colorSpace='rgb', opacity=1,
-                                     languageStyle='LTR',
-                                     depth=-7.0);
-    text_neutral = visual.TextStim(win=win, name='text_neutral',
-                                   text='Neutral',
+    bored = visual.Polygon(
+        win=win, name='bored',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.30, -0.25),
+        lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
+        fillColor=[1, 1, 1], fillColorSpace='rgb',
+        opacity=1, depth=-7.0, interpolate=True)
+    depressed = visual.Polygon(
+        win=win, name='depressed',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.47, -0.1),
+        lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
+        fillColor=[1, 1, 1], fillColorSpace='rgb',
+        opacity=1, depth=-8.0, interpolate=True)
+    frustrated = visual.Polygon(
+        win=win, name='frustrated',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.47, 0.1),
+        lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
+        fillColor=[1, 1, 1], fillColorSpace='rgb',
+        opacity=1, depth=-9.0, interpolate=True)
+    angry = visual.Polygon(
+        win=win, name='angry',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.30, 0.25),
+        lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
+        fillColor=[1, 1, 1], fillColorSpace='rgb',
+        opacity=1, depth=-10.0, interpolate=True)
+    tense = visual.Polygon(
+        win=win, name='tense',
+        edges=1000, size=(0.18, 0.18),
+        ori=0, pos=(-0.10, 0.38),
+        lineWidth=1, lineColor=[1, 1, 1], lineColorSpace='rgb',
+        fillColor=[1, 1, 1], fillColorSpace='rgb',
+        opacity=1, depth=-11.0, interpolate=True)
+    text_excited = visual.TextStim(win=win, name='text_excited',
+                                   text='Excited',
                                    font='Arial',
-                                   pos=(0.43, 0.02), height=0.05, wrapWidth=None, ori=0,
-                                   color='black', colorSpace='rgb', opacity=1,
-                                   languageStyle='LTR',
-                                   depth=-8.0);
-    text_surprise = visual.TextStim(win=win, name='text_surprise',
-                                    text='Surprise',
-                                    font='Arial',
-                                    pos=(0.31, -0.30), height=0.05, wrapWidth=None, ori=0,
-                                    color='black', colorSpace='rgb', opacity=1,
-                                    languageStyle='LTR',
-                                    depth=-9.0);
-    text_fear = visual.TextStim(win=win, name='text_fear',
-                                text='Fear',
-                                font='Arial',
-                                pos=(-0.05, -0.35), height=0.05, wrapWidth=None, ori=0,
-                                color='black', colorSpace='rgb', opacity=1,
-                                languageStyle='LTR',
-                                depth=-10.0);
-    text_sadness = visual.TextStim(win=win, name='text_sadness',
-                                   text='Sadness',
-                                   font='Arial',
-                                   pos=(-0.37, -0.20), height=0.05, wrapWidth=None, ori=0,
-                                   color='black', colorSpace='rgb', opacity=1,
-                                   languageStyle='LTR',
-                                   depth=-11.0);
-    text_disgust = visual.TextStim(win=win, name='text_disgust',
-                                   text='Disgust',
-                                   font='Arial',
-                                   pos=(-0.4, 0.12), height=0.05, wrapWidth=None, ori=0,
+                                   pos=(0.10, 0.38), height=0.04, wrapWidth=None, ori=0,
                                    color='black', colorSpace='rgb', opacity=1,
                                    languageStyle='LTR',
                                    depth=-12.0);
-    text_anger = visual.TextStim(win=win, name='text_anger',
-                                 text='Anger',
+    text_delighted = visual.TextStim(win=win, name='text_delighted',
+                                     text='Delighted',
+                                     font='Arial',
+                                     pos=(0.30, 0.25), height=0.035, wrapWidth=None, ori=0,
+                                     color='black', colorSpace='rgb', opacity=1,
+                                     languageStyle='LTR',
+                                     depth=-13.0);
+    text_happy = visual.TextStim(win=win, name='text_happy',
+                                 text='Happy',
                                  font='Arial',
-                                 pos=(-0.15, 0.35), height=0.05, wrapWidth=None, ori=0,
+                                 pos=(0.47, 0.1), height=0.04, wrapWidth=None, ori=0,
                                  color='black', colorSpace='rgb', opacity=1,
                                  languageStyle='LTR',
-                                 depth=-13.0);
+                                 depth=-14.0);
+    text_content = visual.TextStim(win=win, name='text_content',
+                                   text='Content',
+                                   font='Arial',
+                                   pos=(0.47, -0.1), height=0.04, wrapWidth=None, ori=0,
+                                   color='black', colorSpace='rgb', opacity=1,
+                                   languageStyle='LTR',
+                                   depth=-15.0);
+    text_relaxed = visual.TextStim(win=win, name='text_relaxed',
+                                   text='Relaxed',
+                                   font='Arial',
+                                   pos=(0.30, -0.25), height=0.04, wrapWidth=None, ori=0,
+                                   color='black', colorSpace='rgb', opacity=1,
+                                   languageStyle='LTR',
+                                   depth=-16.0);
+    text_calm = visual.TextStim(win=win, name='text_calm',
+                                text='Calm',
+                                font='Arial',
+                                pos=(0.10, -0.38), height=0.04, wrapWidth=None, ori=0,
+                                color='black', colorSpace='rgb', opacity=1,
+                                languageStyle='LTR',
+                                depth=-17.0);
+    text_tired = visual.TextStim(win=win, name='text_tired',
+                                 text='Tired',
+                                 font='Arial',
+                                 pos=(-0.10, -0.38), height=0.04, wrapWidth=None, ori=0,
+                                 color='black', colorSpace='rgb', opacity=1,
+                                 languageStyle='LTR',
+                                 depth=-18.0);
+    text_bored = visual.TextStim(win=win, name='text_bored',
+                                 text='Bored',
+                                 font='Arial',
+                                 pos=(-0.30, -0.25), height=0.04, wrapWidth=None, ori=0,
+                                 color='black', colorSpace='rgb', opacity=1,
+                                 languageStyle='LTR',
+                                 depth=-19.0);
+    text_depressed = visual.TextStim(win=win, name='text_depressed',
+                                     text='Depressed',
+                                     font='Arial',
+                                     pos=(-0.47, -0.1), height=0.035, wrapWidth=None, ori=0,
+                                     color='black', colorSpace='rgb', opacity=1,
+                                     languageStyle='LTR',
+                                     depth=-20.0);
+    text_frustrated = visual.TextStim(win=win, name='text_frustrated',
+                                      text='Frustrated',
+                                      font='Arial',
+                                      pos=(-0.47, 0.1), height=0.035, wrapWidth=None, ori=0,
+                                      color='black', colorSpace='rgb', opacity=1,
+                                      languageStyle='LTR',
+                                      depth=-21.0);
+    text_angry = visual.TextStim(win=win, name='text_angry',
+                                 text='Angry',
+                                 font='Arial',
+                                 pos=(-0.30, 0.25), height=0.04, wrapWidth=None, ori=0,
+                                 color='black', colorSpace='rgb', opacity=1,
+                                 languageStyle='LTR',
+                                 depth=-22.0);
+    text_tense = visual.TextStim(win=win, name='text_tense',
+                                 text='Tense',
+                                 font='Arial',
+                                 pos=(-0.10, 0.38), height=0.04, wrapWidth=None, ori=0,
+                                 color='black', colorSpace='rgb', opacity=1,
+                                 languageStyle='LTR',
+                                 depth=-23.0);
     mouse = event.Mouse(win=win)
     x, y = [None, None]
     mouse.mouseClock = core.Clock()
+
 
     # Initialize components for Routine "End"
     EndClock = core.Clock()
@@ -484,8 +555,9 @@ def runExp(participantId):
         mouse.clicked_name = []
         gotValidClick = False  # until a click is received
         # keep track of which components have finished
-        GertComponents = [happiness, neutral, surprise, fear, sadness, disgust, anger, text_happiness, text_neutral,
-                          text_surprise, text_fear, text_sadness, text_disgust, text_anger, mouse]
+        GertComponents = [excited, delighted, happy, content, relaxed, calm, tired, bored, depressed, frustrated, angry,
+                          tense, text_excited, text_delighted, text_happy, text_content, text_relaxed, text_calm,
+                          text_tired, text_bored, text_depressed, text_frustrated, text_angry, text_tense, mouse]
         for thisComponent in GertComponents:
             thisComponent.tStart = None
             thisComponent.tStop = None
@@ -508,131 +580,221 @@ def runExp(participantId):
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
 
-            # *happiness* updates
-            if happiness.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *excited* updates
+            if excited.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                happiness.frameNStart = frameN  # exact frame index
-                happiness.tStart = t  # local t and not account for scr refresh
-                happiness.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(happiness, 'tStartRefresh')  # time at next scr refresh
-                happiness.setAutoDraw(True)
+                excited.frameNStart = frameN  # exact frame index
+                excited.tStart = t  # local t and not account for scr refresh
+                excited.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(excited, 'tStartRefresh')  # time at next scr refresh
+                excited.setAutoDraw(True)
 
-            # *neutral* updates
-            if neutral.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *delighted* updates
+            if delighted.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                neutral.frameNStart = frameN  # exact frame index
-                neutral.tStart = t  # local t and not account for scr refresh
-                neutral.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(neutral, 'tStartRefresh')  # time at next scr refresh
-                neutral.setAutoDraw(True)
+                delighted.frameNStart = frameN  # exact frame index
+                delighted.tStart = t  # local t and not account for scr refresh
+                delighted.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(delighted, 'tStartRefresh')  # time at next scr refresh
+                delighted.setAutoDraw(True)
 
-            # *surprise* updates
-            if surprise.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *happy* updates
+            if happy.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                surprise.frameNStart = frameN  # exact frame index
-                surprise.tStart = t  # local t and not account for scr refresh
-                surprise.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(surprise, 'tStartRefresh')  # time at next scr refresh
-                surprise.setAutoDraw(True)
+                happy.frameNStart = frameN  # exact frame index
+                happy.tStart = t  # local t and not account for scr refresh
+                happy.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(happy, 'tStartRefresh')  # time at next scr refresh
+                happy.setAutoDraw(True)
 
-            # *fear* updates
-            if fear.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *content* updates
+            if content.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                fear.frameNStart = frameN  # exact frame index
-                fear.tStart = t  # local t and not account for scr refresh
-                fear.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(fear, 'tStartRefresh')  # time at next scr refresh
-                fear.setAutoDraw(True)
+                content.frameNStart = frameN  # exact frame index
+                content.tStart = t  # local t and not account for scr refresh
+                content.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(content, 'tStartRefresh')  # time at next scr refresh
+                content.setAutoDraw(True)
 
-            # *sadness* updates
-            if sadness.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *relaxed* updates
+            if relaxed.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                sadness.frameNStart = frameN  # exact frame index
-                sadness.tStart = t  # local t and not account for scr refresh
-                sadness.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(sadness, 'tStartRefresh')  # time at next scr refresh
-                sadness.setAutoDraw(True)
+                relaxed.frameNStart = frameN  # exact frame index
+                relaxed.tStart = t  # local t and not account for scr refresh
+                relaxed.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(relaxed, 'tStartRefresh')  # time at next scr refresh
+                relaxed.setAutoDraw(True)
 
-            # *disgust* updates
-            if disgust.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *calm* updates
+            if calm.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                disgust.frameNStart = frameN  # exact frame index
-                disgust.tStart = t  # local t and not account for scr refresh
-                disgust.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(disgust, 'tStartRefresh')  # time at next scr refresh
-                disgust.setAutoDraw(True)
+                calm.frameNStart = frameN  # exact frame index
+                calm.tStart = t  # local t and not account for scr refresh
+                calm.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(calm, 'tStartRefresh')  # time at next scr refresh
+                calm.setAutoDraw(True)
 
-            # *anger* updates
-            if anger.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *tired* updates
+            if tired.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                anger.frameNStart = frameN  # exact frame index
-                anger.tStart = t  # local t and not account for scr refresh
-                anger.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(anger, 'tStartRefresh')  # time at next scr refresh
-                anger.setAutoDraw(True)
+                tired.frameNStart = frameN  # exact frame index
+                tired.tStart = t  # local t and not account for scr refresh
+                tired.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(tired, 'tStartRefresh')  # time at next scr refresh
+                tired.setAutoDraw(True)
 
-            # *text_happiness* updates
-            if text_happiness.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *bored* updates
+            if bored.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_happiness.frameNStart = frameN  # exact frame index
-                text_happiness.tStart = t  # local t and not account for scr refresh
-                text_happiness.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_happiness, 'tStartRefresh')  # time at next scr refresh
-                text_happiness.setAutoDraw(True)
+                bored.frameNStart = frameN  # exact frame index
+                bored.tStart = t  # local t and not account for scr refresh
+                bored.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(bored, 'tStartRefresh')  # time at next scr refresh
+                bored.setAutoDraw(True)
 
-            # *text_neutral* updates
-            if text_neutral.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *depressed* updates
+            if depressed.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_neutral.frameNStart = frameN  # exact frame index
-                text_neutral.tStart = t  # local t and not account for scr refresh
-                text_neutral.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_neutral, 'tStartRefresh')  # time at next scr refresh
-                text_neutral.setAutoDraw(True)
+                depressed.frameNStart = frameN  # exact frame index
+                depressed.tStart = t  # local t and not account for scr refresh
+                depressed.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(depressed, 'tStartRefresh')  # time at next scr refresh
+                depressed.setAutoDraw(True)
 
-            # *text_surprise* updates
-            if text_surprise.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *frustrated* updates
+            if frustrated.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_surprise.frameNStart = frameN  # exact frame index
-                text_surprise.tStart = t  # local t and not account for scr refresh
-                text_surprise.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_surprise, 'tStartRefresh')  # time at next scr refresh
-                text_surprise.setAutoDraw(True)
+                frustrated.frameNStart = frameN  # exact frame index
+                frustrated.tStart = t  # local t and not account for scr refresh
+                frustrated.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(frustrated, 'tStartRefresh')  # time at next scr refresh
+                frustrated.setAutoDraw(True)
 
-            # *text_fear* updates
-            if text_fear.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *angry* updates
+            if angry.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_fear.frameNStart = frameN  # exact frame index
-                text_fear.tStart = t  # local t and not account for scr refresh
-                text_fear.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_fear, 'tStartRefresh')  # time at next scr refresh
-                text_fear.setAutoDraw(True)
+                angry.frameNStart = frameN  # exact frame index
+                angry.tStart = t  # local t and not account for scr refresh
+                angry.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(angry, 'tStartRefresh')  # time at next scr refresh
+                angry.setAutoDraw(True)
 
-            # *text_sadness* updates
-            if text_sadness.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *tense* updates
+            if tense.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_sadness.frameNStart = frameN  # exact frame index
-                text_sadness.tStart = t  # local t and not account for scr refresh
-                text_sadness.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_sadness, 'tStartRefresh')  # time at next scr refresh
-                text_sadness.setAutoDraw(True)
+                tense.frameNStart = frameN  # exact frame index
+                tense.tStart = t  # local t and not account for scr refresh
+                tense.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(tense, 'tStartRefresh')  # time at next scr refresh
+                tense.setAutoDraw(True)
 
-            # *text_disgust* updates
-            if text_disgust.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *text_excited* updates
+            if text_excited.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_disgust.frameNStart = frameN  # exact frame index
-                text_disgust.tStart = t  # local t and not account for scr refresh
-                text_disgust.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_disgust, 'tStartRefresh')  # time at next scr refresh
-                text_disgust.setAutoDraw(True)
+                text_excited.frameNStart = frameN  # exact frame index
+                text_excited.tStart = t  # local t and not account for scr refresh
+                text_excited.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_excited, 'tStartRefresh')  # time at next scr refresh
+                text_excited.setAutoDraw(True)
 
-            # *text_anger* updates
-            if text_anger.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+            # *text_delighted* updates
+            if text_delighted.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
-                text_anger.frameNStart = frameN  # exact frame index
-                text_anger.tStart = t  # local t and not account for scr refresh
-                text_anger.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(text_anger, 'tStartRefresh')  # time at next scr refresh
-                text_anger.setAutoDraw(True)
+                text_delighted.frameNStart = frameN  # exact frame index
+                text_delighted.tStart = t  # local t and not account for scr refresh
+                text_delighted.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_delighted, 'tStartRefresh')  # time at next scr refresh
+                text_delighted.setAutoDraw(True)
+
+            # *text_happy* updates
+            if text_happy.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_happy.frameNStart = frameN  # exact frame index
+                text_happy.tStart = t  # local t and not account for scr refresh
+                text_happy.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_happy, 'tStartRefresh')  # time at next scr refresh
+                text_happy.setAutoDraw(True)
+
+            # *text_content* updates
+            if text_content.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_content.frameNStart = frameN  # exact frame index
+                text_content.tStart = t  # local t and not account for scr refresh
+                text_content.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_content, 'tStartRefresh')  # time at next scr refresh
+                text_content.setAutoDraw(True)
+
+            # *text_relaxed* updates
+            if text_relaxed.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_relaxed.frameNStart = frameN  # exact frame index
+                text_relaxed.tStart = t  # local t and not account for scr refresh
+                text_relaxed.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_relaxed, 'tStartRefresh')  # time at next scr refresh
+                text_relaxed.setAutoDraw(True)
+
+            # *text_calm* updates
+            if text_calm.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_calm.frameNStart = frameN  # exact frame index
+                text_calm.tStart = t  # local t and not account for scr refresh
+                text_calm.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_calm, 'tStartRefresh')  # time at next scr refresh
+                text_calm.setAutoDraw(True)
+
+            # *text_tired* updates
+            if text_tired.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_tired.frameNStart = frameN  # exact frame index
+                text_tired.tStart = t  # local t and not account for scr refresh
+                text_tired.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_tired, 'tStartRefresh')  # time at next scr refresh
+                text_tired.setAutoDraw(True)
+
+            # *text_bored* updates
+            if text_bored.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_bored.frameNStart = frameN  # exact frame index
+                text_bored.tStart = t  # local t and not account for scr refresh
+                text_bored.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_bored, 'tStartRefresh')  # time at next scr refresh
+                text_bored.setAutoDraw(True)
+
+            # *text_depressed* updates
+            if text_depressed.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_depressed.frameNStart = frameN  # exact frame index
+                text_depressed.tStart = t  # local t and not account for scr refresh
+                text_depressed.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_depressed, 'tStartRefresh')  # time at next scr refresh
+                text_depressed.setAutoDraw(True)
+
+            # *text_frustrated* updates
+            if text_frustrated.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_frustrated.frameNStart = frameN  # exact frame index
+                text_frustrated.tStart = t  # local t and not account for scr refresh
+                text_frustrated.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_frustrated, 'tStartRefresh')  # time at next scr refresh
+                text_frustrated.setAutoDraw(True)
+
+            # *text_angry* updates
+            if text_angry.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_angry.frameNStart = frameN  # exact frame index
+                text_angry.tStart = t  # local t and not account for scr refresh
+                text_angry.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_angry, 'tStartRefresh')  # time at next scr refresh
+                text_angry.setAutoDraw(True)
+
+            # *text_tense* updates
+            if text_tense.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
+                # keep track of start time/frame for later
+                text_tense.frameNStart = frameN  # exact frame index
+                text_tense.tStart = t  # local t and not account for scr refresh
+                text_tense.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(text_tense, 'tStartRefresh')  # time at next scr refresh
+                text_tense.setAutoDraw(True)
             # *mouse* updates
             if mouse.status == NOT_STARTED and t >= 0.0 - frameTolerance:
                 # keep track of start time/frame for later
@@ -650,7 +812,8 @@ def runExp(participantId):
                     if sum(buttons) > 0:  # state changed to a new click
                         # check if the mouse was inside our 'clickable' objects
                         gotValidClick = False
-                        for obj in [happiness, neutral, surprise, fear, sadness, disgust, anger]:
+                        for obj in [excited, delighted, happy, content, relaxed, calm, tired, bored, depressed,
+                                    frustrated, angry, tense]:
                             if obj.contains(mouse):
                                 gotValidClick = True
                                 mouse.clicked_name.append(obj.name)
@@ -679,41 +842,62 @@ def runExp(participantId):
         for thisComponent in GertComponents:
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
-        trials.addData('happiness.started', happiness.tStartRefresh)
-        trials.addData('happiness.stopped', happiness.tStopRefresh)
-        trials.addData('neutral.started', neutral.tStartRefresh)
-        trials.addData('neutral.stopped', neutral.tStopRefresh)
-        trials.addData('surprise.started', surprise.tStartRefresh)
-        trials.addData('surprise.stopped', surprise.tStopRefresh)
-        trials.addData('fear.started', fear.tStartRefresh)
-        trials.addData('fear.stopped', fear.tStopRefresh)
-        trials.addData('sadness.started', sadness.tStartRefresh)
-        trials.addData('sadness.stopped', sadness.tStopRefresh)
-        trials.addData('disgust.started', disgust.tStartRefresh)
-        trials.addData('disgust.stopped', disgust.tStopRefresh)
-        trials.addData('anger.started', anger.tStartRefresh)
-        trials.addData('anger.stopped', anger.tStopRefresh)
-        trials.addData('text_happiness.started', text_happiness.tStartRefresh)
-        trials.addData('text_happiness.stopped', text_happiness.tStopRefresh)
-        trials.addData('text_neutral.started', text_neutral.tStartRefresh)
-        trials.addData('text_neutral.stopped', text_neutral.tStopRefresh)
-        trials.addData('text_surprise.started', text_surprise.tStartRefresh)
-        trials.addData('text_surprise.stopped', text_surprise.tStopRefresh)
-        trials.addData('text_fear.started', text_fear.tStartRefresh)
-        trials.addData('text_fear.stopped', text_fear.tStopRefresh)
-        trials.addData('text_sadness.started', text_sadness.tStartRefresh)
-        trials.addData('text_sadness.stopped', text_sadness.tStopRefresh)
-        trials.addData('text_disgust.started', text_disgust.tStartRefresh)
-        trials.addData('text_disgust.stopped', text_disgust.tStopRefresh)
-        trials.addData('text_anger.started', text_anger.tStartRefresh)
-        trials.addData('text_anger.stopped', text_anger.tStopRefresh)
+        trials.addData('excited.started', excited.tStartRefresh)
+        trials.addData('excited.stopped', excited.tStopRefresh)
+        trials.addData('delighted.started', delighted.tStartRefresh)
+        trials.addData('delighted.stopped', delighted.tStopRefresh)
+        trials.addData('happy.started', happy.tStartRefresh)
+        trials.addData('happy.stopped', happy.tStopRefresh)
+        trials.addData('content.started', content.tStartRefresh)
+        trials.addData('content.stopped', content.tStopRefresh)
+        trials.addData('relaxed.started', relaxed.tStartRefresh)
+        trials.addData('relaxed.stopped', relaxed.tStopRefresh)
+        trials.addData('calm.started', calm.tStartRefresh)
+        trials.addData('calm.stopped', calm.tStopRefresh)
+        trials.addData('tired.started', tired.tStartRefresh)
+        trials.addData('tired.stopped', tired.tStopRefresh)
+        trials.addData('bored.started', bored.tStartRefresh)
+        trials.addData('bored.stopped', bored.tStopRefresh)
+        trials.addData('depressed.started', depressed.tStartRefresh)
+        trials.addData('depressed.stopped', depressed.tStopRefresh)
+        trials.addData('frustrated.started', frustrated.tStartRefresh)
+        trials.addData('frustrated.stopped', frustrated.tStopRefresh)
+        trials.addData('angry.started', angry.tStartRefresh)
+        trials.addData('angry.stopped', angry.tStopRefresh)
+        trials.addData('tense.started', tense.tStartRefresh)
+        trials.addData('tense.stopped', tense.tStopRefresh)
+        trials.addData('text_excited.started', text_excited.tStartRefresh)
+        trials.addData('text_excited.stopped', text_excited.tStopRefresh)
+        trials.addData('text_delighted.started', text_delighted.tStartRefresh)
+        trials.addData('text_delighted.stopped', text_delighted.tStopRefresh)
+        trials.addData('text_happy.started', text_happy.tStartRefresh)
+        trials.addData('text_happy.stopped', text_happy.tStopRefresh)
+        trials.addData('text_content.started', text_content.tStartRefresh)
+        trials.addData('text_content.stopped', text_content.tStopRefresh)
+        trials.addData('text_relaxed.started', text_relaxed.tStartRefresh)
+        trials.addData('text_relaxed.stopped', text_relaxed.tStopRefresh)
+        trials.addData('text_calm.started', text_calm.tStartRefresh)
+        trials.addData('text_calm.stopped', text_calm.tStopRefresh)
+        trials.addData('text_tired.started', text_tired.tStartRefresh)
+        trials.addData('text_tired.stopped', text_tired.tStopRefresh)
+        trials.addData('text_bored.started', text_bored.tStartRefresh)
+        trials.addData('text_bored.stopped', text_bored.tStopRefresh)
+        trials.addData('text_depressed.started', text_depressed.tStartRefresh)
+        trials.addData('text_depressed.stopped', text_depressed.tStopRefresh)
+        trials.addData('text_frustrated.started', text_frustrated.tStartRefresh)
+        trials.addData('text_frustrated.stopped', text_frustrated.tStopRefresh)
+        trials.addData('text_angry.started', text_angry.tStartRefresh)
+        trials.addData('text_angry.stopped', text_angry.tStopRefresh)
+        trials.addData('text_tense.started', text_tense.tStartRefresh)
+        trials.addData('text_tense.stopped', text_tense.tStopRefresh)
         # store data for trials (TrialHandler)
         x, y = mouse.getPos()
         buttons = mouse.getPressed()
         if sum(buttons):
             # check if the mouse was inside our 'clickable' objects
             gotValidClick = False
-            for obj in [happiness, neutral, surprise, fear, sadness, disgust, anger]:
+            for obj in [excited, delighted, happy, content, relaxed, calm, tired, bored, depressed, frustrated, angry,
+                        tense]:
                 if obj.contains(mouse):
                     gotValidClick = True
                     mouse.clicked_name.append(obj.name)
@@ -731,6 +915,7 @@ def runExp(participantId):
         thisExp.nextEntry()
 
         nImageShowed += 1
+
 
     # completed 1 repeats of 'trials'
 

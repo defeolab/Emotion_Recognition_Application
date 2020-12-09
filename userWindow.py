@@ -54,6 +54,10 @@ class userWindow():
         gender = Entry(top)
         gender.grid(row=5, column=2, columnspan=10)
 
+        Label(top, text=' Educational Level ', font='Times 15').grid(row=5, column=1, pady=20)
+        gender = Entry(top)
+        gender.grid(row=6 , column=2, columnspan=10)
+
         Label(top, text=' Other info???? ', font='Times 15').grid(row=6, column=1, pady=20)
 
 
