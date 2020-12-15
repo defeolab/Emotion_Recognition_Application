@@ -7,6 +7,7 @@ import sys, os
 import vlc
 from time import sleep
 import webBrowser
+import json
 
 #from PyQt5.QtWebEngineWidgets import QWebEngineView
 
@@ -48,6 +49,9 @@ class PatientWindow :
 
         experiments_frame.grid(row=1, column=1, rowspan = 2, pady=3, padx=100 , sticky=tk.E + tk.W + tk.N + tk.S)
         ttk.Label(experiments_frame, text="Participant n " + self.patientId, font='Times 18').grid(row =0, column=1)
+
+        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command= self.show_anagraphic)
+        angraphic.grid(row=1, column= 2)
 
         widgets.append(experiments_frame)
 
@@ -134,4 +138,35 @@ class PatientWindow :
         webBrowser.launch_browser()
 
 
+    def show_anagraphic(self):
+        top = tk.Toplevel()
+        top.title("Add a new Patient")
+        top.geometry("400x500")
 
+        fp = open('anagraphicData.txt', 'r')
+        data = json.load(fp)
+
+        participants = data['Participants']
+
+        user = None
+
+        for p in participants:
+            if str(p['id']) == self.patientId:
+                user = p
+                break
+
+
+        if user is not None:
+
+            ttk.Label(top, text="Participant n " + self.patientId, font='Times 26').grid(row=0, column=1, pady =30, padx = 20)
+            ttk.Label(top, text="Age :  " + user['age'], font='Times 18').grid(row=1, column=1, sticky=tk.W, pady =20, padx = 5)
+            ttk.Label(top, text="Gender :  " + user['gender'], font='Times 18').grid(row=2, column=1, sticky=tk.W, pady =20, padx = 5)
+            ttk.Label(top, text="Educational Level :  " + user['edu'], font='Times 18').grid(row=3, column=1, sticky=tk.W, pady =20, padx = 5)
+
+
+
+        else:
+            ttk.Label(top, text="Data on Participant n " + self.patientId+ " not found.", font='Times 18').grid(row=0, column=1, padx = 5)
+            top.rowconfigure(0, weight=1)
+
+        ttk.Button(top, text="Close", command=top.destroy).grid(row=4, column=1, pady=50)

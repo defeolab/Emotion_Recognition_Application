@@ -1,14 +1,15 @@
 from tkinter import *
 from tkinter import ttk
 import userWindow as uw
+import json
 
 class loginWindow:
 
-    user0 = 'mark'
-    pass0 = 'mark'
-
-    user1 = 'clinic'
-    pass1 = 'clinic'
+    # user0 = 'mark'
+    # pass0 = 'mark'
+    #
+    # user1 = 'clinic'
+    # pass1 = 'clinic'
 
     def __init__(self):
 
@@ -39,6 +40,17 @@ class loginWindow:
     def login_user(self):
 
         '''Check username and password entered are correct'''
+
+        fp = open('credentials.txt', 'r')
+        credentials = json.load(fp)
+        fp.close()
+
+        self.user0 = credentials['ClinicalApp']['username']
+        self.pass0 = credentials['ClinicalApp']['password']
+
+        self.user1 = credentials['MarketingApp']['username']
+        self.pass1 = credentials['MarketingApp']['password']
+
         if self.username.get() == self.user0 and self.password.get() == self.pass0:
 
             self.message = Label(text='Ok!!!!', fg='Red')

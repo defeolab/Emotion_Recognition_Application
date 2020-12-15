@@ -3,6 +3,7 @@ from tkinter import ttk
 import loginWindow as lw
 from random import randint
 import os
+import json
 
 
 import patientWindow as pw
@@ -16,7 +17,13 @@ class userWindow():
         self.patientId = id
         self.window = None
         self.patient = None
-        self.participants = ['Participant n 1234', 'Participant n 5678', 'Participant n 3853', 'Participant n 6734']
+        fp = open('anagraphicData.txt', 'r')
+        data = json.load(fp)
+        self.ids = data['IDs']
+        fp.close()
+        self.participants = []
+        for id in self.ids :
+            self.participants.append('Participant n '+ str(id))
         self.dropdown = None
 
         self.createWindow()
@@ -54,23 +61,44 @@ class userWindow():
         gender = Entry(top)
         gender.grid(row=5, column=2, columnspan=10)
 
-        Label(top, text=' Educational Level ', font='Times 15').grid(row=5, column=1, pady=20)
-        gender = Entry(top)
-        gender.grid(row=6 , column=2, columnspan=10)
+        Label(top, text=' Educational Level ', font='Times 15').grid(row=6, column=1, pady=20)
+        edu = Entry(top)
+        edu.grid(row=6 , column=2, columnspan=10)
 
-        Label(top, text=' Other info???? ', font='Times 15').grid(row=6, column=1, pady=20)
+        #Label(top, text=' Other info???? ', font='Times 15').grid(row=6, column=1, pady=20)
+
 
 
         def add_to_participants():
-            id = randint(1000, 9999)
+
+            while True:
+                id = randint(1000, 9999)
+                if id not in self.ids:
+                    break
+
             self.participants.append("Participant n " +str(id))
             self.update_menu()
+
+            fp = open('anagraphicData.txt', 'r')
+            data = json.load(fp)
+
+            data['IDs'].append(id)
 
             try:
                 path = os.getcwd()+'/data/'+str(id)
                 os.mkdir(path)
+
             except OSError:
                 print("Creation of the directory %s failed" % path)
+
+            elem = {'id': id, 'name': name.get(), 'surname': surname.get(), 'age': age.get(),
+                    'gender': gender.get(), 'edu': edu.get()}
+
+            data['Participants'].append(elem)
+
+            fp = open('anagraphicData.txt', 'w')
+            json.dump(data, fp)
+            fp.close()
 
             top.destroy()
 
@@ -79,7 +107,7 @@ class userWindow():
     def createWindow(self):
         self.window = Tk()
         self.window.title("User personal page")
-        self.window.geometry("800x600")
+        self.window.geometry("1000x600")
         self.window.columnconfigure(10, weight=1)
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )
