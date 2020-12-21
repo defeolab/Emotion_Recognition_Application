@@ -9,6 +9,8 @@ from time import sleep
 import webBrowser
 import json
 
+import videoPlayer as vp
+
 #from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
@@ -110,28 +112,28 @@ class PatientWindow :
             print("exit with " + str(sys.exc_info()[0]))
 
     def run_expAlessia (self):
-        print("Non funzionante")
-        #
-        #
-        # # Instance = vlc.Instance('--fullscreen')
-        # Instance = vlc.Instance()
-        # player = Instance.media_player_new()
-        # Media = Instance.media_new('videos/filmato_Alessia.mp4')
-        # print(Media.get_mrl())
-        #
-        # root.bind("<Return>", (lambda event: print("Return")))
-        # root.bind("<Escape>", (lambda event: print("escape")))
-        #
-        # player.set_media(Media)
-        # player.set_fullscreen(True)
-        # player.play()
-        #
-        # def close_player():
-        #     player.stop()
-        #
-        # sleep(5)  # Or however long you expect it to take to open vlc
-        # while player.is_playing():
-        #     sleep(1)
+        #print("Non funzionante")
+
+        top = tk.Toplevel()
+        top.title("Experiment VLC media player")
+
+        top.state('zoomed')
+
+        player = None
+
+        player = vp.Player(top, title="tkinter vlc")
+
+        def closeTop():
+            player.OnStop()
+            top.destroy()
+
+        top.protocol("WM_DELETE_WINDOW", closeTop)
+
+        def pause(arg):
+            #print(str(arg))
+            player.OnPause()
+        top.bind('<space>', pause)
+
 
 
     def run_expCamilla(self):

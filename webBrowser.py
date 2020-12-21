@@ -307,13 +307,23 @@ class InstructionFrame(tk.Frame):
         self.instruction = None
         tk.Frame.__init__(self, master)
 
-        self.instruction = tk.Listbox(self)
+        #self.instruction = tk.Listbox(self)
+        self.instruction = tk.Text(self,width = 50, font=("Helvetica", 14))
         self.instruction.grid(row=0, column=0,  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=1)
-        tk.Grid.columnconfigure(self, 0, minsize= 400, weight=1)
-        self.instruction.insert(0, "QUI VERRANNO VISUALIZZATE LE ISTRUZIONI")
-
-
+        tk.Grid.columnconfigure(self, 0, minsize= 200, weight=1)
+        #self.instruction.insert(0, "QUI VERRANNO VISUALIZZATE LE ISTRUZIONI")
+        self.instruction.insert(tk.INSERT, "Istruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
+                                           "     • Cliccare tasto “Menu”\n     • Cliccare tasto “Sostenibilità”\n"
+                                           "     • Cliccare tasto “Fondazione”\n     • Leggere la pagina “Fondazione Lavazza”\n"
+                                           "     • Leggere l’articolo “Innovazione contro il cambiamento                     climatico” cliccando il tasto “Scopri di più”\n"
+                                           "     • Leggere l’articolo “L’impresa di diventare impresa”\n"
+                                           "     • Leggere l’articolo “Il caffè per rinascere” \n\nIstruzioni per sito Nespresso:\n"
+                                           "     • Andare sul sito nespresso.com\n     • Passare il mouse sul tasto “Sostenibilità e riciclo”\n"
+                                           "     • Cliccare tasto “Il caffè secondo Nespresso”\n     • Leggere l’articolo “Avvicinati e ascolta”\n"
+                                           "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Pace e speranza in Colombia”\n"
+                                           "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Piantare radici per salvaguardare il futuro           del caffè e del nostro pianeta”")
+        self.instruction.config(state='disabled')
 
 def launch_browser():
     logger.setLevel(_logging.INFO)

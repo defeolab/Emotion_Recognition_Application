@@ -45,11 +45,11 @@ class loginWindow:
         credentials = json.load(fp)
         fp.close()
 
-        self.user0 = credentials['ClinicalApp']['username']
-        self.pass0 = credentials['ClinicalApp']['password']
+        self.user1 = credentials['ClinicalApp']['username']
+        self.pass1 = credentials['ClinicalApp']['password']
 
-        self.user1 = credentials['MarketingApp']['username']
-        self.pass1 = credentials['MarketingApp']['password']
+        self.user0 = credentials['MarketingApp']['username']
+        self.pass0 = credentials['MarketingApp']['password']
 
         if self.username.get() == self.user0 and self.password.get() == self.pass0:
 

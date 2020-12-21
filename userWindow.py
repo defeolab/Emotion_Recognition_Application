@@ -58,15 +58,19 @@ class userWindow():
         age.grid(row=4, column=2, columnspan=10)
 
         Label(top, text=' Gender ', font='Times 15').grid(row=5, column=1, pady=20)
-        gender = Entry(top)
-        gender.grid(row=5, column=2, columnspan=10)
+        genderValues = ['Male', 'Female', 'Prefer not to say']
+        varGend = StringVar(top)
+        varGend.set(genderValues[0])
+        genderMenu = OptionMenu(top, varGend, *genderValues)
+        genderMenu.grid(row=5, column=2, columnspan=10)
+
 
         Label(top, text=' Educational Level ', font='Times 15').grid(row=6, column=1, pady=20)
-        edu = Entry(top)
-        edu.grid(row=6 , column=2, columnspan=10)
-
-        #Label(top, text=' Other info???? ', font='Times 15').grid(row=6, column=1, pady=20)
-
+        eduValues = ['Male', 'Female', 'Prefer not to say']
+        varEdu = StringVar(top)
+        varEdu.set(eduValues[0])
+        eduMenu = OptionMenu(top, varEdu, *eduValues)
+        eduMenu.grid(row=6, column=2, columnspan=10)
 
 
         def add_to_participants():
@@ -92,7 +96,7 @@ class userWindow():
                 print("Creation of the directory %s failed" % path)
 
             elem = {'id': id, 'name': name.get(), 'surname': surname.get(), 'age': age.get(),
-                    'gender': gender.get(), 'edu': edu.get()}
+                    'gender': varGend.get(), 'edu': varEdu.get()}
 
             data['Participants'].append(elem)
 
@@ -116,7 +120,6 @@ class userWindow():
         Label(text="", font='Times 25').grid(row=0, column=1, pady=40, padx = 20 )
 
 
-        # Add a grid
         mainframe = Frame(self.window)
         mainframe.grid(column=0, row=1, sticky=(N, W, E, S))
         mainframe.columnconfigure(0, weight=1)
