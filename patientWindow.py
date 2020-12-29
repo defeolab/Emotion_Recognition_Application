@@ -142,8 +142,8 @@ class PatientWindow :
 
     def show_anagraphic(self):
         top = tk.Toplevel()
-        top.title("Add a new Patient")
-        top.geometry("400x500")
+        top.title("Anagraphic data")
+        top.geometry("500x500")
 
         fp = open('anagraphicData.txt', 'r')
         data = json.load(fp)

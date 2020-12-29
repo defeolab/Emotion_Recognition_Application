@@ -1,9 +1,10 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, _setit
 import loginWindow as lw
 from random import randint
 import os
 import json
+from tkinter import messagebox
 
 
 import patientWindow as pw
@@ -33,10 +34,12 @@ class userWindow():
         application = lw.loginWindow()
 
     def update_menu(self):
-        menu = self.dropdown["menu"]
-        menu.delete(0, "end")
+
+        self.dropdown["menu"].delete(0, "end")
         for string in self.participants:
-            menu.add_command(label=string)
+            self.dropdown["menu"].add_command(label=string, command=_setit(self.tkvar, string))
+
+
 
     def add_patient(self):
         top = Toplevel()
@@ -66,7 +69,7 @@ class userWindow():
 
 
         Label(top, text=' Educational Level ', font='Times 15').grid(row=6, column=1, pady=20)
-        eduValues = ['Male', 'Female', 'Prefer not to say']
+        eduValues = ['Primary School', 'Middle School', 'High School', 'Bachelor/Master Degree']
         varEdu = StringVar(top)
         varEdu.set(eduValues[0])
         eduMenu = OptionMenu(top, varEdu, *eduValues)
@@ -106,13 +109,16 @@ class userWindow():
 
             top.destroy()
 
-        Button(top, text='Add Patient', command=add_to_participants).grid(row=7, column=3)
+            messagebox.showinfo("Sucessfully added", "You added a new Participant, the Participant is associated with the number "+ str(id)+".")
+
+
+        Button(top, text='Add Participant', command=add_to_participants).grid(row=7, column=3, pady=20)
 
     def createWindow(self):
         self.window = Tk()
         self.window.title("User personal page")
         self.window.geometry("1000x600")
-        self.window.columnconfigure(10, weight=1)
+        self.window.columnconfigure(1, weight=1)
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )
 
@@ -127,20 +133,22 @@ class userWindow():
 
 
         # Create a Tkinter variable
-        tkvar = StringVar(self.window)
+        self.tkvar = StringVar(self.window)
 
         # Dictionary with options
-        tkvar.set(self.participants[0])  # set the default option
+        self.tkvar.set(self.participants[0])  # set the default option
 
-        self.dropdown = OptionMenu(mainframe, tkvar, *self.participants)
+        self.dropdown = OptionMenu(mainframe, self.tkvar, *self.participants)
 
         Label(mainframe, text="Choose a participant", font='Times 16').grid(row=2, column=1, pady= 20)
 
         self.dropdown.grid(row=3, column=1, sticky=(N, W, E, S))
 
 
-        add_but = ttk.Button(mainframe, text="Add new Patient", command=self.add_patient).grid(row=4, column=1,
+        add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_patient).grid(row=4, column=1,
                                                                                                  padx=10, pady=50)
+
+        no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26').grid(row=1, column=1, padx= 30, pady= 20)
 
         def selectPatient(str):
 
@@ -149,15 +157,17 @@ class userWindow():
                     w.destroy()
 
             #name_surname = str.get().split()
-            patient = str.get().split()[2]
-            self.patient = pw.PatientWindow(self.window, self.environment, patient)
+            pat = str.get().split()[2]
+            self.patient = pw.PatientWindow(self.window, self.environment, pat)
 
         # on change dropdown value
         def change_dropdown(*args):
-            selectPatient(tkvar)
+            selectPatient(self.tkvar)
 
         # link function to change dropdown
-        tkvar.trace('w', change_dropdown)
+        self.tkvar.trace('w', change_dropdown)
+
+
 
 
 

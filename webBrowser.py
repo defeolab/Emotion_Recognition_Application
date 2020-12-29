@@ -115,7 +115,7 @@ class BrowserFrame(tk.Frame):
         rect = [0, 0, self.winfo_width(), self.winfo_height()]
         window_info.SetAsChild(self.get_window_handle(), rect)
         self.browser = cef.CreateBrowserSync(window_info,
-                                             url="https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
+                                             url="https://www.lavazza.it/it.html")
         assert self.browser
         self.browser.SetClientHandler(LoadHandler(self))
         self.browser.SetClientHandler(FocusHandler(self))
@@ -237,8 +237,23 @@ class NavigationBar(tk.Frame):
         tk.Grid.rowconfigure(self, 0, weight=100)
         tk.Grid.columnconfigure(self, 3, weight=100)
 
+
+        self.nespresso_button = tk.Button(self, text="Nespresso",command=self.go_toN)
+        self.nespresso_button.grid(row=0, column=5, padx=20)
+
+        self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toL)
+        self.lavazza_button.grid(row=0, column=4, padx=20)
+
         # Update state of buttons
         self.update_state()
+
+    def go_toN(self):
+        self.master.get_browser().StopLoad()
+        self.master.get_browser().LoadUrl("https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
+
+    def go_toL(self):
+        self.master.get_browser().StopLoad()
+        self.master.get_browser().LoadUrl("https://www.lavazza.it/it.html")
 
     def go_back(self):
         if self.master.get_browser():
