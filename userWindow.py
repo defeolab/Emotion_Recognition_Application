@@ -11,10 +11,9 @@ import patientWindow as pw
 
 class userWindow():
 
-    def __init__(self, name, surname, environment, id):
+    def __init__(self, name, surname, id):
         self.name = name
         self.surname = surname
-        self.environment = environment  # 0 = clinical, 1 = neuromarketing
         self.patientId = id
         self.window = None
         self.patient = None
@@ -158,7 +157,7 @@ class userWindow():
 
             #name_surname = str.get().split()
             pat = str.get().split()[2]
-            self.patient = pw.PatientWindow(self.window, self.environment, pat)
+            self.patient = pw.PatientWindow(self.window, pat)
 
         # on change dropdown value
         def change_dropdown(*args):

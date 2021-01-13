@@ -7,9 +7,6 @@ class loginWindow:
 
     # user0 = 'mark'
     # pass0 = 'mark'
-    #
-    # user1 = 'clinic'
-    # pass1 = 'clinic'
 
     def __init__(self):
 
@@ -45,13 +42,10 @@ class loginWindow:
         credentials = json.load(fp)
         fp.close()
 
-        self.user1 = credentials['ClinicalApp']['username']
-        self.pass1 = credentials['ClinicalApp']['password']
+        self.user = credentials['username']
+        self.passw = credentials['password']
 
-        self.user0 = credentials['MarketingApp']['username']
-        self.pass0 = credentials['MarketingApp']['password']
-
-        if self.username.get() == self.user0 and self.password.get() == self.pass0:
+        if self.username.get() == self.user and self.password.get() == self.passw:
 
             self.message = Label(text='Ok!!!!', fg='Red')
             self.message.grid(row=6, column=3)
@@ -60,22 +54,8 @@ class loginWindow:
             self.window.destroy()
 
             #Open new window
-            newWindow = uw.userWindow("Vito", "De Feo", 0, 1234)
+            newWindow = uw.userWindow("Vito", "De Feo", 1234)
             newWindow.window.mainloop()
-
-        elif self.username.get() == self.user1 and self.password.get() == self.pass1:
-
-            self.message = Label(text='Ok!!!!', fg='Red')
-            self.message.grid(row=6, column=3)
-
-            #Destroy the current window
-            self.window.destroy()
-
-            #Open new window
-            newWindow = uw.userWindow("Vito", "De Feo", 1, 1234)
-            newWindow.window.mainloop()
-
-
 
         else:
 

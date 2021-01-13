@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
 import expGiulia
-import expClinical
 import sys, os
 import vlc
 from time import sleep
@@ -16,11 +15,11 @@ import videoPlayer as vp
 
 class PatientWindow :
 
-    def __init__(self, parent, environment, id, name=None, surname=None):
+    def __init__(self, parent, id, name=None, surname=None):
         self.name = name
         self.surname = surname
         self.patientId = id
-        self.environment = environment          #0 = clinical, 1 = neuromarketing
+
         self.parent = parent
         self.widgets = self.addWidgets()
 
@@ -57,35 +56,20 @@ class PatientWindow :
 
         widgets.append(experiments_frame)
 
-        if self.environment == 0:
 
-            neuro_frame = ttk.LabelFrame(experiments_frame, text="Experiments", relief=tk.RIDGE)
-            neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
+        neuro_frame = ttk.LabelFrame(experiments_frame, text="Experiments", relief=tk.RIDGE)
+        neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
-            button1 = ttk.Button(neuro_frame, text="Giulia's Experiment", command=self.run_expGiulia)
-            button1.grid(row=1, column=1, pady=15)
-            button2 = ttk.Button(neuro_frame, text="Alessia's Experiment", command=self.run_expAlessia)
-            button2.grid(row=2, column=1, pady=15)
-            neuro_frame.columnconfigure(1, weight=1)
+        button1 = ttk.Button(neuro_frame, text="Giulia's Experiment", command=self.run_expGiulia)
+        button1.grid(row=1, column=1, pady=15)
+        button2 = ttk.Button(neuro_frame, text="Alessia's Experiment", command=self.run_expAlessia)
+        button2.grid(row=2, column=1, pady=15)
+        neuro_frame.columnconfigure(1, weight=1)
 
-            show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
-            show_data_but.grid(row=2, column=1, pady=30)
+        show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
+        show_data_but.grid(row=2, column=1, pady=30)
 
-            widgets.extend([neuro_frame, button1, button2, show_data_but])
-
-        else:
-
-            clinical_frame = ttk.LabelFrame(experiments_frame, text="Experiment", relief=tk.RIDGE)
-            clinical_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
-
-            button3 = ttk.Button(clinical_frame, text="Clinical Experiment", command=self.run_expClinical)
-            clinical_frame.columnconfigure(1, weight=1)
-            button3.grid(row=1, column=1, pady = 10)
-
-            show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
-            show_data_but.grid(row=2, column=1, pady = 30)
-
-            widgets.extend([clinical_frame, button3, show_data_but])
+        widgets.extend([neuro_frame, button1, button2, show_data_but])
 
         return widgets
 
@@ -100,16 +84,6 @@ class PatientWindow :
             if(sys.exc_info()[1].__getattribute__('code') == 1):
                 self.run_expCamilla()
             self.run_expCamilla()       #Da LEVARE POST PRESENTAZIONE
-
-    def run_expClinical(self):
-        try:
-            if (self.patientId == None):
-                self.patientId = '';
-            #os.system('expClinical.py')
-            expClinical.runExp(self.patientId)
-
-        except:
-            print("exit with " + str(sys.exc_info()[0]))
 
     def run_expAlessia (self):
         #print("Non funzionante")
