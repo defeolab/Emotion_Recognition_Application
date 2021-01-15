@@ -64,12 +64,16 @@ class PatientWindow :
         button1.grid(row=1, column=1, pady=15)
         button2 = ttk.Button(neuro_frame, text="Alessia's Experiment", command=self.run_expAlessia)
         button2.grid(row=2, column=1, pady=15)
+        button3 = ttk.Button(neuro_frame, text="Camilla's Experiment", command=self.run_expCamilla)
+        button3.grid(row=3, column=1, pady=15)
+        button4 = ttk.Button(neuro_frame, text="Chiara's Experiment", command=self.run_expChiara)
+        button4.grid(row=4, column=1, pady=15)
         neuro_frame.columnconfigure(1, weight=1)
 
         show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
         show_data_but.grid(row=2, column=1, pady=30)
 
-        widgets.extend([neuro_frame, button1, button2, show_data_but])
+        widgets.extend([neuro_frame, button1, button2, button3, button4, show_data_but])
 
         return widgets
 
@@ -81,9 +85,12 @@ class PatientWindow :
 
         except:
 
-            if(sys.exc_info()[1].__getattribute__('code') == 1):
-                self.run_expCamilla()
-            self.run_expCamilla()       #Da LEVARE POST PRESENTAZIONE
+            # if(sys.exc_info()[1].__getattribute__('code') == 1):
+            #     self.run_expCamilla()
+            # self.run_expCamilla()       #Da LEVARE POST PRESENTAZIONE
+            print("Manual escape")
+
+        os.startfile("https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
     def run_expAlessia (self):
         #print("Non funzionante")
@@ -101,6 +108,8 @@ class PatientWindow :
             player.OnStop()
             top.destroy()
 
+            os.startfile("https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+
         top.protocol("WM_DELETE_WINDOW", closeTop)
 
         def pause(arg):
@@ -111,8 +120,12 @@ class PatientWindow :
 
 
     def run_expCamilla(self):
-        webBrowser.launch_browser()
+        webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
 
+    def run_expChiara(self):
+        webBrowser.launch_browser("https://www.spain.info/it/", 2)
+        # https: // www.spain.info / it /
+        # https: // www.visitnorway.it /
 
     def show_anagraphic(self):
         top = tk.Toplevel()

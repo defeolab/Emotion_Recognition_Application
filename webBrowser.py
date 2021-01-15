@@ -1,5 +1,6 @@
 from cefpython3 import cefpython as cef
 import ctypes
+
 try:
     import tkinter as tk
 except ImportError:
@@ -19,13 +20,14 @@ MAC = (platform.system() == "Darwin")
 # Globals
 logger = _logging.getLogger("tkinter_.py")
 
+
 class MainFrame(tk.Frame):
 
-    def __init__(self, root):
+    def __init__(self, root, starting_url, type_exp):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
-
+        self.type = type_exp  # 1= Camilla, 2=Chiara
         # Root
         root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
@@ -41,22 +43,22 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self)
+        self.navigation_bar = NavigationBar(self, self.type)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
         tk.Grid.columnconfigure(self, 0, weight=0)
 
         # BrowserFrame
-        self.browser_frame = BrowserFrame(self, self.navigation_bar)
+        self.browser_frame = BrowserFrame(self, starting_url, self.navigation_bar)
         self.browser_frame.grid(row=1, column=0,
                                 sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 1, weight=1)
         tk.Grid.columnconfigure(self, 0, weight=1)
 
-        #InstructionFrame
-        self.instruction_frame = InstructionFrame(self)
-        self.instruction_frame.grid(row=1, column =1, sticky=(tk.N + tk.S + tk.E + tk.W))
+        # InstructionFrame
+        self.instruction_frame = InstructionFrame(self, self.type)
+        self.instruction_frame.grid(row=1, column=1, sticky=(tk.N + tk.S + tk.E + tk.W))
         # tk.Grid.rowconfigure(self, 0, weight=1)
         # tk.Grid.columnconfigure(self, 1, weight=1)
 
@@ -98,12 +100,14 @@ class MainFrame(tk.Frame):
             return self.browser_frame
         return None
 
+
 class BrowserFrame(tk.Frame):
 
-    def __init__(self, master, navigation_bar=None):
+    def __init__(self, master, starting_url="", navigation_bar=None):
         self.navigation_bar = navigation_bar
         self.closing = False
         self.browser = None
+        self.starting_url = starting_url
         tk.Frame.__init__(self, master)
         self.bind("<FocusIn>", self.on_focus_in)
         self.bind("<FocusOut>", self.on_focus_out)
@@ -115,7 +119,7 @@ class BrowserFrame(tk.Frame):
         rect = [0, 0, self.winfo_width(), self.winfo_height()]
         window_info.SetAsChild(self.get_window_handle(), rect)
         self.browser = cef.CreateBrowserSync(window_info,
-                                             url="https://www.lavazza.it/it.html")
+                                             url=self.starting_url)
         assert self.browser
         self.browser.SetClientHandler(LoadHandler(self))
         self.browser.SetClientHandler(FocusHandler(self))
@@ -173,6 +177,7 @@ class BrowserFrame(tk.Frame):
     def clear_browser_references(self):
         self.browser = None
 
+
 class LoadHandler(object):
 
     def __init__(self, browser_frame):
@@ -181,6 +186,7 @@ class LoadHandler(object):
     def OnLoadStart(self, browser, **_):
         if self.browser_frame.master.navigation_bar:
             self.browser_frame.master.navigation_bar.set_url(browser.GetUrl())
+
 
 class FocusHandler(object):
 
@@ -202,34 +208,36 @@ class FocusHandler(object):
         logger.debug("FocusHandler.OnGotFocus")
         self.browser_frame.focus_set()
 
+
 class NavigationBar(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, type_exp):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
         self.forward_image = None
         self.reload_image = None
         tk.Frame.__init__(self, master)
+        self.type = type_exp
 
         # Back button
         back = 'resources/back.png'
         self.back_image = tk.PhotoImage(file=back)
-        #self.back_image = self.back_image.zoom(25).subsample(100)
-        self.back_button = tk.Button(self, image=self.back_image,command=self.go_back)
+        # self.back_image = self.back_image.zoom(25).subsample(100)
+        self.back_button = tk.Button(self, image=self.back_image, command=self.go_back)
         self.back_button.grid(row=0, column=0)
 
         # Forward button
         forward = 'resources/forward.png'
         self.forward_image = tk.PhotoImage(file=forward)
-        #self.forward_image = self.forward_image.zoom(25).subsample(100)
-        self.forward_button = tk.Button(self, image=self.forward_image,command=self.go_forward)
+        # self.forward_image = self.forward_image.zoom(25).subsample(100)
+        self.forward_button = tk.Button(self, image=self.forward_image, command=self.go_forward)
         self.forward_button.grid(row=0, column=1)
 
-#        Reload button
+        #        Reload button
         refresh = 'resources/reload.png'
         self.reload_image = tk.PhotoImage(file=refresh)
-        #self.reload_image = self.reload_image.zoom(25).subsample(100)
-        self.reload_button = tk.Button(self, image=self.reload_image,command=self.reload)
+        # self.reload_image = self.reload_image.zoom(25).subsample(100)
+        self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
         # Url entry
@@ -237,23 +245,39 @@ class NavigationBar(tk.Frame):
         tk.Grid.rowconfigure(self, 0, weight=100)
         tk.Grid.columnconfigure(self, 3, weight=100)
 
+        if self.type == 1:
+            self.nespresso_button = tk.Button(self, text="Nespresso", command=self.go_toNespresso)
+            self.nespresso_button.grid(row=0, column=5, padx=20)
 
-        self.nespresso_button = tk.Button(self, text="Nespresso",command=self.go_toN)
-        self.nespresso_button.grid(row=0, column=5, padx=20)
+            self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toLavazza)
+            self.lavazza_button.grid(row=0, column=4, padx=20)
 
-        self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toL)
-        self.lavazza_button.grid(row=0, column=4, padx=20)
+        elif self.type == 2:
+            self.spain_button = tk.Button(self, text="Spagna", command=self.go_toSpagna)
+            self.spain_button.grid(row=0, column=5, padx=20)
+
+            self.norway_button = tk.Button(self, text="Norvegia", command=self.go_toNorvegia)
+            self.norway_button.grid(row=0, column=4, padx=20)
 
         # Update state of buttons
         self.update_state()
 
-    def go_toN(self):
+    def go_toNespresso(self):
         self.master.get_browser().StopLoad()
-        self.master.get_browser().LoadUrl("https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
+        self.master.get_browser().LoadUrl(
+            "https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
 
-    def go_toL(self):
+    def go_toLavazza(self):
         self.master.get_browser().StopLoad()
         self.master.get_browser().LoadUrl("https://www.lavazza.it/it.html")
+
+    def go_toSpagna(self):
+        self.master.get_browser().StopLoad()
+        self.master.get_browser().LoadUrl("https://www.spain.info/it/")
+
+    def go_toNorvegia(self):
+        self.master.get_browser().StopLoad()
+        self.master.get_browser().LoadUrl("https://www.visitnorway.it/")
 
     def go_back(self):
         if self.master.get_browser():
@@ -318,29 +342,36 @@ class NavigationBar(tk.Frame):
 
 
 class InstructionFrame(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master, type_exp):
         self.instruction = None
         tk.Frame.__init__(self, master)
-
-        #self.instruction = tk.Listbox(self)
-        self.instruction = tk.Text(self,width = 50, font=("Helvetica", 14))
-        self.instruction.grid(row=0, column=0,  sticky=(tk.N + tk.S + tk.E + tk.W))
+        self.type = type_exp
+        # self.instruction = tk.Listbox(self)
+        self.instruction = tk.Text(self, width=50, font=("Helvetica", 14))
+        self.instruction.grid(row=0, column=0, sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=1)
-        tk.Grid.columnconfigure(self, 0, minsize= 200, weight=1)
-        #self.instruction.insert(0, "QUI VERRANNO VISUALIZZATE LE ISTRUZIONI")
-        self.instruction.insert(tk.INSERT, "Istruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
+        tk.Grid.columnconfigure(self, 0, minsize=200, weight=1)
+
+        if self.type == 1:
+            self.instruction.insert(tk.INSERT, "GRUPPO A\nIstruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
                                            "     • Cliccare tasto “Menu”\n     • Cliccare tasto “Sostenibilità”\n"
                                            "     • Cliccare tasto “Fondazione”\n     • Leggere la pagina “Fondazione Lavazza”\n"
                                            "     • Leggere l’articolo “Innovazione contro il cambiamento                     climatico” cliccando il tasto “Scopri di più”\n"
                                            "     • Leggere l’articolo “L’impresa di diventare impresa”\n"
-                                           "     • Leggere l’articolo “Il caffè per rinascere” \n\nIstruzioni per sito Nespresso:\n"
+                                           "     • Leggere l’articolo “Il caffè per rinascere” \n\nGRUPPO B\nIstruzioni per sito Nespresso:\n"
                                            "     • Andare sul sito nespresso.com\n     • Passare il mouse sul tasto “Sostenibilità e riciclo”\n"
                                            "     • Cliccare tasto “Il caffè secondo Nespresso”\n     • Leggere l’articolo “Avvicinati e ascolta”\n"
                                            "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Pace e speranza in Colombia”\n"
                                            "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Piantare radici per salvaguardare il futuro           del caffè e del nostro pianeta”")
+        elif self.type == 2:
+            self.instruction.insert(tk.INSERT, "Istruzioni per il partecipante:\n\n 1.  Osservate la home page.\n\n 2.  Cercare nel menù di navigazione la voce “Cosa fare”\n\n"
+                                               " 3.  Scegliete l’opzione “Natura” (per il sito della Spagna) / \n      “Attrazioni naturali imperdibili” ( per il sito della Norvegia).\n\n"
+                                               " 4.  Scorrete fra i contenuti dell’intera pagina e cercate il \n       pulsante per prenotare un’esperienza a contatto con la \n      natura.")
+
         self.instruction.config(state='disabled')
 
-def launch_browser():
+
+def launch_browser(url, type):
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -348,13 +379,13 @@ def launch_browser():
     logger.addHandler(stream_handler)
     logger.info("CEF Python {ver}".format(ver=cef.__version__))
     logger.info("Python {ver} {arch}".format(
-            ver=platform.python_version(), arch=platform.architecture()[0]))
+        ver=platform.python_version(), arch=platform.architecture()[0]))
     logger.info("Tk {ver}".format(ver=tk.Tcl().eval('info patchlevel')))
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
     root.state("zoomed")
-    app = MainFrame(root)
+    app = MainFrame(root, url, type)
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     app.mainloop()
