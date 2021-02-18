@@ -53,7 +53,7 @@ def runExp(participantId):
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
                                      extraInfo=expInfo, runtimeInfo=None,
-                                     originPath='C:\\Users\\matti\\OneDrive\\Desktop\\Tesi\\ExpGiulia_lastrun.py',
+                                     originPath=os.getcwd(),
                                      savePickle=True, saveWideText=True,
                                      dataFileName=filename)
     # save a log file for detail verbose info
