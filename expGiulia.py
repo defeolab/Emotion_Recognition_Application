@@ -15,7 +15,7 @@ from __future__ import absolute_import, division
 
 from psychopy import locale_setup
 from psychopy import prefs
-from psychopy import sound, gui, visual, core, data, event, logging, clock
+from psychopy import sound, gui, visual, core, data, event, logging, clock, monitors
 from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
                                 STOPPED, FINISHED, PRESSED, RELEASED, FOREVER)
 
@@ -29,6 +29,11 @@ import sys  # to get file system encoding
 from psychopy.hardware import keyboard
 import threading
 
+###Titta imports
+import pickle
+import pandas as pd
+from Titta.titta import Titta, helpers_tobii as helpers
+import os
 
 def runExp(participantId):
     # Ensure that relative paths start from the same directory as this scripta
@@ -47,15 +52,31 @@ def runExp(participantId):
     expInfo['expName'] = expName
     expInfo['psychopyVersion'] = psychopyVersion
 
+    ##titta setup
+    monitor_refresh_rate = 60  # frames per second (fps)
+    mon = monitors.Monitor('testMonitor')  # Defined in defaults file
+    """mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
+    mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
+    mon.setSizePix(SCREEN_RES)"""
+    et_name = 'Tobii T60'
+    dummy_mode = False
+    bimonocular_calibration = False
+    settings = Titta.get_defaults(et_name)
+    settings.FILENAME = 'testfile.tsv'
+    settings.N_CAL_TARGETS = 5  # change the duration of the calibration -- default : 0, 1, 3, 5, 9, 13
+
+    # %% Connect to eye tracker and calibrate
+    tracker = Titta.Connect(settings)
+    tracker.init()
+
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
     filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
-
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
                                      extraInfo=expInfo, runtimeInfo=None,
-                                     originPath='C:\\Users\\matti\\OneDrive\\Desktop\\Tesi\\ExpGiulia_lastrun.py',
                                      savePickle=True, saveWideText=True,
                                      dataFileName=filename)
+
     # save a log file for detail verbose info
     logFile = logging.LogFile(filename + '.log', level=logging.EXP)
     logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a file
@@ -67,13 +88,14 @@ def runExp(participantId):
 
     # Setup the Window
     win = visual.Window(
-        size=(1024, 768), fullscr=True, screen=0,
+        size=(1280, 1024), fullscr=True, screen=0,
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
         units='height')
     # store frame rate of monitor if we can measure it
     expInfo['frameRate'] = win.getActualFrameRate()
+
     if expInfo['frameRate'] != None:
         frameDur = 1.0 / round(expInfo['frameRate'])
     else:
@@ -84,22 +106,25 @@ def runExp(participantId):
 
     # Initialize components for Routine "trial"
     trialClock = core.Clock()
+
     welcomeText = visual.TextStim(win=win, name='welcomeText',
                                   text='Welcome to this experiment.\n\nPress the spacebar when you are ready and the video will start!',
                                   font='Arial',
                                   pos=(0, 0), height=0.1, wrapWidth=None, ori=0,
                                   color='white', colorSpace='rgb', opacity=1,
                                   languageStyle='LTR',
-                                  depth=0.0);
+                                  depth=0.0)
+
     key_resp = keyboard.Keyboard()
+
+
 
     # Initialize components for Routine "Video"
     VideoClock = core.Clock()
     video = visual.MovieStim3(
         win=win, name='video',
         noAudio=False,
-        #filename='C:\\Users\\matti\\OneDrive\\Desktop\\Tesi\\VideoEsperimenti\\filmato_Giulia.mp4',
-        filename='videos\\filmato_Giulia.mp4',
+        filename='videos/filmato_Giulia.mp4',
         ori=0, pos=(0, 0), opacity=1,
         loop=False,
         depth=0.0,
@@ -211,7 +236,7 @@ def runExp(participantId):
     continueRoutine = True
     # update component parameters for each repeat
     # keep track of which components have finished
-    VideoComponents = [video]
+    """VideoComponents = [video]
     for thisComponent in VideoComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -223,8 +248,30 @@ def runExp(participantId):
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     VideoClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
-    frameN = -1
+    frameN = -1"""
 
+    ##titta part
+    fixation_point = helpers.MyDot2(win)
+
+    if bimonocular_calibration:
+        tracker.calibrate(win, eye='left', calibration_number='first')
+        tracker.calibrate(win, eye='right', calibration_number='second')
+    else:
+        tracker.calibrate(win)
+
+    # %% Record some data
+    tracker.start_recording(gaze_data=True, store_data=True)
+
+    # Present fixation dot and wait for one second
+    for i in range(monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message('fix on')
+        fixation_point.draw()
+        t = win.flip()
+    tracker.send_message('fix off')
+
+
+    """
     # -------Run Routine "Video"-------
     while continueRoutine:
         # get current time
@@ -265,9 +312,24 @@ def runExp(participantId):
     for thisComponent in VideoComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    video.stop()
-    # the Routine "Video" was not non-slip safe, so reset the non-slip timer
-    routineTimer.reset()
+    video.stop()"""
+
+    tracker.stop_recording(gaze_data=True)
+    tracker.save_data(mon)
+
+    bs = r"\""
+    # %% Open pickle and write et-data and messages to tsv-files.
+    print(os.path.dirname(os.path.realpath(__file__)) + bs + settings.FILENAME[:-4] + '.pkl')
+    # os.makedirs(os.path.dirname(os.path.realpath(__file__))+ bs + settings.FILENAME[:-4] + '.pkl', exist_ok=True)
+    f = open(os.path.dirname(os.path.realpath(__file__)) + '/' + settings.FILENAME[:-4] + '.pkl', 'rb')
+    gaze_data = pickle.load(f)
+    msg_data = pickle.load(f)
+
+    #  Save data and messages
+    df = pd.DataFrame(gaze_data, columns=tracker.header)
+    df.to_csv(os.path.dirname(os.path.realpath(__file__)) + bs + settings.FILENAME[:-4] + '.tsv', sep='\t')
+    df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+    df_msg.to_csv(os.path.dirname(os.path.realpath(__file__)) + bs + settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
     # Flip one final time so any remaining win.callOnFlip()
     # and win.timeOnFlip() tasks get executed before quitting
@@ -280,7 +342,7 @@ def runExp(participantId):
     # make sure everything is closed down
     thisExp.abort()  # or data files will save again on exit
     win.close()
-    #core.quit()
+    core.quit()
     logging.flush()
 
     for thisThread in threading.enumerate():
