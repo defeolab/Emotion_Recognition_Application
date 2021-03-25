@@ -32,10 +32,114 @@ import threading
 ###Titta imports
 import pickle
 import pandas as pd
-from Titta.titta import Titta, helpers_tobii as helpers
+from titta import Titta, helpers_tobii as helpers
 import os
 
 def runExp(participantId):
+    # Ensure that relative paths start from the same directory as this scripta
+    _thisDir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(_thisDir)
+    im_name = 'Capture.PNG'
+
+    # Store info about the experiment session
+    psychopyVersion = '2020.2.4'
+    expName = 'ExpGiulia'  # from the Builder filename that created this script
+    expInfo = {'participant': participantId, 'session': '001'}
+
+    #dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
+    #if dlg.OK == False:
+    #    core.quit()  # user pressed cancel
+    expInfo['date'] = data.getDateStr()  # add a simple timestamp
+    expInfo['expName'] = expName
+    expInfo['psychopyVersion'] = psychopyVersion
+
+    MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
+    FULLSCREEN = True
+    SCREEN_RES = [1920, 1080]
+    SCREEN_WIDTH = 52.7  # cm
+    VIEWING_DIST = 63  # distance from eye to center of screen (cm)
+
+    monitor_refresh_rate = 60  # frames per second (fps)
+    mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
+    mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
+    mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
+    mon.setSizePix(SCREEN_RES)
+
+    et_name = 'Tobii T60'
+    # et_name = 'IS4_Large_Peripheral'
+    # et_name = 'Tobii Pro Nano'
+
+    bimonocular_calibration = False
+    dummy_mode = True
+
+    # Change any of the default settings
+    settings = Titta.get_defaults(et_name)
+    settings.FILENAME = 'testfile.tsv'
+    settings.N_CAL_TARGETS = 5
+
+    tracker = Titta.Connect(settings)
+    if dummy_mode:
+        tracker.set_dummy_mode()
+    tracker.init()
+
+    win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
+                        screen=1, size=SCREEN_RES, units='deg')
+    expInfo['frameRate'] = win.getActualFrameRate()
+
+    #get fixation point
+    fixation_point = helpers.MyDot2(win)
+    image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
+
+    # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
+    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
+    print(filename)
+    # An ExperimentHandler isn't essential but helps with data saving
+
+    #  Calibrate
+    if bimonocular_calibration:
+        tracker.calibrate(win, eye='left', calibration_number='first')
+        tracker.calibrate(win, eye='right', calibration_number='second')
+    else:
+        tracker.calibrate(win)
+
+    # Record some data
+    tracker.start_recording(gaze_data=True, store_data=True)
+    """
+    for i in range(expInfo['frameRate']):
+        if i == 0:
+            tracker.send_message('fix on')
+        fixation_point.draw()
+        t = win.flip()
+    tracker.send_message('fix off')
+    """
+    # Wait exactly 3 * fps frames (3 s)
+    for i in range(3 * monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message(''.join(['stim on: ', im_name]))
+        image.draw()
+        t = win.flip()
+    tracker.send_message(''.join(['stim off: ', im_name]))
+
+    win.flip()
+    tracker.stop_recording(gaze_data=True)
+
+    # Close window and save data
+    win.close()
+    tracker.save_data(mon)  # Also save screen geometry from the monitor object
+
+    # Open pickle and write et-data and messages to tsv-files.
+    f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
+    gaze_data = pickle.load(f)
+    msg_data = pickle.load(f)
+
+    #  Save data and messages
+    df = pd.DataFrame(gaze_data, columns=tracker.header)
+    df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
+    df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+    df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+
+def runExpp(participantId):
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
@@ -52,22 +156,41 @@ def runExp(participantId):
     expInfo['expName'] = expName
     expInfo['psychopyVersion'] = psychopyVersion
 
-    ##titta setup
+    # %%titta setup
     monitor_refresh_rate = 60  # frames per second (fps)
     mon = monitors.Monitor('testMonitor')  # Defined in defaults file
     """mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)"""
     et_name = 'Tobii T60'
-    dummy_mode = False
+    dummy_mode = True
     bimonocular_calibration = False
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'testfile.tsv'
     settings.N_CAL_TARGETS = 5  # change the duration of the calibration -- default : 0, 1, 3, 5, 9, 13
 
-    # %% Connect to eye tracker and calibrate
+    #Connect to eye tracker and calibrate
     tracker = Titta.Connect(settings)
+    if dummy_mode:
+        tracker.set_dummy_mode()
     tracker.init()
+
+    endExpNow = False  # flag for 'escape' or other condition => quit the exp
+
+    win = visual.Window(
+        size=(1280, 1024), fullscr=True, screen=0,
+        winType='pyglet', allowGUI=False, allowStencil=False,
+        monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
+        blendMode='avg', useFBO=True,
+        units='height')
+    expInfo['frameRate'] = win.getActualFrameRate()
+
+    """"# create a default keyboard (e.g. to check for escape)
+    defaultKeyboard = keyboard.Keyboard()
+    # Initialize components for Routine "trial"
+    trialClock = core.Clock()"""
+
+    # %%
 
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
     filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
@@ -124,7 +247,7 @@ def runExp(participantId):
     video = visual.MovieStim3(
         win=win, name='video',
         noAudio=False,
-        filename='videos/filmato_Giulia.mp4',
+        filename='videos/filmato_Alessia.mp4',
         ori=0, pos=(0, 0), opacity=1,
         loop=False,
         depth=0.0,
