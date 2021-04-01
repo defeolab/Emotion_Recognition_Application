@@ -35,7 +35,8 @@ import pandas as pd
 from titta import Titta, helpers_tobii as helpers
 import os
 
-def runExp(participantId):
+def runExp(participantId, camera):
+    #todo : handle various camera types + handle bug from calibration
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)

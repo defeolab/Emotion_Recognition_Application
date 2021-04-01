@@ -22,6 +22,7 @@ class PatientWindow :
 
         self.parent = parent
         self.widgets = self.addWidgets()
+        self.tracker = 'eye_tracker'
 
     def browseFiles(self):
         filename = filedialog.askopenfile(initialdir= os.getcwd() +"/data/"+ str(self.patientId),
@@ -54,6 +55,12 @@ class PatientWindow :
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command= self.show_anagraphic)
         angraphic.grid(row=1, column= 2)
 
+        eye_tracker_button = ttk.Button(self.parent, text="Switch to Eye Tracker", command=self.switch_eye_tracker)
+        eye_tracker_button.grid(row=2, column=2)
+
+        webcam_button = ttk.Button(self.parent, text="Switch to Webcam", command=self.switch_webcam)
+        webcam_button.grid(row=3, column=2)
+
         widgets.append(experiments_frame)
 
 
@@ -80,8 +87,8 @@ class PatientWindow :
     def run_expGiulia(self):
         try:
             if(self.patientId == None):
-                self.patientId = '';
-            expGiulia.runExp(self.patientId)
+                self.patientId = ''
+            expGiulia.runExp(self.patientId, self.tracker)
 
         except:
 
@@ -101,8 +108,12 @@ class PatientWindow :
         top.state('zoomed')
 
         player = None
-
         player = vp.Player(top, title="tkinter vlc")
+        #todo : handle different camera types
+        if self.tracker == 'eye_tracker':
+            print("eye tracker")
+        else:
+            print('webcam')
 
         def closeTop():
             player.OnStop()
@@ -120,12 +131,24 @@ class PatientWindow :
 
 
     def run_expCamilla(self):
-        webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
+        webBrowser.launch_browser("https://www.lavazza.it/it.html", 1, self.tracker)
 
     def run_expChiara(self):
-        webBrowser.launch_browser("https://www.spain.info/it/", 2)
+        webBrowser.launch_browser("https://www.spain.info/it/", 2, self.tracker)
         # https: // www.spain.info / it /
         # https: // www.visitnorway.it /
+
+    def switch_webcam(self):
+        if(self.tracker == 'eye_tracker'):
+            self.tracker = 'webcam'
+        else:
+            print('already on webcam mode !')
+
+    def switch_eye_tracker(self):
+        if(self.tracker == 'webcam'):
+            self.tracker = 'eye_tracker'
+        else:
+            print('already on eye_tracker mode !')
 
     def show_anagraphic(self):
         top = tk.Toplevel()
