@@ -24,9 +24,6 @@ import pandas as pd
 if sys.version_info[0] == 3: # if Python 3:
     from io import BytesIO as StringIO
     import pickle
-else: # else Python 2
-    from cStringIO import StringIO
-    import cPickle as pickle
     
 
 EYE_IMAGE_SIZE_PIX = (175, 496)
@@ -44,7 +41,7 @@ system_info = pickle.load(f)
 settings = pickle.load(f)
 python_version = pickle.load(f)
 
-# And additional stuff if you pickeled something optional during the 
+# And additional stuff  if you pickeled something optional during the
 # call to 'save_data()'
 
 print(f)
