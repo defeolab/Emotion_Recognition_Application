@@ -28,6 +28,7 @@ import sys  # to get file system encoding
 
 from psychopy.hardware import keyboard
 import threading
+from screeninfo import get_monitors
 
 ###Titta imports
 import pickle
@@ -36,6 +37,10 @@ from titta import Titta, helpers_tobii as helpers
 import os
 
 def runExp(participantId, camera):
+    tmp = get_monitors()
+    new_width = tmp[0].width    # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
     #todo : handle various camera types + handle bug from calibration
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -56,7 +61,7 @@ def runExp(participantId, camera):
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    SCREEN_RES = [1920, 1080]
+    SCREEN_RES = [new_width, new_height]
     SCREEN_WIDTH = 52.7  # cm
     VIEWING_DIST = 63  # distance from eye to center of screen (cm)
 
@@ -84,7 +89,7 @@ def runExp(participantId, camera):
     tracker.init()
 
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
-                        screen=1, size=SCREEN_RES, units='deg')
+                        screen=0, size=SCREEN_RES, units='deg')
     expInfo['frameRate'] = win.getActualFrameRate()
 
     #get fixation point
@@ -141,6 +146,23 @@ def runExp(participantId, camera):
 
 
 def runExpp(participantId):
+
+    """
+            for m in get_monitors():
+                    print("width :"+str(m.width))
+                    print("height :" + str(m.height))
+            """
+    tmp = get_monitors()
+    new_width = tmp[0].width    # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+
+    VideoClock = core.Clock()
+    if(new_width==1280 and new_height==1024):
+        myfilename = 'videos\\filmato_Giulia_resized.mp4'
+    else:
+        myfilename = 'videos\\filmato_Giulia_original.mp4'
+
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
@@ -179,7 +201,8 @@ def runExpp(participantId):
     endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
     win = visual.Window(
-        size=(1280, 1024), fullscr=True, screen=0,
+        size=(new_width, new_height), fullscr=True, screen=0,      #screen=1 open the window on second screen, screen=0 on the principal
+                                                                   #it depends from windows settings
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
@@ -212,7 +235,7 @@ def runExpp(participantId):
 
     # Setup the Window
     win = visual.Window(
-        size=(1280, 1024), fullscr=True, screen=0,
+        size=(new_width, new_height), fullscr=True, screen=0,      #fullscreen = True
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
@@ -246,9 +269,10 @@ def runExpp(participantId):
     # Initialize components for Routine "Video"
     VideoClock = core.Clock()
     video = visual.MovieStim3(
-        win=win, name='video',
+        win=win,size=(new_width, new_height), name='video',
         noAudio=False,
-        filename='videos/filmato_Alessia.mp4',
+        filename=myfilename,
+        #filename='videos/filmato_Alessia.mp4',
         ori=0, pos=(0, 0), opacity=1,
         loop=False,
         depth=0.0,
