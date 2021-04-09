@@ -16,3 +16,5 @@ dependencies:
   - cefpython3
   - tobii-research
   - pygame
+  - sounddevice
+  - dlib
