@@ -1,28 +1,41 @@
 import tkinter as tk
+from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
 import expGiulia
+import webcam
 import sys, os
 import vlc
 from time import sleep
 import webBrowser
 import json
+import cv2
+from PIL import Image, ImageTk
 
 import videoPlayer as vp
 
 #from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
-class PatientWindow :
+class PatientWindow:
 
-    def __init__(self, parent, id, name=None, surname=None):
+    def __init__(self, parent, id, name=None, surname=None, video_source=0):
         self.name = name
         self.surname = surname
         self.patientId = id
 
-        self.parent = parent
+        self.parent = parent #window
         self.widgets = self.addWidgets()
         self.tracker = 'eye_tracker'
+
+        self.frame = None
+
+
+    def add_webcam_frame(self):
+        top = Toplevel()
+        top.title("Webcam output")
+        top.geometry("600x600")
+        Label(top, text=' Webcam ', font='Times 25').grid(row=1, column=3, pady=40)
 
     def browseFiles(self):
         filename = filedialog.askopenfile(initialdir= os.getcwd() +"/data/"+ str(self.patientId),
@@ -100,8 +113,6 @@ class PatientWindow :
         os.startfile("https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
     def run_expAlessia (self):
-        #print("Non funzionante")
-
         top = tk.Toplevel()
         top.title("Experiment VLC media player")
 
@@ -141,6 +152,10 @@ class PatientWindow :
     def switch_webcam(self):
         if(self.tracker == 'eye_tracker'):
             self.tracker = 'webcam'
+            self.frame = webcam.App(tk.Toplevel(), "webcam")
+            """top = Toplevel()
+            top.title("Webcam output")
+            top.geometry("600x600")"""
         else:
             print('already on webcam mode !')
 
@@ -149,6 +164,7 @@ class PatientWindow :
             self.tracker = 'eye_tracker'
         else:
             print('already on eye_tracker mode !')
+
 
     def show_anagraphic(self):
         top = tk.Toplevel()
