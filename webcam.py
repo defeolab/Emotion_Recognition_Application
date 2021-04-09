@@ -3,7 +3,7 @@ import cv2
 import time
 import PIL
 from PIL import ImageTk
-
+import gaze_tracking
 class App:
     def __init__(self, window, window_title, video_source=0):
         self.window = window
@@ -50,6 +50,7 @@ class MyVideoCapture:
     def __init__(self, video_source=0):
         # Open the video source
         self.vid = cv2.VideoCapture(video_source)
+        self.gaze = gaze_tracking.GazeTracking()
         if not self.vid.isOpened():
             raise ValueError("Unable to open video source", video_source)
 
@@ -60,7 +61,17 @@ class MyVideoCapture:
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
+            #add features to webcam input
+            self.gaze.refresh(frame)
+            frame = self.gaze.annotated_frame()
             if ret:
+                left_pupil = self.gaze.pupil_left_coords()
+                right_pupil = self.gaze.pupil_right_coords()
+                cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9,
+                            (147, 58, 31), 1)
+                cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9,
+                            (147, 58, 31), 1)
+
                 # Return a boolean success flag and the current frame converted to BGR
                 return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
             else:
