@@ -74,6 +74,9 @@ class PatientWindow:
         webcam_button = ttk.Button(self.parent, text="Switch to Webcam", command=self.switch_webcam)
         webcam_button.grid(row=3, column=2)
 
+        webcam_faceless_button = ttk.Button(self.parent, text="Switch to Webcam (without face)", command=self.switch_webcam_faceless)
+        webcam_faceless_button.grid(row=4, column=2)
+
         widgets.append(experiments_frame)
 
 
@@ -120,11 +123,6 @@ class PatientWindow:
 
         player = None
         player = vp.Player(top, title="tkinter vlc")
-        #todo : handle different camera types
-        if self.tracker == 'eye_tracker':
-            print("eye tracker")
-        else:
-            print('webcam')
 
         def closeTop():
             player.OnStop()
@@ -150,20 +148,25 @@ class PatientWindow:
         # https: // www.visitnorway.it /
 
     def switch_webcam(self):
-        if(self.tracker == 'eye_tracker'):
+        if(self.tracker == 'webcam'):
+            print('already on webcam mode !')
+        else:
             self.tracker = 'webcam'
             self.frame = webcam.App(tk.Toplevel(), "webcam")
-            """top = Toplevel()
-            top.title("Webcam output")
-            top.geometry("600x600")"""
+
+    def switch_webcam_faceless(self):
+        if(self.tracker == 'webcam_faceless'):
+            print('already on webcam faceless mode !')
         else:
-            print('already on webcam mode !')
+            self.tracker = 'webcam_faceless'
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def switch_eye_tracker(self):
-        if(self.tracker == 'webcam'):
-            self.tracker = 'eye_tracker'
-        else:
+        if(self.tracker == 'eye_tracker'):
             print('already on eye_tracker mode !')
+        else:
+            self.tracker = 'eye_tracker'
+            self.frame = None
 
 
     def show_anagraphic(self):
