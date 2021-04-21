@@ -40,6 +40,7 @@ class App:
 
     def stop(self):
         self.window.destroy()
+        self.vid.__del__()
 
     def update(self):
         # Get a frame from the video source
@@ -67,6 +68,7 @@ class Faceless_app:
 
     def stop(self):
         self.window.destroy()
+        self.vid.__del__()
 
     def update(self):
         # Get a frame from the video source
