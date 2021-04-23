@@ -5,6 +5,7 @@ import PIL
 from PIL import ImageTk
 import gaze_tracking
 
+
 class App:
     def __init__(self, window, window_title, video_source=0):
         self.window = window
@@ -36,7 +37,8 @@ class App:
         ret, frame = self.vid.get_frame()
 
         if ret:
-            cv2.imwrite("data/snapshots/frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+            cv2.imwrite("data/snapshots/frame-" + time.strftime("%d-%m-%Y-%H-%M-%S") + ".jpg",
+                        cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
     def stop(self):
         self.window.destroy()
@@ -93,7 +95,7 @@ class MyVideoCapture:
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
-            #add features to webcam input
+            # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
             if ret:
@@ -105,9 +107,9 @@ class MyVideoCapture:
                             (147, 58, 31), 1)
 
                 # Return a boolean success flag and the current frame converted to BGR
-                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+                return ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             else:
-                return (ret, None)
+                return ret, None
         else:
             raise ValueError("Unable to get a frame")
 
@@ -116,4 +118,4 @@ class MyVideoCapture:
         if self.vid.isOpened():
             self.vid.release()
 
-#App(tk.Tk(), "Tkinter and OpenCV")
+# App(tk.Tk(), "Tkinter and OpenCV")

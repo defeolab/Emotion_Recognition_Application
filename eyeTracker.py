@@ -33,114 +33,322 @@ from screeninfo import get_monitors
 ###Titta imports
 import pickle
 import pandas as pd
+
+import webBrowser
 from titta import Titta, helpers_tobii as helpers
 import os
 
-def runexp(participantId):
-    # Import modules
-    import pickle
-    import pandas as pd
-    from psychopy import visual, monitors
-    from psychopy import core, event
-    import numpy as np
-    from titta import Titta, helpers_tobii as helpers
+import tkinter as tk
+import videoPlayer as vp
 
-    MY_MONITOR = 'TobiiMonitor'
-    FULLSCREEN = False
-    SCREEN_RES = [1920, 1080]
+
+def runexpGiulia(participantId):
+    print(participantId)
+    tmp = get_monitors()
+    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+
+    MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
+    FULLSCREEN = True
+    SCREEN_RES = [tmp[0].width, tmp[0].height]
     SCREEN_WIDTH = 52.7  # cm
-    VIEWING_DIST = 63  # # distance from eye to center of screen (cm) (to setup according to the experiment condition)
-
+    VIEWING_DIST = 63  # distance from eye to center of screen (cm)
+    monitor_refresh_rate = 60  # frames per second (fps)
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
+    im_name = 'beer_positioning.jpg'
 
-    # Monitor/geometry operator screen
-    MY_MONITOR_OP = 'default'  # needs to exists in PsychoPy monitor center
-    FULLSCREEN_OP = False
-    SCREEN_RES_OP = [1920, 1080]
-    SCREEN_WIDTH_OP = 52.7  # cm
-    VIEWING_DIST_OP = 63  # # distance from eye to center of screen (cm)
-
-    mon_op = monitors.Monitor(MY_MONITOR_OP)  # Defined in defaults file
-    mon_op.setWidth(SCREEN_WIDTH_OP)  # Width of screen (cm)
-    mon_op.setDistance(VIEWING_DIST_OP)  # Distance eye / monitor (cm)
-    mon_op.setSizePix(SCREEN_RES_OP)
-
-    # Window set-up (this color will be used for calibration)
-    win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
-                        screen=1, size=SCREEN_RES, units='deg')
-
-    win_op = visual.Window(monitor=mon_op, fullscr=FULLSCREEN_OP,
-                           screen=0, size=SCREEN_RES_OP, units='norm')
-
-    fixation_point = helpers.MyDot2(win)
-    image = visual.ImageStim(win, image='beer_positioning.jpg', units='norm', size=(2, 2))
-
+    # %%  ET settings
     et_name = 'Tobii T60'
-    # et_name = 'Tobii4C'
-
     dummy_mode = True
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
-    settings.FILENAME = 'record.tsv'
+    settings.FILENAME = 'data/giulia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    #settings.FILENAME = 'testfile.tsv'
+    print(settings.FILENAME)
+    settings.N_CAL_TARGETS = 3
 
     tracker = Titta.Connect(settings)
+
     if dummy_mode:
         tracker.set_dummy_mode()
     tracker.init()
 
-    # Calibrate
+    # Window set-up (this color will be used for calibration)
+
+    win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
+                        screen=1, size=SCREEN_RES, units='deg')
+    fixation_point = helpers.MyDot2(win)
+    image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
+
+    #  Calibrate
     if bimonocular_calibration:
-        tracker.calibrate(win, win_operator=win_op, eye='left', calibration_number='first')
-        tracker.calibrate(win, win_operator=win_op, eye='right', calibration_number='second')
+        tracker.calibrate(win, eye='left', calibration_number='first')
+        tracker.calibrate(win, eye='right', calibration_number='second')
     else:
         tracker.calibrate(win)
 
     tracker.start_recording(gaze_data=True, store_data=True)
-
     # Present fixation dot and wait for one second
-    fixation_point.draw()
-    t = win.flip()
-    tracker.send_message('fixation target onset')
-    core.wait(1)
-    tracker.send_message('fixation target offset')
+    for i in range(monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message('fix on')
+        fixation_point.draw()
+        win.flip()
+    tracker.send_message('fix off')
 
-    image.draw()
-    t = win.flip()
-    tracker.send_message('image onset')
-    core.wait(3)
-    tracker.send_message('image offset')
+    # Wait exactly 3 * fps frames (3 s)
 
+    for i in range(30 * monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message(''.join(['stim on: ', im_name]))
+        image.draw()
+        t = win.flip()
+    tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
     tracker.stop_recording(gaze_data=True)
 
     # Close window and save data
+
     win.close()
-    win_op.close()
-    tracker.save_data()
+    tracker.save_data(mon)  # Also save screen geometry from the monitor object
+
+    # %% Open pickle and write et-data and messages to tsv-files.
 
     f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
     gaze_data = pickle.load(f)
     msg_data = pickle.load(f)
-
-    # Save data and messages
+    #  Save data and messages
     df = pd.DataFrame(gaze_data, columns=tracker.header)
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
-    core.quit()
 
-def runExp(participantId, camera):
+def runexpAlessia(participantId):
+    print(participantId)
     tmp = get_monitors()
-    new_width = tmp[0].width    # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
     print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
-    #todo : handle various camera types + handle bug from calibration
+
+    MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
+    FULLSCREEN = True
+    SCREEN_RES = [tmp[0].width, tmp[0].height]
+    SCREEN_WIDTH = 52.7  # cm
+    VIEWING_DIST = 63  # distance from eye to center of screen (cm) #TODO : measure the actual distance
+    monitor_refresh_rate = 60  # frames per second (fps)
+    mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
+    mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
+    mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
+    mon.setSizePix(SCREEN_RES)
+    im_name = 'beer_positioning.jpg'
+
+    # %%  ET settings
+    et_name = 'Tobii T60'
+    dummy_mode = True
+    bimonocular_calibration = False
+
+    settings = Titta.get_defaults(et_name)
+    settings.FILENAME = 'data/alessia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    #settings.FILENAME = 'testfile.tsv'
+    print(settings.FILENAME)
+    settings.N_CAL_TARGETS = 3
+
+    tracker = Titta.Connect(settings)
+
+    if dummy_mode:
+        tracker.set_dummy_mode()
+    tracker.init()
+
+    # Window set-up (this color will be used for calibration)
+
+    win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
+                        screen=1, size=SCREEN_RES, units='deg')
+    fixation_point = helpers.MyDot2(win)
+    #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
+
+    #  Calibrate
+    if bimonocular_calibration:
+        tracker.calibrate(win, eye='left', calibration_number='first')
+        tracker.calibrate(win, eye='right', calibration_number='second')
+    else:
+        tracker.calibrate(win)
+
+    createVideoFrame()
+
+    tracker.start_recording(gaze_data=True, store_data=True)
+    # Present fixation dot and wait for one second
+    for i in range(monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message('fix on')
+        fixation_point.draw()
+        win.flip()
+    tracker.send_message('fix off')
+
+    # Wait exactly 3 * fps frames (3 s)
+
+    """for i in range(3 * monitor_refresh_rate):
+        if i == 0:
+            ###send movie in this loop
+            tracker.send_message(''.join(['stim on: ', im_name]))
+        image.draw()
+        t = win.flip()
+    tracker.send_message(''.join(['stim off: ', im_name]))
+    win.flip()"""
+    #try to pass video here
+
+    tracker.stop_recording(gaze_data=True)
+    # Close window and save data
+
+    win.close()
+    tracker.save_data(mon)  # Also save screen geometry from the monitor object
+
+    # %% Open pickle and write et-data and messages to tsv-files.
+
+    f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
+    gaze_data = pickle.load(f)
+    msg_data = pickle.load(f)
+    #  Save data and messages
+    df = pd.DataFrame(gaze_data, columns=tracker.header)
+    df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
+    df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+    df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+def createVideoFrame():
+
+    top = tk.Toplevel()
+    top.title("Experiment VLC media player")
+    top.state('zoomed')
+    player = None
+    player = vp.Player(top, title="tkinter vlc")
+
+    def closeTop():
+        player.OnStop()
+        top.destroy()
+
+        os.startfile(
+            "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+
+    top.protocol("WM_DELETE_WINDOW", closeTop)
+
+    def pause(arg):
+        # print(str(arg))
+        player.OnPause()
+
+    top.bind('<space>', pause)
+
+
+def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for Chiara
+    print(participantId)
+    tmp = get_monitors()
+    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+
+    MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
+    FULLSCREEN = True
+    SCREEN_RES = [tmp[0].width, tmp[0].height]
+    SCREEN_WIDTH = 52.7  # cm
+    VIEWING_DIST = 63  # distance from eye to center of screen (cm)
+    monitor_refresh_rate = 60  # frames per second (fps)
+    mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
+    mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
+    mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
+    mon.setSizePix(SCREEN_RES)
+    im_name = 'beer_positioning.jpg'
+
+    # %%  ET settings
+    et_name = 'Tobii T60'
+    dummy_mode = False
+    bimonocular_calibration = False
+
+    settings = Titta.get_defaults(et_name)
+    if type == 1:
+        settings.FILENAME = 'data/camilla/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    else:
+        settings.FILENAME = 'data/chiara/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    # settings.FILENAME = 'testfile.tsv'
+    print(settings.FILENAME)
+    settings.N_CAL_TARGETS = 3
+
+    tracker = Titta.Connect(settings)
+
+    if dummy_mode:
+        tracker.set_dummy_mode()
+    tracker.init()
+
+    # Window set-up (this color will be used for calibration)
+
+    win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
+                        screen=1, size=SCREEN_RES, units='deg')
+    fixation_point = helpers.MyDot2(win)
+    image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
+
+    #  Calibrate
+    if bimonocular_calibration:
+        tracker.calibrate(win, eye='left', calibration_number='first')
+        tracker.calibrate(win, eye='right', calibration_number='second')
+    else:
+        tracker.calibrate(win)
+
+
+    tracker.start_recording(gaze_data=True, store_data=True)
+    # Present fixation dot and wait for one second
+    for i in range(monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message('fix on')
+        fixation_point.draw()
+        win.flip()
+    tracker.send_message('fix off')
+
+    # Wait exactly 3 * fps frames (3 s)
+    #pass browser here
+    create_browser_frame(type)
+    for i in range(3 * monitor_refresh_rate):
+        if i == 0:
+            tracker.send_message(''.join(['stim on: ', im_name]))
+        image.draw()
+        t = win.flip()
+    tracker.send_message(''.join(['stim off: ', im_name]))
+    win.flip()
+
+    tracker.stop_recording(gaze_data=True)
+
+    # Close window and save data
+
+    win.close()
+    tracker.save_data(mon)  # Also save screen geometry from the monitor object
+
+    # %% Open pickle and write et-data and messages to tsv-files.
+
+    f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
+    gaze_data = pickle.load(f)
+    msg_data = pickle.load(f)
+    #  Save data and messages
+    df = pd.DataFrame(gaze_data, columns=tracker.header)
+    df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
+    df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+    df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+def create_browser_frame(type):
+    if(type == 1):
+        webBrowser.launch_browser("https://www.lavazza.it/it.html", type)
+    else:
+        webBrowser.launch_browser("https://www.spain.info/it/", type)
+
+###potentially not needed anymore
+def runExp(participantId, camera):
+    tmp = get_monitors()
+    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+    # todo : handle various camera types + handle bug from calibration
     # Ensure that relative paths start from the same directory as this scripta
     _thisDir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(_thisDir)
@@ -151,8 +359,8 @@ def runExp(participantId, camera):
     expName = 'ExpGiulia'  # from the Builder filename that created this script
     expInfo = {'participant': participantId, 'session': '001'}
 
-    #dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
-    #if dlg.OK == False:
+    # dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
+    # if dlg.OK == False:
     #    core.quit()  # user pressed cancel
     expInfo['date'] = data.getDateStr()  # add a simple timestamp
     expInfo['expName'] = expName
@@ -175,12 +383,12 @@ def runExp(participantId, camera):
     # et_name = 'Tobii Pro Nano'
 
     bimonocular_calibration = False
-    dummy_mode = True
+    dummy_mode = False
 
     # Change any of the default settings
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'testfile.tsv'
-    settings.N_CAL_TARGETS = 5
+    settings.N_CAL_TARGETS = 3
 
     tracker = Titta.Connect(settings)
     if dummy_mode:
@@ -191,12 +399,13 @@ def runExp(participantId, camera):
                         screen=0, size=SCREEN_RES, units='deg')
     expInfo['frameRate'] = win.getActualFrameRate()
 
-    #get fixation point
+    # get fixation point
     fixation_point = helpers.MyDot2(win)
     image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
 
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
+    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (
+        expInfo['participant'], expInfo['participant'], expName, expInfo['date'])
     print(filename)
     # An ExperimentHandler isn't essential but helps with data saving
 
@@ -245,19 +454,18 @@ def runExp(participantId, camera):
 
 
 def runExpp(participantId):
-
     """
             for m in get_monitors():
                     print("width :"+str(m.width))
                     print("height :" + str(m.height))
             """
     tmp = get_monitors()
-    new_width = tmp[0].width    # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
     print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     VideoClock = core.Clock()
-    if(new_width==1280 and new_height==1024):
+    if (new_width == 1280 and new_height == 1024):
         myfilename = 'videos\\filmato_Giulia_resized.mp4'
     else:
         myfilename = 'videos\\filmato_Giulia_original.mp4'
@@ -271,8 +479,8 @@ def runExpp(participantId):
     expName = 'ExpGiulia'  # from the Builder filename that created this script
     expInfo = {'participant': participantId, 'session': '001'}
 
-    #dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
-    #if dlg.OK == False:
+    # dlg = gui.DlgFromDict(dictionary=expInfo, sort_keys=False, title=expName)
+    # if dlg.OK == False:
     #    core.quit()  # user pressed cancel
     expInfo['date'] = data.getDateStr()  # add a simple timestamp
     expInfo['expName'] = expName
@@ -289,9 +497,9 @@ def runExpp(participantId):
     bimonocular_calibration = False
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'testfile.tsv'
-    settings.N_CAL_TARGETS = 5  # change the duration of the calibration -- default : 0, 1, 3, 5, 9, 13
+    settings.N_CAL_TARGETS = 3  # change the duration of the calibration -- default : 0, 1, 3, 5, 9, 13
 
-    #Connect to eye tracker and calibrate
+    # Connect to eye tracker and calibrate
     tracker = Titta.Connect(settings)
     if dummy_mode:
         tracker.set_dummy_mode()
@@ -300,8 +508,9 @@ def runExpp(participantId):
     endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
     win = visual.Window(
-        size=(new_width, new_height), fullscr=True, screen=0,      #screen=1 open the window on second screen, screen=0 on the principal
-                                                                   #it depends from windows settings
+        size=(new_width, new_height), fullscr=True, screen=0,
+        # screen=1 open the window on second screen, screen=0 on the principal
+        # it depends from windows settings
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
@@ -316,7 +525,8 @@ def runExpp(participantId):
     # %%
 
     # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (expInfo['participant'],expInfo['participant'], expName, expInfo['date'])
+    filename = _thisDir + os.sep + u'data/%s/%s_%s_%s' % (
+        expInfo['participant'], expInfo['participant'], expName, expInfo['date'])
     # An ExperimentHandler isn't essential but helps with data saving
     thisExp = data.ExperimentHandler(name=expName, version='',
                                      extraInfo=expInfo, runtimeInfo=None,
@@ -334,7 +544,7 @@ def runExpp(participantId):
 
     # Setup the Window
     win = visual.Window(
-        size=(new_width, new_height), fullscr=True, screen=0,      #fullscreen = True
+        size=(new_width, new_height), fullscr=True, screen=0,  # fullscreen = True
         winType='pyglet', allowGUI=False, allowStencil=False,
         monitor='testMonitor', color=[0, 0, 0], colorSpace='rgb',
         blendMode='avg', useFBO=True,
@@ -363,15 +573,13 @@ def runExpp(participantId):
 
     key_resp = keyboard.Keyboard()
 
-
-
     # Initialize components for Routine "Video"
     VideoClock = core.Clock()
     video = visual.MovieStim3(
-        win=win,size=(new_width, new_height), name='video',
+        win=win, size=(new_width, new_height), name='video',
         noAudio=False,
         filename=myfilename,
-        #filename='videos/filmato_Alessia.mp4',
+        # filename='videos/filmato_Alessia.mp4',
         ori=0, pos=(0, 0), opacity=1,
         loop=False,
         depth=0.0,
@@ -447,7 +655,6 @@ def runExpp(participantId):
             win.close()
             core.quit()
 
-
         # check if all components have finished
         if not continueRoutine:  # a component has requested a forced-end of Routine
             break
@@ -516,7 +723,6 @@ def runExpp(participantId):
         fixation_point.draw()
         t = win.flip()
     tracker.send_message('fix off')
-
 
     """
     # -------Run Routine "Video"-------
@@ -600,5 +806,3 @@ def runExpp(participantId):
                 pass  # wait until it has properly finished polling
 
     sys.exit(1)  # quits the python session entirely
-
-

@@ -1,8 +1,9 @@
 import tkinter as tk
+import videoPlayer as vp
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
-import expGiulia
+import eyeTracker
 import webcam
 import sys, os
 import vlc
@@ -12,9 +13,10 @@ import json
 import cv2
 from PIL import Image, ImageTk
 
-import videoPlayer as vp
 
-#from PyQt5.QtWebEngineWidgets import QWebEngineView
+
+
+# from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
 class PatientWindow:
@@ -24,12 +26,11 @@ class PatientWindow:
         self.surname = surname
         self.patientId = id
 
-        self.parent = parent #window
+        self.parent = parent  # window
         self.widgets = self.addWidgets()
         self.tracker = 'eye_tracker'
 
         self.frame = None
-
 
     def add_webcam_frame(self):
         top = Toplevel()
@@ -38,35 +39,34 @@ class PatientWindow:
         Label(top, text=' Webcam ', font='Times 25').grid(row=1, column=3, pady=40)
 
     def browseFiles(self):
-        filename = filedialog.askopenfile(initialdir= os.getcwd() +"/data/"+ str(self.patientId),
-                                              title="Select a File",
-                                              filetypes=(("csv files",
-                                                          "*.csv"),
-                                                         ("all files",
-                                                          "*.*")))
+        filename = filedialog.askopenfile(initialdir=os.getcwd() + "/data/" + str(self.patientId),
+                                          title="Select a File",
+                                          filetypes=(("csv files",
+                                                      "*.csv"),
+                                                     ("all files",
+                                                      "*.*")))
 
-        if filename is not None :
+        if filename is not None:
 
             comand = "start " + filename.name
-            try :
+            try:
                 os.system(comand)
             except:
                 print(comand)
 
-
     def addWidgets(self):
         widgets = []
 
-        self.parent.columnconfigure(1, weight = 2)
+        self.parent.columnconfigure(1, weight=2)
 
         experiments_frame = ttk.LabelFrame(self.parent)
-        experiments_frame.columnconfigure(1, weight =1)
+        experiments_frame.columnconfigure(1, weight=1)
 
-        experiments_frame.grid(row=1, column=1, rowspan = 2, pady=3, padx=100 , sticky=tk.E + tk.W + tk.N + tk.S)
-        ttk.Label(experiments_frame, text="Participant n " + self.patientId, font='Times 18').grid(row =0, column=1)
+        experiments_frame.grid(row=1, column=1, rowspan=2, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
+        ttk.Label(experiments_frame, text="Participant n " + self.patientId, font='Times 18').grid(row=0, column=1)
 
-        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command= self.show_anagraphic)
-        angraphic.grid(row=1, column= 2)
+        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
+        angraphic.grid(row=1, column=2)
 
         eye_tracker_button = ttk.Button(self.parent, text="Switch to Eye Tracker", command=self.switch_eye_tracker)
         eye_tracker_button.grid(row=2, column=2)
@@ -74,11 +74,11 @@ class PatientWindow:
         webcam_button = ttk.Button(self.parent, text="Switch to Webcam", command=self.switch_webcam)
         webcam_button.grid(row=3, column=2)
 
-        webcam_faceless_button = ttk.Button(self.parent, text="Switch to Webcam (without face)", command=self.switch_webcam_faceless)
+        webcam_faceless_button = ttk.Button(self.parent, text="Switch to Webcam (without face)",
+                                            command=self.switch_webcam_faceless)
         webcam_faceless_button.grid(row=4, column=2)
 
         widgets.append(experiments_frame)
-
 
         neuro_frame = ttk.LabelFrame(experiments_frame, text="Experiments", relief=tk.RIDGE)
         neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
@@ -101,73 +101,74 @@ class PatientWindow:
         return widgets
 
     def run_expGiulia(self):
-        try:
-            if(self.patientId == None):
-                self.patientId = ''
-            expGiulia.runExp(self.patientId, self.tracker)
+        eyeTracker.runexpGiulia(self.patientId)
+        os.startfile(
+            "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
-        except:
+    def run_expAlessia(self):
+        # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
+        if self.tracker == "eye_tracker":
+            eyeTracker.runexpAlessia(self.patientId)
 
-            # if(sys.exc_info()[1].__getattribute__('code') == 1):
-            #     self.run_expCamilla()
-            # self.run_expCamilla()       #Da LEVARE POST PRESENTAZIONE
-            print("Manual escape")
-
-        os.startfile("https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
-
-    def run_expAlessia (self):
-        top = tk.Toplevel()
-        top.title("Experiment VLC media player")
-
-        top.state('zoomed')
-
-        player = None
-        player = vp.Player(top, title="tkinter vlc")
+        else:
+            #to be run after calibration
+            top = tk.Toplevel()
+            top.title("Experiment VLC media player")
+            top.state('zoomed')
+            player = None
+            player = vp.Player(top, title="tkinter vlc")
 
         def closeTop():
             player.OnStop()
             top.destroy()
 
-            os.startfile("https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+            os.startfile(
+                "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
         top.protocol("WM_DELETE_WINDOW", closeTop)
 
         def pause(arg):
-            #print(str(arg))
+            # print(str(arg))
             player.OnPause()
+
         top.bind('<space>', pause)
 
-
-
     def run_expCamilla(self):
-        webBrowser.launch_browser("https://www.lavazza.it/it.html", 1, self.tracker)
+        # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
+        if self.tracker == "eye_tracker":
+            eyeTracker.runexpBrowser(self.patientId, 'Camilla')
+        else:
+            webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
 
     def run_expChiara(self):
-        webBrowser.launch_browser("https://www.spain.info/it/", 2, self.tracker)
-        # https: // www.spain.info / it /
-        # https: // www.visitnorway.it /
+        # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
+        if self.tracker == "eye_tracker":
+            eyeTracker.runexpBrowser(self.patientId, 'Chiara')
+        else:
+            webBrowser.launch_browser("https://www.spain.info/it/", 2)
+            # https: // www.spain.info / it /
+            # https: // www.visitnorway.it /
 
     def switch_webcam(self):
-        if(self.tracker == 'webcam'):
+        if (self.tracker == 'webcam'):
             print('already on webcam mode !')
         else:
             self.tracker = 'webcam'
             self.frame = webcam.App(tk.Toplevel(), "webcam")
 
     def switch_webcam_faceless(self):
-        if(self.tracker == 'webcam_faceless'):
+        if (self.tracker == 'webcam_faceless'):
             print('already on webcam faceless mode !')
         else:
             self.tracker = 'webcam_faceless'
             self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def switch_eye_tracker(self):
-        if(self.tracker == 'eye_tracker'):
+        if (self.tracker == 'eye_tracker'):
             print('already on eye_tracker mode !')
         else:
             self.tracker = 'eye_tracker'
             self.frame = None
-
 
     def show_anagraphic(self):
         top = tk.Toplevel()
@@ -186,18 +187,24 @@ class PatientWindow:
                 user = p
                 break
 
-
         if user is not None:
 
-            ttk.Label(top, text="Participant n " + self.patientId, font='Times 26').grid(row=0, column=1, pady =30, padx = 20)
-            ttk.Label(top, text="Age :  " + user['age'], font='Times 18').grid(row=1, column=1, sticky=tk.W, pady =20, padx = 5)
-            ttk.Label(top, text="Gender :  " + user['gender'], font='Times 18').grid(row=2, column=1, sticky=tk.W, pady =20, padx = 5)
-            ttk.Label(top, text="Educational Level :  " + user['edu'], font='Times 18').grid(row=3, column=1, sticky=tk.W, pady =20, padx = 5)
+            ttk.Label(top, text="Participant n " + self.patientId, font='Times 26').grid(row=0, column=1, pady=30,
+                                                                                         padx=20)
+            ttk.Label(top, text="Age :  " + user['age'], font='Times 18').grid(row=1, column=1, sticky=tk.W, pady=20,
+                                                                               padx=5)
+            ttk.Label(top, text="Gender :  " + user['gender'], font='Times 18').grid(row=2, column=1, sticky=tk.W,
+                                                                                     pady=20, padx=5)
+            ttk.Label(top, text="Educational Level :  " + user['edu'], font='Times 18').grid(row=3, column=1,
+                                                                                             sticky=tk.W, pady=20,
+                                                                                             padx=5)
 
 
 
         else:
-            ttk.Label(top, text="Data on Participant n " + self.patientId+ " not found.", font='Times 18').grid(row=0, column=1, padx = 5)
+            ttk.Label(top, text="Data on Participant n " + self.patientId + " not found.", font='Times 18').grid(row=0,
+                                                                                                                 column=1,
+                                                                                                                 padx=5)
             top.rowconfigure(0, weight=1)
 
         ttk.Button(top, text="Close", command=top.destroy).grid(row=4, column=1, pady=50)
