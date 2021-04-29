@@ -90,7 +90,7 @@ class Player(Tk.Frame):
 
         self.parent = parent
 
-        self.videoPath = os.getcwd() + '/videos/filmato_Alessia.mp4'
+        self.videoPath = os.getcwd() + '/videos/movie_commercial.mp4'
         self.firstTime = True
 
         if title == None:

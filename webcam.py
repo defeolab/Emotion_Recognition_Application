@@ -118,4 +118,4 @@ class MyVideoCapture:
         if self.vid.isOpened():
             self.vid.release()
 
-# App(tk.Tk(), "Tkinter and OpenCV")
+#App(tk.Tk(), "Tkinter and OpenCV")

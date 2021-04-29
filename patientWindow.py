@@ -101,9 +101,25 @@ class PatientWindow:
         return widgets
 
     def run_expGiulia(self):
-        eyeTracker.runexpGiulia(self.patientId)
-        os.startfile(
-            "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+        if (self.tracker == 'eye_tracker'):
+            eyeTracker.runexpGiulia(self.patientId)
+            os.startfile(
+                "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+        else:
+            top = tk.Toplevel()
+            top.title("Experiment VLC media player")
+            top.state('zoomed')
+            top.geometry("300x300")
+            top.configure(background='grey')
+
+            img = ImageTk.PhotoImage(master = top, image = Image.open('beer_positioning.jpg'))
+            label1 = tk.Label(top, image=img)
+            label1.pack(side="bottom", fill="both", expand="yes")
+
+            top.mainloop()
+            os.startfile(
+                "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+
 
     def run_expAlessia(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
