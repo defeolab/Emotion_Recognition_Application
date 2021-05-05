@@ -131,6 +131,7 @@ def runexpGiulia(participantId):
 
 
 def runexpAlessia(participantId):
+
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -172,65 +173,45 @@ def runexpAlessia(participantId):
     fixation_point = helpers.MyDot2(win)
     #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
 
-    #  Calibrate
-    """if bimonocular_calibration:
-        tracker.calibrate(win, eye='left', calibration_number='first')
-        tracker.calibrate(win, eye='right', calibration_number='second')
-    else:
-        tracker.calibrate(win)"""
     tracker.calibrate(win)
-
-    #win.close()
-    createVideoFrame()
     tracker.start_recording(gaze_data=True, store_data=True)
 
-    #tracker.start_sample_buffer(sample_buffer_length=10)
+    def createVideoFrame():
+        top = tk.Toplevel()
+        top.title("Experiment VLC media player")
+        top.state('zoomed')
+        player = None
+        player = vp.Player(top, title="tkinter vlc")
 
-    exit_program = False
-    while not exit_program:
-        k = event.getKeys()
-        if 'escape' in k:
-            exit_program = True
+        def closeTop():
+            player.OnStop()
+            player.quit()
+            top.destroy()
 
-    tracker.stop_recording(gaze_data=True)
-    # Close window and save data
-    #win.close()
-    tracker.save_data(mon)  # Also save screen geometry from the monitor object
+            #save file
+            tracker.stop_recording(gaze_data=True)
+            # Close window and save data
+            tracker.save_data(mon)  # Also save screen geometry from the monitor object
+            # %% Open pickle and write et-data and messages to tsv-files.
+            f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
+            gaze_data = pickle.load(f)
+            msg_data = pickle.load(f)
+            #  Save data and messages
+            df = pd.DataFrame(gaze_data, columns=tracker.header)
+            df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
+            df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+            df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+            os.startfile(
+                "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
-    # %% Open pickle and write et-data and messages to tsv-files.
+        top.protocol("WM_DELETE_WINDOW", closeTop)
 
-    print('save data')
-    f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
-    gaze_data = pickle.load(f)
-    msg_data = pickle.load(f)
-    #  Save data and messages
-    df = pd.DataFrame(gaze_data, columns=tracker.header)
-    df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
-    df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
-    df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+        def pause():
+            player.OnPause()
 
-def createVideoFrame():
+        top.bind('<space>', pause)
 
-    top = tk.Toplevel()
-    top.title("Experiment VLC media player")
-    top.state('zoomed')
-    player = None
-    player = vp.Player(top, title="tkinter vlc")
-
-    def closeTop():
-        player.OnStop()
-        top.destroy()
-
-        os.startfile(
-            "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
-
-    top.protocol("WM_DELETE_WINDOW", closeTop)
-
-    def pause(arg):
-        # print(str(arg))
-        player.OnPause()
-
-    top.bind('<space>', pause)
+    createVideoFrame()
 
 
 def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for Chiara
@@ -275,22 +256,15 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     fixation_point = helpers.MyDot2(win)
 
     tracker.calibrate(win)
-
+    tracker.start_recording(gaze_data=True, store_data=True)
+    print('hmk')
     if(type == 1):
         webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
     else:
         webBrowser.launch_browser("https://www.spain.info/it/", 2)
-    tracker.start_recording(gaze_data=True, store_data=True)
-
-    exit_program = False
-    while not exit_program:
-        k = event.getKeys()
-        if 'escape' in k:
-            exit_program = True
-    # win.flip()
-
+    print('k')
     tracker.stop_recording(gaze_data=True)
-
+    print('ok')
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
 
     # %% Open pickle and write et-data and messages to tsv-files.

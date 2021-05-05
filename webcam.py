@@ -4,9 +4,11 @@ import time
 import PIL
 from PIL import ImageTk
 import gaze_tracking
+import csv
+import datetime
 
 
-class App:
+class App: #I show the webcam output
     def __init__(self, window, window_title, video_source=0):
         self.window = window
         self.window.title(window_title)
@@ -55,7 +57,7 @@ class App:
         self.window.after(self.delay, self.update)
 
 
-class Faceless_app:
+class Faceless_app: # I show just a 'Stop record' Button
     def __init__(self, window, window_title, video_source=0):
         self.window = window
         self.window.title(window_title)
@@ -76,7 +78,6 @@ class Faceless_app:
         # Get a frame from the video source
 
         self.vid.get_frame()
-
         self.window.after(self.delay, self.update)
 
 
@@ -98,9 +99,16 @@ class MyVideoCapture:
             # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
+            file_name = "test.csv"
+
             if ret:
                 left_pupil = self.gaze.pupil_left_coords()
                 right_pupil = self.gaze.pupil_right_coords()
+                with open(file_name, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(["pupil_left_coords", "pupil_right_coords"])
+                    writer.writerow([str(left_pupil), str(right_pupil)])
+
                 cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9,
                             (147, 58, 31), 1)
                 cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9,

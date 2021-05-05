@@ -141,13 +141,13 @@ class PatientWindow:
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
-        top.protocol("WM_DELETE_WINDOW", closeTop)
+            top.protocol("WM_DELETE_WINDOW", closeTop)
 
         def pause(arg):
             # print(str(arg))
             player.OnPause()
 
-        top.bind('<space>', pause)
+            top.bind('<space>', pause)
 
     def run_expCamilla(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)

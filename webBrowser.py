@@ -384,7 +384,13 @@ def launch_browser(url, type):
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    root.state("zoomed")
+
+    def closeRoot():
+        print('destroy')
+        root.destroy()
+        root.quit()
+    root.protocol("WM_DELETE_WINDOW", closeRoot)
+
     app = MainFrame(root, url, type)
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
