@@ -6,7 +6,9 @@ from PIL import ImageTk
 import gaze_tracking
 import csv
 import datetime
-
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 class App: #I show the webcam output
     def __init__(self, window, window_title, video_source=0):
@@ -93,21 +95,20 @@ class MyVideoCapture:
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
+        self.coordinates = []
+
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
-            file_name = "test.csv"
 
             if ret:
                 left_pupil = self.gaze.pupil_left_coords()
                 right_pupil = self.gaze.pupil_right_coords()
-                with open(file_name, 'w', newline='') as file:
-                    writer = csv.writer(file)
-                    writer.writerow(["pupil_left_coords", "pupil_right_coords"])
-                    writer.writerow([str(left_pupil), str(right_pupil)])
+                if (left_pupil is not None) & (right_pupil is not None):
+                    self.coordinates.append([left_pupil[0], left_pupil[1],right_pupil[0], right_pupil[1]])
 
                 cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9,
                             (147, 58, 31), 1)
@@ -124,6 +125,16 @@ class MyVideoCapture:
     # Release the video source when the object is destroyed
     def __del__(self):
         if self.vid.isOpened():
+            fieldnames = ['left_pupil_x', 'left_pupil_y', 'right_pupil_x', 'right_pupil_y']
+
+            my_df = pd.DataFrame(self.coordinates, columns=fieldnames)
+            my_df.to_csv('test.csv', index=False, header=True)
+
+            #heatmap in the end of the use of the camera
+            x, y = my_df["left_pupil_x"], my_df["left_pupil_y"]
+            plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
+            plt.show()
+
             self.vid.release()
 
 #App(tk.Tk(), "Tkinter and OpenCV")
