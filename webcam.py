@@ -7,8 +7,8 @@ import gaze_tracking
 import csv
 import datetime
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
+import patientWindow
 
 class App: #I show the webcam output
     def __init__(self, window, window_title, video_source=0):
@@ -31,7 +31,7 @@ class App: #I show the webcam output
         self.btn_stop.pack(anchor=tk.CENTER, expand=True)
 
         # After it is called once, the update method will be automatically called every delay milliseconds
-        self.delay = 15
+        self.delay = 10
         self.update()
 
         self.window.mainloop()
@@ -133,7 +133,7 @@ class MyVideoCapture:
             #heatmap in the end of the use of the camera
             x, y = my_df["left_pupil_x"], my_df["left_pupil_y"]
             plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
-            plt.show()
+            plt.savefig('heatmap.png')
 
             self.vid.release()
 

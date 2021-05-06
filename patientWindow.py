@@ -12,7 +12,7 @@ import webBrowser
 import json
 import cv2
 from PIL import Image, ImageTk
-
+import time
 
 
 
@@ -28,9 +28,10 @@ class PatientWindow:
 
         self.parent = parent  # window
         self.widgets = self.addWidgets()
-        self.tracker = 'eye_tracker'
+        self.settings = 'lab' #possible settings : 'lab' or 'home'
 
         self.frame = None
+        self.camera_on = False
 
     def add_webcam_frame(self):
         top = Toplevel()
@@ -68,15 +69,15 @@ class PatientWindow:
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
         angraphic.grid(row=1, column=2)
 
-        eye_tracker_button = ttk.Button(self.parent, text="Switch to Eye Tracker", command=self.switch_eye_tracker)
-        eye_tracker_button.grid(row=2, column=2)
+        start_camera_button = ttk.Button(self.parent, text="Start the camera", command=self.start_camera)
+        start_camera_button.grid(row=2, column=2)
 
-        webcam_button = ttk.Button(self.parent, text="Switch to Webcam", command=self.switch_webcam)
-        webcam_button.grid(row=3, column=2)
+        lab_button = ttk.Button(self.parent, text="Switch to Lab Settings", command=self.switch_lab)
+        lab_button.grid(row=3, column=2)
 
-        webcam_faceless_button = ttk.Button(self.parent, text="Switch to Webcam (without face)",
-                                            command=self.switch_webcam_faceless)
-        webcam_faceless_button.grid(row=4, column=2)
+        home_button = ttk.Button(self.parent, text="Switch to Home Settings",
+                                 command=self.switch_home)
+        home_button.grid(row=4, column=2)
 
         widgets.append(experiments_frame)
 
@@ -101,11 +102,15 @@ class PatientWindow:
         return widgets
 
     def run_expGiulia(self):
-        if (self.tracker == 'eye_tracker'):
-            eyeTracker.runexpGiulia(self.patientId)
-            os.startfile(
-                "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpGiulia(self.patientId)
+                os.startfile(
+                    "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
         else:
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
@@ -123,11 +128,15 @@ class PatientWindow:
 
     def run_expAlessia(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
-        if self.tracker == "eye_tracker":
-            eyeTracker.runexpAlessia(self.patientId)
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpAlessia(self.patientId)
 
         else:
             #to be run after calibration
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
@@ -150,41 +159,48 @@ class PatientWindow:
             top.bind('<space>', pause)
 
     def run_expCamilla(self):
-        # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
-        if self.tracker == "eye_tracker":
-            eyeTracker.runexpBrowser(self.patientId, 'Camilla')
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpBrowser(self.patientId, 'Camilla')
         else:
             webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
 
     def run_expChiara(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
-        if self.tracker == "eye_tracker":
-            eyeTracker.runexpBrowser(self.patientId, 'Chiara')
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                webBrowser.launch_browser("https://www.spain.info/it/", 2)
+            #eyeTracker.runexpBrowser(self.patientId, 'Chiara')
         else:
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             webBrowser.launch_browser("https://www.spain.info/it/", 2)
             # https: // www.spain.info / it /
             # https: // www.visitnorway.it /
 
-    def switch_webcam(self):
-        if (self.tracker == 'webcam'):
-            print('already on webcam mode !')
+    def switch_lab(self):
+        if (self.settings == 'lab'):
+            print('already using lab settings mode !')
         else:
-            self.tracker = 'webcam'
-            self.frame = webcam.App(tk.Toplevel(), "webcam")
+            self.settings = 'lab'
 
-    def switch_webcam_faceless(self):
-        if (self.tracker == 'webcam_faceless'):
-            print('already on webcam faceless mode !')
+    def start_camera(self):
+        if not self.camera_on & (self.settings == 'lab'):
+            self.camera_on = True
+            self.frame = webcam.App(tk.Toplevel(), "Recording")
         else:
-            self.tracker = 'webcam_faceless'
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            print("camera is already on !")
 
-    def switch_eye_tracker(self):
-        if (self.tracker == 'eye_tracker'):
-            print('already on eye_tracker mode !')
+
+    def switch_home(self):
+        if (self.settings == 'home'):
+            print('already using home settings mode !')
         else:
-            self.tracker = 'eye_tracker'
-            self.frame = None
+            self.settings = 'home'
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def show_anagraphic(self):
         top = tk.Toplevel()
