@@ -234,7 +234,7 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = False
+    dummy_mode = True
 
     settings = Titta.get_defaults(et_name)
     if type == 1:
@@ -257,14 +257,13 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
 
     tracker.calibrate(win)
     tracker.start_recording(gaze_data=True, store_data=True)
-    print('hmk')
+
     if(type == 1):
         webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
     else:
         webBrowser.launch_browser("https://www.spain.info/it/", 2)
-    print('k')
+
     tracker.stop_recording(gaze_data=True)
-    print('ok')
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
 
     # %% Open pickle and write et-data and messages to tsv-files.

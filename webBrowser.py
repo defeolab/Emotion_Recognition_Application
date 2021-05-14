@@ -89,6 +89,7 @@ class MainFrame(tk.Frame):
         if self.browser_frame:
             self.browser_frame.on_root_close()
         self.master.destroy()
+        self.quit()
 
     def get_browser(self):
         if self.browser_frame:
@@ -385,14 +386,10 @@ def launch_browser(url, type):
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
 
-    def closeRoot():
-        print('destroy')
-        root.destroy()
-        root.quit()
-    root.protocol("WM_DELETE_WINDOW", closeRoot)
-
     app = MainFrame(root, url, type)
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
-    app.mainloop()
+    app.browser_frame.mainloop()
+    print("nice")
+    #app.mainloop()
     cef.Shutdown()
