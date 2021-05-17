@@ -234,7 +234,7 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = True
+    dummy_mode = False
 
     settings = Titta.get_defaults(et_name)
     if type == 1:
