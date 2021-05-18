@@ -5,13 +5,12 @@ window = tk.Tk()
 
 
 def start():
-    sample_rate = 48000
+    sample_rate = 384000     #using the highest sampling frequency
     sec = 10
     myrec = ls.Record(sample_rate, sec, window)
     val = myrec.mysignal()
     myrec.playback(val)
-    myrec.savefile('new_signal_record.wav', val)
-
+    myrec.savefile('new1_signal_record.wav', val)
     return
 
 
