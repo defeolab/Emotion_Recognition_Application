@@ -390,6 +390,5 @@ def launch_browser(url, type):
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     app.browser_frame.mainloop()
-    print("nice")
     #app.mainloop()
     cef.Shutdown()

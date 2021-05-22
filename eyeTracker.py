@@ -174,6 +174,7 @@ def runexpAlessia(participantId):
     #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
 
     tracker.calibrate(win)
+    win.close()
     tracker.start_recording(gaze_data=True, store_data=True)
 
     def createVideoFrame():
@@ -256,6 +257,7 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     fixation_point = helpers.MyDot2(win)
 
     tracker.calibrate(win)
+    win.close()
     tracker.start_recording(gaze_data=True, store_data=True)
 
     if(type == 1):
@@ -276,3 +278,5 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+    print("saved")

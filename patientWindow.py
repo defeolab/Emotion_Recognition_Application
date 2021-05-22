@@ -101,6 +101,7 @@ class PatientWindow:
 
         return widgets
 
+
     def run_expGiulia(self):
         if self.settings == "lab":
             if self.camera_on is False:
@@ -121,6 +122,14 @@ class PatientWindow:
             label1 = tk.Label(top, image=img)
             label1.pack(side="bottom", fill="both", expand="yes")
 
+            def countdown(time):
+                if time == -1:
+                    top.destroy()
+                    self.frame.stop()
+                else:
+                    top.after(1000, countdown, time - 1)
+
+            countdown(30)
             top.mainloop()
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
@@ -146,6 +155,7 @@ class PatientWindow:
         def closeTop():
             player.OnStop()
             top.destroy()
+            self.frame.stop()
 
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
@@ -158,13 +168,16 @@ class PatientWindow:
 
             top.bind('<space>', pause)
 
+
+
     def run_expCamilla(self):
         if self.settings == "lab":
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpBrowser(self.patientId, 'Camilla')
+                eyeTracker.runexpBrowser(self.patientId, 1)
         else:
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
 
     def run_expChiara(self):
@@ -173,8 +186,7 @@ class PatientWindow:
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                webBrowser.launch_browser("https://www.spain.info/it/", 2)
-            #eyeTracker.runexpBrowser(self.patientId, 'Chiara')
+                eyeTracker.runexpBrowser(self.patientId, 2)
         else:
             self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             webBrowser.launch_browser("https://www.spain.info/it/", 2)
