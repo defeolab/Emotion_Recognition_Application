@@ -134,7 +134,7 @@ class MyVideoCapture:
             x, y = my_df["left_pupil_x"], my_df["left_pupil_y"]
             plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
             plt.savefig('heatmap.png')
-
+            #data/id/heatmap.png
             self.vid.release()
 
 #App(tk.Tk(), "Tkinter and OpenCV")
