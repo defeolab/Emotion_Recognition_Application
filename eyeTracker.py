@@ -131,7 +131,6 @@ def runexpGiulia(participantId):
 
 
 def runexpAlessia(participantId):
-
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -156,7 +155,7 @@ def runexpAlessia(participantId):
 
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/alessia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    #settings.FILENAME = 'testfile.tsv'
+    # settings.FILENAME = 'testfile.tsv'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -171,7 +170,7 @@ def runexpAlessia(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
+    # image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
 
     tracker.calibrate(win)
     win.close()
@@ -189,7 +188,7 @@ def runexpAlessia(participantId):
             player.quit()
             top.destroy()
 
-            #save file
+            # save file
             tracker.stop_recording(gaze_data=True)
             # Close window and save data
             tracker.save_data(mon)  # Also save screen geometry from the monitor object
@@ -260,7 +259,7 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     win.close()
     tracker.start_recording(gaze_data=True, store_data=True)
 
-    if(type == 1):
+    if (type == 1):
         webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
     else:
         webBrowser.launch_browser("https://www.spain.info/it/", 2)
@@ -275,8 +274,9 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     msg_data = pickle.load(f)
     #  Save data and messages
     df = pd.DataFrame(gaze_data, columns=tracker.header)
+    df = df.filter(items=["system_time_stamp",
+                          "left_gaze_point_in_user_coordinate_system_x",
+                          "left_gaze_point_in_user_coordinate_system_y"])
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-
-    print("saved")
