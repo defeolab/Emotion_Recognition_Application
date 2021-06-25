@@ -8,6 +8,7 @@ except ImportError:
 import sys
 import platform
 import logging as _logging
+import patientWindow as pw
 
 # Fix for PyCharm hints warnings
 WindowUtils = cef.WindowUtils()
@@ -23,11 +24,15 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
+        #self.starting_url = starting_url
         self.type = type_exp  # 1= Camilla, 2=Chiara
+        self.id = id
+        self.old_window = old_window
+        self.old_root = old_root
         # Root
         root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
@@ -41,9 +46,9 @@ class MainFrame(tk.Frame):
         self.bind("<Configure>", self.on_configure)
         self.bind("<FocusIn>", self.on_focus_in)
         self.bind("<FocusOut>", self.on_focus_out)
-
+        print("in mainframe")
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, self.type)
+        self.navigation_bar = NavigationBar(self, self.type, starting_url)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -89,6 +94,10 @@ class MainFrame(tk.Frame):
         if self.browser_frame:
             self.browser_frame.on_root_close()
         self.master.destroy()
+        #self.quit()
+        self.old_root.destroy()
+        pw.PatientWindow(self.old_window, self.id)
+
 
     def get_browser(self):
         if self.browser_frame:
@@ -103,7 +112,7 @@ class MainFrame(tk.Frame):
 
 class BrowserFrame(tk.Frame):
 
-    def __init__(self, master, starting_url="", navigation_bar=None):
+    def __init__(self, master, starting_url, navigation_bar=None):
         self.navigation_bar = navigation_bar
         self.closing = False
         self.browser = None
@@ -113,6 +122,7 @@ class BrowserFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
         self.bind("<Configure>", self.on_configure)
         self.focus_set()
+        print("in browserframe")
 
     def embed_browser(self):
         window_info = cef.WindowInfo()
@@ -210,7 +220,7 @@ class FocusHandler(object):
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, type_exp):
+    def __init__(self, master, type_exp, starting_url):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -218,7 +228,8 @@ class NavigationBar(tk.Frame):
         self.reload_image = None
         tk.Frame.__init__(self, master)
         self.type = type_exp
-
+        self.starting_url = starting_url
+        print("in navigationbar")
         # Back button
         back = 'resources/back.png'
         self.back_image = tk.PhotoImage(file=back)
@@ -245,19 +256,24 @@ class NavigationBar(tk.Frame):
         tk.Grid.rowconfigure(self, 0, weight=100)
         tk.Grid.columnconfigure(self, 3, weight=100)
 
-        if self.type == 1:
-            self.nespresso_button = tk.Button(self, text="Nespresso", command=self.go_toNespresso)
-            self.nespresso_button.grid(row=0, column=5, padx=20)
+        #if self.type == 1:
+            #self.master.get_browser().StopLoad()
+        #    if self.starting_url is not None:
 
-            self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toLavazza)
-            self.lavazza_button.grid(row=0, column=4, padx=20)
+        #        self.master.get_browser().LoadUrl(self.starting_url)
 
-        elif self.type == 2:
-            self.spain_button = tk.Button(self, text="Spagna", command=self.go_toSpagna)
-            self.spain_button.grid(row=0, column=5, padx=20)
+            #self.nespresso_button = tk.Button(self, text="Nespresso", command=self.go_toNespresso)
+            #self.nespresso_button.grid(row=0, column=5, padx=20)
 
-            self.norway_button = tk.Button(self, text="Norvegia", command=self.go_toNorvegia)
-            self.norway_button.grid(row=0, column=4, padx=20)
+         #   self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toLavazza)
+         #   self.lavazza_button.grid(row=0, column=4, padx=20)
+
+        #elif self.type == 2:
+        #    self.spain_button = tk.Button(self, text="Spagna", command=self.go_toSpagna)
+        #    self.spain_button.grid(row=0, column=5, padx=20)
+
+        #    self.norway_button = tk.Button(self, text="Norvegia", command=self.go_toNorvegia)
+        #    self.norway_button.grid(row=0, column=4, padx=20)
 
         # Update state of buttons
         self.update_state()
@@ -268,7 +284,7 @@ class NavigationBar(tk.Frame):
             "https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
 
     def go_toLavazza(self):
-        self.master.get_browser().StopLoad()
+        #self.master.get_browser().StopLoad()
         self.master.get_browser().LoadUrl("https://www.lavazza.it/it.html")
 
     def go_toSpagna(self):
@@ -352,26 +368,26 @@ class InstructionFrame(tk.Frame):
         tk.Grid.rowconfigure(self, 0, weight=1)
         tk.Grid.columnconfigure(self, 0, minsize=200, weight=1)
 
-        if self.type == 1:
-            self.instruction.insert(tk.INSERT, "GRUPPO A\nIstruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
-                                           "     • Cliccare tasto “Menu”\n     • Cliccare tasto “Sostenibilità”\n"
-                                           "     • Cliccare tasto “Fondazione”\n     • Leggere la pagina “Fondazione Lavazza”\n"
-                                           "     • Leggere l’articolo “Innovazione contro il cambiamento                     climatico” cliccando il tasto “Scopri di più”\n"
-                                           "     • Leggere l’articolo “L’impresa di diventare impresa”\n"
-                                           "     • Leggere l’articolo “Il caffè per rinascere” \n\nGRUPPO B\nIstruzioni per sito Nespresso:\n"
-                                           "     • Andare sul sito nespresso.com\n     • Passare il mouse sul tasto “Sostenibilità e riciclo”\n"
-                                           "     • Cliccare tasto “Il caffè secondo Nespresso”\n     • Leggere l’articolo “Avvicinati e ascolta”\n"
-                                           "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Pace e speranza in Colombia”\n"
-                                           "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Piantare radici per salvaguardare il futuro           del caffè e del nostro pianeta”")
-        elif self.type == 2:
-            self.instruction.insert(tk.INSERT, "Istruzioni per il partecipante:\n\n 1.  Osservate la home page.\n\n 2.  Cercare nel menù di navigazione la voce “Cosa fare”\n\n"
-                                               " 3.  Scegliete l’opzione “Natura” (per il sito della Spagna) / \n      “Attrazioni naturali imperdibili” ( per il sito della Norvegia).\n\n"
-                                               " 4.  Scorrete fra i contenuti dell’intera pagina e cercate il \n       pulsante per prenotare un’esperienza a contatto con la \n      natura.")
+        #if self.type == 1:
+        #    self.instruction.insert(tk.INSERT, "GRUPPO A\nIstruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
+        #                                   "     • Cliccare tasto “Menu”\n     • Cliccare tasto “Sostenibilità”\n"
+        #                                   "     • Cliccare tasto “Fondazione”\n     • Leggere la pagina “Fondazione Lavazza”\n"
+        #                                   "     • Leggere l’articolo “Innovazione contro il cambiamento                     climatico” cliccando il tasto “Scopri di più”\n"
+        #                                   "     • Leggere l’articolo “L’impresa di diventare impresa”\n"
+        #                                   "     • Leggere l’articolo “Il caffè per rinascere” \n\nGRUPPO B\nIstruzioni per sito Nespresso:\n"
+        #                                   "     • Andare sul sito nespresso.com\n     • Passare il mouse sul tasto “Sostenibilità e riciclo”\n"
+        #                                   "     • Cliccare tasto “Il caffè secondo Nespresso”\n     • Leggere l’articolo “Avvicinati e ascolta”\n"
+        #                                   "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Pace e speranza in Colombia”\n"
+        #                                   "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Piantare radici per salvaguardare il futuro           del caffè e del nostro pianeta”")
+        #elif self.type == 2:
+        #    self.instruction.insert(tk.INSERT, "Istruzioni per il partecipante:\n\n 1.  Osservate la home page.\n\n 2.  Cercare nel menù di navigazione la voce “Cosa fare”\n\n"
+        #                                       " 3.  Scegliete l’opzione “Natura” (per il sito della Spagna) / \n      “Attrazioni naturali imperdibili” ( per il sito della Norvegia).\n\n"
+        #                                       " 4.  Scorrete fra i contenuti dell’intera pagina e cercate il \n       pulsante per prenotare un’esperienza a contatto con la \n      natura.")
 
         self.instruction.config(state='disabled')
 
 
-def launch_browser(url, type):
+def launch_browser(url, type, id, window, old_root):
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -384,9 +400,11 @@ def launch_browser(url, type):
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    root.state("zoomed")
-    app = MainFrame(root, url, type)
+    #print(url)
+    app = MainFrame(root, url, type, id, window, old_root)
+
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
-    app.mainloop()
+    app.browser_frame.mainloop()
+    #app.mainloop()
     cef.Shutdown()
