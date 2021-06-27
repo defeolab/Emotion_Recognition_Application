@@ -40,7 +40,16 @@ import os
 
 import tkinter as tk
 import videoPlayer as vp
+import GSR.GSR_RECORD_SIGNAL.signalRecord as sigrec
 
+def startGSR(GSRwindow):
+
+    sample_rate = 384000     #using the highest sampling frequency
+    sec = 10
+    myrec = sigrec.Record(sample_rate, sec, GSRwindow)
+    val = myrec.mysignal()
+    myrec.playback(val)
+    myrec.savefile('new1_signal_record.wav', val)
 
 def runexpGiulia(participantId):
     print(participantId)
@@ -91,6 +100,9 @@ def runexpGiulia(participantId):
     else:
         tracker.calibrate(win)"""
     tracker.calibrate(win)
+
+    GSRwindow = tk.Tk()
+    startGSR(GSRwindow)
 
     tracker.start_recording(gaze_data=True, store_data=True)
     # Present fixation dot and wait for one second
@@ -175,6 +187,10 @@ def runexpAlessia(participantId):
 
     tracker.calibrate(win)
     win.close()
+
+    GSRwindow = tk.Tk()
+    startGSR(GSRwindow)
+
     tracker.start_recording(gaze_data=True, store_data=True)
 
     def createVideoFrame():
@@ -258,6 +274,10 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
 
     tracker.calibrate(win)
     win.close()
+
+    GSRwindow = tk.Tk()
+    startGSR(GSRwindow)
+
     tracker.start_recording(gaze_data=True, store_data=True)
 
     if(type == 1):
