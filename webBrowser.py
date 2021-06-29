@@ -1,5 +1,6 @@
 from cefpython3 import cefpython as cef
 import ctypes
+import GSR.GSR_RECORD_SIGNAL.launch_signalRecord as launch_sigrec
 
 try:
     import tkinter as tk
@@ -387,7 +388,7 @@ class InstructionFrame(tk.Frame):
         self.instruction.config(state='disabled')
 
 
-def launch_browser(url, type, id, window, old_root):
+def launch_browser(url, type, id, window, old_root, path=None, sec=None):
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -402,6 +403,7 @@ def launch_browser(url, type, id, window, old_root):
     root = tk.Toplevel()
     #print(url)
     app = MainFrame(root, url, type, id, window, old_root)
+    launch_sigrec.startGSR(path, sec)
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()

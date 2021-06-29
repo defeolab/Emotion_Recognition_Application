@@ -44,7 +44,7 @@ import time
 import platform
 from tkinter import filedialog
 import patientWindow as pw
-
+import GSR.GSR_RECORD_SIGNAL.launch_signalRecord as launch_sigrec
 
 class ttkTimer(Thread):
     """a class serving same function as wxTimer... but there may be better ways to do this
@@ -87,10 +87,14 @@ class Player(Tk.Frame):
     """The main window has to deal with events.
     """
 
-    def __init__(self, parent, title=None):
+    def __init__(self, parent, title=None, type=None, path=None, sec=None):
         Tk.Frame.__init__(self, parent)
 
         self.parent = parent
+
+        self.type = type
+        self.path = path
+        self.sec = sec
 
         #self.videoPath = os.getcwd() + '/videos/movie_commercial.mp4'
         self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/video/")
@@ -167,7 +171,8 @@ class Player(Tk.Frame):
 
         self.player.set_hwnd(self.GetHandle())
 
-        self.OnPlay()
+        #self.OnPlay()
+
 
         # set the volume slider to the curnt volume
         # self.volslider.SetValue(self.player.audio_get_volume() / 2)
@@ -180,6 +185,9 @@ class Player(Tk.Frame):
         """
         # check if there is a file to play, otherwise open a
         # Tk.FileDialog to select a file
+        if self.type is not None:
+            launch_sigrec.startGSR(self.path, self.sec)
+
         if not self.player.get_media():
             self.OnOpen()
         else:

@@ -78,13 +78,11 @@ class appSignal:
 
         return time, left, right
 
-
+"""
 root = tk.Tk()
 root.title('Original Signal')
 root1 = tk.Tk()
 root1.title('Left and Right Channel Signal')
-data, sample = sf.read(
-    r"C:\Users\chuks\OneDrive\Desktop\THESIS\signals\signal_384000\signal_wet_hands_with_alcohol.wav")
 plt.rcParams['agg.path.chunksize'] = 384000
 main = appSignal(data, root, root1)
 main.myCanvas()
@@ -92,3 +90,4 @@ time, left_channel, right_channel = main.leftRightChannel()
 
 root.mainloop()
 root1.mainloop()
+"""

@@ -204,23 +204,23 @@ class PatientWindow:
             player = None
             player = vp.Player(top, title="tkinter vlc")
 
-        def closeTop():
+            def closeTop():
 
-            top.destroy()
-            self.frame.stop()
+                top.destroy()
+                self.frame.stop()
 
-            os.startfile(
-                "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
-            player.OnStop()
+                os.startfile(
+                    "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+                player.OnStop()
 
 
-        top.protocol("WM_DELETE_WINDOW", closeTop)
+            top.protocol("WM_DELETE_WINDOW", closeTop)
 
-        def pause(arg):
-            # print(str(arg))
-            player.OnPause()
+            def pause(arg):
+                # print(str(arg))
+                player.OnPause()
 
-        top.bind('<space>', pause)
+            top.bind('<space>', pause)
 
 
 
@@ -230,14 +230,15 @@ class PatientWindow:
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpBrowser(self.patientId, 1)
+                self.search_key_var = self.search.get()
+                if self.search_key_var is not None:
+                    #eyeTracker.runexpBrowser(self.patientId, 1)
+                    eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)
         else:
-
             self.search_key_var = self.search.get()
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             if self.search_key_var is not None:
                 #print(self.search_key_var)
-
                 #f = urllib.request.urlopen(self.search_key_var)
                 #myfile = f.read()
 
@@ -254,15 +255,21 @@ class PatientWindow:
         #self.parent.protocol("WM_DELETE_WINDOW", self.root.destroy())
 
     def run_expChiara(self):
+        self.search_key_var = None
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpBrowser(self.patientId, 2)
+                #eyeTracker.runexpBrowser(self.patientId, 2)
+                self.search_key_var = self.search.get()
+                if self.search_key_var is not None:
+                    eyeTracker.runexpBrowser(self.search_key_var, 2,self.patientId,self.parent,self.root)
         else:
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            webBrowser.launch_browser("https://www.spain.info/it/", 2)
+            self.search_key_var = self.search.get()
+            if self.search_key_var is not None:
+                self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+                webBrowser.launch_browser(self.search_key_var, 2,self.patientId,self.parent,self.root)
             # https: // www.spain.info / it /
             # https: // www.visitnorway.it /
 

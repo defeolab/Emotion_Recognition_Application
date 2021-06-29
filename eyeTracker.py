@@ -42,14 +42,13 @@ import tkinter as tk
 import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.signalRecord as sigrec
 
-def startGSR(GSRwindow):
 
-    sample_rate = 384000     #using the highest sampling frequency
-    sec = 10
-    myrec = sigrec.Record(sample_rate, sec, GSRwindow)
+def startGSR(path, sec):
+    sample_rate = 384000  # using the highest sampling frequency
+    myrec = sigrec.Record(sample_rate, sec)
     val = myrec.mysignal()
-    myrec.playback(val)
-    myrec.savefile('new1_signal_record.wav', val)
+    myrec.savefile(path, val)
+
 
 def runexpGiulia(participantId):
     print(participantId)
@@ -72,11 +71,12 @@ def runexpGiulia(participantId):
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = False
+    dummy_mode = True
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/giulia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    GSRpath = 'data/giulia/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -101,10 +101,8 @@ def runexpGiulia(participantId):
         tracker.calibrate(win)"""
     tracker.calibrate(win)
 
-    GSRwindow = tk.Tk()
-    startGSR(GSRwindow)
-
     tracker.start_recording(gaze_data=True, store_data=True)
+
     # Present fixation dot and wait for one second
     for i in range(monitor_refresh_rate):
         if i == 0:
@@ -122,6 +120,8 @@ def runexpGiulia(participantId):
         t = win.flip()
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
+
+    startGSR(GSRpath, 30) #integrate a way to get video duration
 
     tracker.stop_recording(gaze_data=True)
 
@@ -143,7 +143,6 @@ def runexpGiulia(participantId):
 
 
 def runexpAlessia(participantId):
-
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -163,12 +162,14 @@ def runexpAlessia(participantId):
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = False
+    dummy_mode = True
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/alessia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    #settings.FILENAME = 'testfile.tsv'
+    GSRpath = 'data/alessia/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
+    sec = 30 #to define
+    # settings.FILENAME = 'testfile.tsv'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -183,13 +184,10 @@ def runexpAlessia(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
+    # image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
 
     tracker.calibrate(win)
     win.close()
-
-    GSRwindow = tk.Tk()
-    startGSR(GSRwindow)
 
     tracker.start_recording(gaze_data=True, store_data=True)
 
@@ -198,14 +196,15 @@ def runexpAlessia(participantId):
         top.title("Experiment VLC media player")
         top.state('zoomed')
         player = None
-        player = vp.Player(top, title="tkinter vlc")
+        player = vp.Player(top, title="tkinter vlc", type="lab", path=GSRpath, sec=sec)
+        #player = vp.Player(top, title="tkinter vlc")
 
         def closeTop():
             player.OnStop()
             player.quit()
             top.destroy()
 
-            #save file
+            # save file
             tracker.stop_recording(gaze_data=True)
             # Close window and save data
             tracker.save_data(mon)  # Also save screen geometry from the monitor object
@@ -229,9 +228,11 @@ def runexpAlessia(participantId):
         top.bind('<space>', pause)
 
     createVideoFrame()
+    #startGSR(GSRpath, 30) #integrate a way to get video duration
 
 
-def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for Chiara
+# def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for Chiara
+def runexpBrowser(search_key_var, type, participantId, parent, root):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -251,14 +252,18 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = False
+    dummy_mode = True
 
     settings = Titta.get_defaults(et_name)
     if type == 1:
         settings.FILENAME = 'data/camilla/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/camilla/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
     else:
         settings.FILENAME = 'data/chiara/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/chiara/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
+    sec = 30
     print(settings.FILENAME)
+
     settings.N_CAL_TARGETS = 3
 
     tracker = Titta.Connect(settings)
@@ -275,15 +280,13 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     tracker.calibrate(win)
     win.close()
 
-    GSRwindow = tk.Tk()
-    startGSR(GSRwindow)
-
     tracker.start_recording(gaze_data=True, store_data=True)
 
-    if(type == 1):
-        webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
+    if (type == 1):
+        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, path=GSRpath, sec=sec)
     else:
-        webBrowser.launch_browser("https://www.spain.info/it/", 2)
+        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, path=GSRpath, sec=sec)
+
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
@@ -295,7 +298,7 @@ def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for
     msg_data = pickle.load(f)
     #  Save data and messages
     df = pd.DataFrame(gaze_data, columns=tracker.header)
-    #df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
+    # df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')

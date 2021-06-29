@@ -11,7 +11,7 @@ class ButterWorthFilter:
 
     def __init__(self):
         self.signal, self.sample_freq = sf.read(
-            r"C:\Users\chuks\OneDrive\Desktop\THESIS\signals\signal_384000\signal_wet_hands_with_alcohol.wav")
+            r"C:\Users\Neuromarketing\PycharmProjects\Emotion_Recognition_Application\new1_signal1_record_112_1.wav")
 
 
     def leftRightChannel(self):
@@ -50,7 +50,7 @@ class ButterWorthFilter:
                            'LeftButterWorth': left_butter_filter, 'RightButterWorth': right_butter_filter})
 
         # save as csv file
-        df.to_csv(r'C:\Users\chuks\OneDrive\Desktop\ANACONDA\JUPYTER_NOTEBOOK\sample_wet_hands1.csv')
+        df.to_csv(r'C:\Users\Neuromarketing\PycharmProjects\Emotion_Recognition_Application\new1_signal1_record_112_1.csv')
 
         return time, left_butter_filter, right_butter_filter
 
@@ -97,11 +97,11 @@ class ButterWorthFilter:
 
         return
 
-
+""""
 app = ButterWorthFilter()
 app.leftRightChannel()
 app.butterLowPass()
 app.canvasPlot()
-
+"""
 
 
