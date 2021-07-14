@@ -40,14 +40,7 @@ import os
 
 import tkinter as tk
 import videoPlayer as vp
-import GSR.GSR_RECORD_SIGNAL.signalRecord as sigrec
-
-
-def startGSR(path, sec):
-    sample_rate = 384000  # using the highest sampling frequency
-    myrec = sigrec.Record(sample_rate, sec)
-    val = myrec.mysignal()
-    myrec.savefile(path, val)
+import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 
 
 def runexpGiulia(participantId):
@@ -76,7 +69,7 @@ def runexpGiulia(participantId):
 
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/giulia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    GSRpath = 'data/giulia/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
+    GSRpath = 'data/giulia/' + str(participantId) + '/gsr/'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -102,6 +95,8 @@ def runexpGiulia(participantId):
     tracker.calibrate(win)
 
     tracker.start_recording(gaze_data=True, store_data=True)
+    rec = gsr.Record()
+    rec.on_rec(GSRpath)
 
     # Present fixation dot and wait for one second
     for i in range(monitor_refresh_rate):
@@ -121,8 +116,7 @@ def runexpGiulia(participantId):
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
-    startGSR(GSRpath, 30) #integrate a way to get video duration
-
+    rec.on_stop()
     tracker.stop_recording(gaze_data=True)
 
     # Close window and save data
@@ -167,8 +161,7 @@ def runexpAlessia(participantId):
 
     settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/alessia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    GSRpath = 'data/alessia/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
-    sec = 30 #to define
+    GSRpath = 'data/alessia/' + str(participantId) + '/gsr/'
     # settings.FILENAME = 'testfile.tsv'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
@@ -196,7 +189,7 @@ def runexpAlessia(participantId):
         top.title("Experiment VLC media player")
         top.state('zoomed')
         player = None
-        player = vp.Player(top, title="tkinter vlc", type="lab", path=GSRpath, sec=sec)
+        player = vp.Player(top, title="tkinter vlc", type="lab", path=GSRpath)
         #player = vp.Player(top, title="tkinter vlc")
 
         def closeTop():
@@ -257,10 +250,10 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     settings = Titta.get_defaults(et_name)
     if type == 1:
         settings.FILENAME = 'data/camilla/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/camilla/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
+        GSRpath = 'data/camilla/' + str(participantId) + '/gsr/'
     else:
         settings.FILENAME = 'data/chiara/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/chiara/' + str(participantId) + '/gsr/' + data.getDateStr() + '.wav'
+        GSRpath = 'data/chiara/' + str(participantId) + '/gsr/'
     sec = 30
     print(settings.FILENAME)
 
@@ -283,9 +276,9 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     tracker.start_recording(gaze_data=True, store_data=True)
 
     if (type == 1):
-        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, path=GSRpath, sec=sec)
+        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="lab", path=GSRpath)
     else:
-        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, path=GSRpath, sec=sec)
+        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="lab", path=GSRpath)
 
 
     tracker.stop_recording(gaze_data=True)

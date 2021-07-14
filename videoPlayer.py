@@ -44,7 +44,7 @@ import time
 import platform
 from tkinter import filedialog
 import patientWindow as pw
-import GSR.GSR_RECORD_SIGNAL.launch_signalRecord as launch_sigrec
+import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 
 class ttkTimer(Thread):
     """a class serving same function as wxTimer... but there may be better ways to do this
@@ -94,7 +94,7 @@ class Player(Tk.Frame):
 
         self.type = type
         self.path = path
-        self.sec = sec
+        self.rec = gsr.Record()
 
         #self.videoPath = os.getcwd() + '/videos/movie_commercial.mp4'
         self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/video/")
@@ -186,7 +186,7 @@ class Player(Tk.Frame):
         # check if there is a file to play, otherwise open a
         # Tk.FileDialog to select a file
         if self.type is not None:
-            launch_sigrec.startGSR(self.path, self.sec)
+            self.rec.on_rec(self.path)
 
         if not self.player.get_media():
             self.OnOpen()
@@ -203,6 +203,7 @@ class Player(Tk.Frame):
         """Pause the player.
         """
         self.player.pause()
+        self.rec.on_stop()
 
     def OnStop(self):
         """Stop the player.

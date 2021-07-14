@@ -1,0 +1,17 @@
+	system_time_stamp	msg
+0	176184960752	Calibration_start
+1	176184967016	calibration point 0 at position -19.169474339912615 10.782829316200846
+2	176187386876	calibration point 1 at position 0.0 -0.0
+3	176189102684	calibration point 2 at position 19.169474339912615 -10.782829316200846
+4	176191344283	Calibration_stop
+5	176191444604	Validation_start
+6	176191936118	validation point 0 at position 0.0 -8.087121987150637
+7	176193433795	validation point 1 at position 14.377105754934462 -0.0
+8	176194933774	validation point 2 at position -14.377105754934458 -0.0
+9	176196433516	validation point 3 at position 0.0 8.087121987150633
+10	176197433605	Validation_end
+11	176197802920	validation data quality Dev_L: 2.98, Dev_R: 2.97 RMS_L: 0.23, RMS_R: 0.12, SD_L: 0.17, SD_R: 0.09, LOSS_L: 0.00, LOSS_R: 0.00
+12	176202925549	fix on
+13	176203897908	fix off
+14	176203898051	stim on: beer_positioning.jpg
+15	176233881613	stim off: beer_positioning.jpg
