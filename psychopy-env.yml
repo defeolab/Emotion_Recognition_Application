@@ -1,0 +1,20 @@
+name: psychopy
+channels:
+- conda-forge
+dependencies:
+- python=3.6
+- psychopy=2020.2.4
+- pip
+- pip:
+  - psychtoolbox
+  - pyglet==1.4.10
+  - pyo
+  - pyparallel; platform_system != "Windows"
+  - SoundFile; platform_system == "Windows"
+  - websocket_client
+  - python-vlc
+  - cefpython3
+  - tobii-research
+  - pygame
+  - screeninfo
+  - dlib

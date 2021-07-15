@@ -42,6 +42,8 @@ import pathlib
 from threading import Timer, Thread, Event
 import time
 import platform
+from tkinter import filedialog
+import patientWindow as pw
 
 
 class ttkTimer(Thread):
@@ -90,7 +92,8 @@ class Player(Tk.Frame):
 
         self.parent = parent
 
-        self.videoPath = os.getcwd() + '/videos/filmato_Alessia.mp4'
+        #self.videoPath = os.getcwd() + '/videos/movie_commercial.mp4'
+        self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/video/")
         self.firstTime = True
 
         if title == None:
@@ -166,7 +169,7 @@ class Player(Tk.Frame):
 
         self.OnPlay()
 
-        # set the volume slider to the current volume
+        # set the volume slider to the curnt volume
         # self.volslider.SetValue(self.player.audio_get_volume() / 2)
         #self.volslider.set(self.player.audio_get_volume())
 
@@ -199,6 +202,7 @@ class Player(Tk.Frame):
         self.player.stop()
         # reset the time slider
         self.timeslider.set(0)
+        #pw.PatientWindow(self.old_window, self.PatientId)
 
     def OnTimer(self):
         """Update the time slider according to the current movie time.
