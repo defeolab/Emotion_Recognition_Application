@@ -1,7 +1,5 @@
 from tkinter import *
 from tkinter import ttk, _setit
-import tkinter as tk
-
 import pandas as pd
 
 import loginWindow as lw
@@ -12,7 +10,6 @@ from tkinter import messagebox
 
 
 import patientWindow as pw
-#global temp
 class userWindow():
 
     def __init__(self, name, surname, id):
@@ -42,13 +39,7 @@ class userWindow():
         for string in self.participants:
             self.dropdown["menu"].add_command(label=string, command=_setit(self.tkvar, string))
 
-
-
-
-        #print("patient")
-
     def add_patient(self):
-        temp = 0
         top = Toplevel()
         top.title("Add a new Patient")
         top.geometry("600x600")
@@ -94,17 +85,13 @@ class userWindow():
         nationality = Entry(top)
         nationality.grid(row=8, column=2, columnspan=10)
 
-
-
-
         def add_to_participants():
             while True:
                 id = randint(1000, 9999)
                 if id not in self.ids:
                     break
 
-            #self.participants.append("Participant n " +str(id))
-            self.participants.append(str(id))
+            self.participants.append('Participant n '+ str(id))
             self.update_menu()
 
             fp = open('anagraphicData.txt', 'r')
@@ -113,11 +100,21 @@ class userWindow():
             data['IDs'].append(id)
 
             try:
-                path = os.getcwd()+'/data/'+str(id)
-                os.mkdir(path)
+                Image_path = os.getcwd()+'/data/Image/'+str(id)
+                os.mkdir(Image_path)
+                GSRPath1 = os.getcwd()+'/data/Image/'+str(id) + '/GSR_data/'
+                os.mkdir(GSRPath1)
+                Video_path = os.getcwd() + '/data/Video/' + str(id)
+                os.mkdir(Video_path)
+                GSRPath2 = os.getcwd() + '/data/Video/' + str(id) + '/GSR_data/'
+                os.mkdir(GSRPath2)
+                Browser_path = os.getcwd() + '/data/Browser/' + str(id)
+                os.mkdir(Browser_path)
+                GSRPath3 = os.getcwd() + '/data/Browser/' + str(id) + '/GSR_data/'
+                os.mkdir(GSRPath3)
                 temp = str(id)
             except OSError:
-                print("Creation of the directory %s failed" % path)
+                print("Creation of the directory %s failed")
 
             elem = {'id': id, 'name': name.get(), 'surname': surname.get(), 'age': age.get(),
                     'gender': varGend.get(), 'edu': varEdu.get()}
@@ -126,23 +123,9 @@ class userWindow():
 
             data['Participants'].append(elem)
 
-
-            df = pd.DataFrame.from_dict(data, orient='index')
-            df.to_csv('website3.csv', index=False, header=True, encoding='utf-8')
-
-            #fp = open('anagraphicData.txt', 'w')
-            #json.dump(data, fp)
-            #fp.close()
-
-            #js = open('anagraphicData.json', 'w')
-            #json.dump(data, js)
-            #js.close()
-
-
-            #df = pd.read_json(r'anagraphicData.json')
-            #df.to_csv(r'patientdata.csv',index = None)
-
-
+            fp = open('anagraphicData.txt', 'w')
+            json.dump(data, fp)
+            fp.close()
 
             top.destroy()
 
@@ -157,7 +140,6 @@ class userWindow():
         self.window.title("User personal page")
         self.window.geometry("1000x600")
         self.window.columnconfigure(1, weight=1)
-        #root = Tk()
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )
 
@@ -170,9 +152,6 @@ class userWindow():
         mainframe.columnconfigure(0, weight=1)
         mainframe.rowconfigure(0, weight=1)
 
-        #scrollbar = Scrollbar(mainframe)
-        #scrollbar.pack(side=RIGHT, fill=Y)
-
         # Create a Tkinter variable
         self.tkvar = StringVar(self.window)
 
@@ -181,17 +160,9 @@ class userWindow():
 
         self.dropdown = OptionMenu(mainframe, self.tkvar, *self.participants)
 
-        #self.dropdown = Listbox(mainframe, yscrollcommand=scrollbar.set)
-        #self.dropdown.insert(END, self.tkvar, *self.participants)
-
         Label(mainframe, text="Choose a participant", font='Times 16').grid(row=2, column=1, pady= 20)
 
         self.dropdown.grid(row=3, column=1, sticky=(N, W, E, S))
-        #self.dropdown.pack(side=LEFT, fill=BOTH)
-
-        #self.dropdown.config(yscrollcommand=scrollbar.set)
-
-        #scrollbar.config(command=self.dropdown.yview)
 
         add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_patient).grid(row=4, column=1,
                                                                                                  padx=10, pady=50)
@@ -202,20 +173,16 @@ class userWindow():
         add_search_but = ttk.Button(mainframe, text="Search", command=self.search_patient).grid(row=7, column=1,
                                                                                                 padx=10, pady=50)
         self.window.columnconfigure(6)
-        #weight = 19
         self.window.bind("<Return>", lambda e: self.search_patient())
 
         no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26').grid(row=1, column=1, padx= 30, pady= 20)
 
         def selectPatient(str):
-            print("hi")
             if self.patient is not None:
-                #no_participant.destroy()
                 for w in self.patient.widgets:
                     w.destroy()
 
 
-            #name_surname = str.get().split()
             pat = str.get().split()[2]
             self.patient = pw.PatientWindow(self.window, pat)
 
@@ -227,13 +194,10 @@ class userWindow():
         self.tkvar.trace('w', change_dropdown)
 
     def searchPatient(self, str):
-        print("hi")
         if self.patient is not None:
-            # no_participant.destroy()
             for w in self.patient.widgets:
                 w.destroy()
 
-        # name_surname = str.get().split()
         pat = str.split()[2]
         self.patient = pw.PatientWindow(self.window, pat)
 

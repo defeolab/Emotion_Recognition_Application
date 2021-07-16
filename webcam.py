@@ -5,19 +5,16 @@ import PIL
 import numpy as np
 from PIL import ImageTk
 import gaze_tracking
-import csv
-import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import patientWindow as pw
-import userWindow as uw
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 
 
-class App: #I show the webcam output
+class App:
     def __init__(self, window, window_title, id, old_window,video_source=0):
         self.window = window
         self.window.title(window_title)
@@ -56,8 +53,6 @@ class App: #I show the webcam output
         self.window.destroy()
         self.vid.__del__()
         pw.PatientWindow(self.old_window, self.PatientId)
-        #newWindow = uw.userWindow("Vito", "De Feo", 1234)
-        #newWindow.window.mainloop()
 
     def update(self):
         # Get a frame from the video source
@@ -129,8 +124,6 @@ class MyVideoCapture:
         model.load_weights('./fer/model.h5')
         return model
     def get_emotion_label(self,frame):
-        # fer_model = self.get_emotion_prediction_label_model()
-        # dictionary which assigns each label an emotion (alphabetical order)
         emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
         # face detection using CV2
         facecasc = cv2.CascadeClassifier('./fer/haarcascade_frontalface_default.xml')
@@ -185,7 +178,5 @@ class MyVideoCapture:
             x, y = my_df["left_pupil_x"], my_df["left_pupil_y"]
             plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
             plt.savefig('heatmap.png')
-            #data/id/heatmap.png
             self.vid.release()
 
-#App(tk.Tk(), "Tkinter and OpenCV")

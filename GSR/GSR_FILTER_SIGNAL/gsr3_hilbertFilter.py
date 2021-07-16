@@ -281,19 +281,3 @@ class HilbertTransformClass:
         frame2.pack(side=RIGHT)
 
 
-#create new record
-#df['LeftAnalyticSignal'] = left_analytic_signal
-#df['RightAnalyticSignal'] = right_analytic_signal
-#df['LeftEnvelop'] = left_envelop
-#df['RightEnvelop'] = right_envelop
-#df['LeftInstantaneousPhase'] = left_instant_phase
-#df['RightInstantaneousPhase'] = right_instant_phase
-#df['LeftInstantaneousFrequency'] = left_instant_freq
-#df['RightInstantaneousFrequency'] = right_instant_freq
-#df['LeftEnvelopButterworth'] = left_envelop_filter
-#df['RightEnvelopButterworth'] = right_envelop_filter
-#df['LeftFrequencyButterworth'] = left_freq_filter
-#df['RightFrequencyButterworth'] = right_freq_filter
-
-#save the new record
-#df.to_csv(r'C:\Users\chuks\OneDrive\Desktop\ANACONDA\JUPYTER_NOTEBOOK\sample_wet_hands.csv')

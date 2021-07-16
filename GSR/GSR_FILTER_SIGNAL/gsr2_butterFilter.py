@@ -33,19 +33,6 @@ class ButterWorthFilter:
         left_butter_filter = lfilter(b, a, left_channel)
         right_butter_filter = lfilter(b, a, right_channel)
 
-        """
-        #get the frequency response and plot
-        b, a = butter(order, cutoff, btype='lowpass', analog='False')
-        w, h = freqs(b, a)
-        plt.semilogx(w, 20 * np.log10(abs(h)))
-        plt.xlabel('Frequency(radian/sec)')
-        plt.ylabel('Amplitude(dB)')
-        plt.title('Butterworth Frequency Response')
-        plt.grid(which='both', axis='both')
-        plt.axvline(cutoff, color='green')
-        plt.axhline(-3, color='green', linestyle='--')
-        #plt.show()
-        """
         df = pd.DataFrame({'Time': time, 'Left_Channel': left_channel, 'Right_Channel': right_channel,
                            'LeftButterWorth': left_butter_filter, 'RightButterWorth': right_butter_filter})
 
@@ -96,12 +83,4 @@ class ButterWorthFilter:
         root.mainloop()
 
         return
-
-""""
-app = ButterWorthFilter()
-app.leftRightChannel()
-app.butterLowPass()
-app.canvasPlot()
-"""
-
 

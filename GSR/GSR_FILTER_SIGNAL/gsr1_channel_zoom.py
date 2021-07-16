@@ -37,11 +37,6 @@ class appSignal:
 
         time = np.linspace(0, len(data) / sample, len(data))
 
-        # df = pd.DataFrame({'Time':time, 'Left':left, 'Right':right})
-
-        # save as csv file
-        # df.to_csv(r'C:\Users\chuks\OneDrive\Desktop\ANACONDA\JUPYTER_NOTEBOOK\gsr_record.csv')
-
         # create a frame for each contain each canvas
         frame = tk.Frame(master=self.root1)
         frame1 = tk.Frame(master=self.root1)

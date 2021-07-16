@@ -43,7 +43,7 @@ import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 
 
-def runexpGiulia(participantId):
+def runexpImage(participantId):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -68,8 +68,8 @@ def runexpGiulia(participantId):
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
-    settings.FILENAME = 'data/giulia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    GSRpath = 'data/giulia/' + str(participantId) + '/gsr/'
+    settings.FILENAME = 'data/Image/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    GSRpath = 'data/Image/' + str(participantId) + '/GSR_data/'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -92,6 +92,7 @@ def runexpGiulia(participantId):
         tracker.calibrate(win, eye='right', calibration_number='second')
     else:
         tracker.calibrate(win)"""
+
     tracker.calibrate(win)
 
     tracker.start_recording(gaze_data=True, store_data=True)
@@ -136,7 +137,7 @@ def runexpGiulia(participantId):
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
 
-def runexpAlessia(participantId):
+def runexpVideo(participantId):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -160,9 +161,8 @@ def runexpAlessia(participantId):
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
-    settings.FILENAME = 'data/alessia/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-    GSRpath = 'data/alessia/' + str(participantId) + '/gsr/'
-    # settings.FILENAME = 'testfile.tsv'
+    settings.FILENAME = 'data/Video/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+    GSRpath = 'data/Video/' + str(participantId) + '/GSR_data/'
     print(settings.FILENAME)
     settings.N_CAL_TARGETS = 3
 
@@ -177,7 +177,6 @@ def runexpAlessia(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    # image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2)) #video instead?
 
     tracker.calibrate(win)
     win.close()
@@ -190,7 +189,6 @@ def runexpAlessia(participantId):
         top.state('zoomed')
         player = None
         player = vp.Player(top, title="tkinter vlc", type="lab", path=GSRpath)
-        #player = vp.Player(top, title="tkinter vlc")
 
         def closeTop():
             player.OnStop()
@@ -201,10 +199,12 @@ def runexpAlessia(participantId):
             tracker.stop_recording(gaze_data=True)
             # Close window and save data
             tracker.save_data(mon)  # Also save screen geometry from the monitor object
+
             # %% Open pickle and write et-data and messages to tsv-files.
             f = open(settings.FILENAME[:-4] + '.pkl', 'rb')
             gaze_data = pickle.load(f)
             msg_data = pickle.load(f)
+
             #  Save data and messages
             df = pd.DataFrame(gaze_data, columns=tracker.header)
             df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
@@ -221,10 +221,7 @@ def runexpAlessia(participantId):
         top.bind('<space>', pause)
 
     createVideoFrame()
-    #startGSR(GSRpath, 30) #integrate a way to get video duration
 
-
-# def runexpBrowser(participantId, type):  # type parameter : 1 for Camilla, 2 for Chiara
 def runexpBrowser(search_key_var, type, participantId, parent, root):
     print(participantId)
     tmp = get_monitors()
@@ -249,11 +246,11 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
 
     settings = Titta.get_defaults(et_name)
     if type == 1:
-        settings.FILENAME = 'data/camilla/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/camilla/' + str(participantId) + '/gsr/'
+        settings.FILENAME = 'data/Browser/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/Browser/' + str(participantId) + '/GSR_data/'
     else:
-        settings.FILENAME = 'data/chiara/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/chiara/' + str(participantId) + '/gsr/'
+        settings.FILENAME = 'data/Browser/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/Browser/' + str(participantId) + '/GSR_data/'
     sec = 30
     print(settings.FILENAME)
 
@@ -291,7 +288,6 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     msg_data = pickle.load(f)
     #  Save data and messages
     df = pd.DataFrame(gaze_data, columns=tracker.header)
-    # df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')

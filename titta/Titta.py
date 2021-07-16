@@ -110,25 +110,7 @@ class Settings(object):
             
         self.VAL_POS_TOBII = np.array([[0.2, 0.5], [0.5, 0.8], [0.8, 0.5], [0.5, 0.2]])
         
-        # CAL_POS_TOBII = np.array([[0.5, 0.5], [0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0],
-        #                           [0.5, 1.0], [0.5, 0.0], [0.0, 0.5], [1.0, 0.5]])
-        
-        # if N_CAL_TARGETS == 0:
-        #     CAL_POS_TOBII = []
-        # elif N_CAL_TARGETS == 1:
-        #     CAL_POS_TOBII = CAL_POS_TOBII[0, :]
-        # elif N_CAL_TARGETS == 5:
-        #     CAL_POS_TOBII = CAL_POS_TOBII[[0, 1, 2, 3, 4], :]  
-            
-        # # VAL_POS_TOBII = np.array([[0.2, 0.2], [0.2, 0.8], [0.8, 0.2], [0.8, 0.8]])    
-        # VAL_POS_TOBII = np.array([[0.2, 0.5], [0.5, 0.8], [0.8, 0.5], [0.5, 0.2]]) 
-            
-        # # Scale the positions so they look good on the screen
-        # scaling = 0.7
-        # corr = 0.5 - (scaling * 0.5)
-        # self.CAL_POS_TOBII = CAL_POS_TOBII * scaling + corr
-        # self.VAL_POS_TOBII = VAL_POS_TOBII * scaling + corr    
-        
+
 class Graphics(object):
     
     def __init__(self):
@@ -153,16 +135,7 @@ class Graphics(object):
         # SIze of calibration dots
         self.TARGET_SIZE=0.6 # in deg
         self.TARGET_SIZE_INNER=self.TARGET_SIZE / float(5)  # inner diameter of dot
-        
-        # Theses parameters are changed directly in the EThead class
-        # self.HEAD_POS_CIRCLE_FIXED_COLOR = blue
-        # self.HEAD_POS_CIRCLE_FIXED_RADIUS = 0.25
-        
-        # self.HEAD_POS_CIRCLE_MOVING_COLOR = yellow
-        # self.HEAD_POS_CIRCLE_MOVING_FILLCOLOR = yellow
-        # self.HEAD_POS_CIRCLE_MOVING_RADIUS = 0.25
-        # self.HEAD_POS_CIRCLE_MOVING_MIN_RADIUS = 0.05
-        
+
         self.POS_CAL_BUTTON = (0.5, -0.8)
         self.COLOR_CAL_BUTTON =  green
         self.WIDTH_CAL_BUTTON = 0.30

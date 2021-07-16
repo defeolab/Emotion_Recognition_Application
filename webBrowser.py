@@ -29,8 +29,7 @@ class MainFrame(tk.Frame):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
-        #self.starting_url = starting_url
-        self.type = type_exp  # 1= Camilla, 2=Chiara
+        self.type = type_exp
         self.id = id
         self.old_window = old_window
         self.old_root = old_root
@@ -47,7 +46,7 @@ class MainFrame(tk.Frame):
         self.bind("<Configure>", self.on_configure)
         self.bind("<FocusIn>", self.on_focus_in)
         self.bind("<FocusOut>", self.on_focus_out)
-        print("in mainframe")
+
         # NavigationBar
         self.navigation_bar = NavigationBar(self, self.type, starting_url)
         self.navigation_bar.grid(row=0, column=0,
@@ -63,10 +62,8 @@ class MainFrame(tk.Frame):
         tk.Grid.columnconfigure(self, 0, weight=1)
 
         # InstructionFrame
-        self.instruction_frame = InstructionFrame(self, self.type)
-        self.instruction_frame.grid(row=1, column=1, sticky=(tk.N + tk.S + tk.E + tk.W))
-        # tk.Grid.rowconfigure(self, 0, weight=1)
-        # tk.Grid.columnconfigure(self, 1, weight=1)
+        #self.instruction_frame = InstructionFrame(self, self.type)
+        #self.instruction_frame.grid(row=1, column=1, sticky=(tk.N + tk.S + tk.E + tk.W))
 
         # Pack MainFrame
         self.pack(fill=tk.BOTH, expand=tk.YES)
@@ -95,7 +92,6 @@ class MainFrame(tk.Frame):
         if self.browser_frame:
             self.browser_frame.on_root_close()
         self.master.destroy()
-        #self.quit()
         self.old_root.destroy()
         pw.PatientWindow(self.old_window, self.id)
 
@@ -123,7 +119,6 @@ class BrowserFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
         self.bind("<Configure>", self.on_configure)
         self.focus_set()
-        print("in browserframe")
 
     def embed_browser(self):
         window_info = cef.WindowInfo()
@@ -139,10 +134,6 @@ class BrowserFrame(tk.Frame):
     def get_window_handle(self):
         if self.winfo_id() > 0:
             return self.winfo_id()
-        # elif MAC:
-        #     from AppKit import NSApp
-        #     import objc
-        #     return objc.pyobjc_id(NSApp.windows()[-1].contentView())
         else:
             raise Exception("Couldn't obtain window handle")
 
@@ -230,25 +221,22 @@ class NavigationBar(tk.Frame):
         tk.Frame.__init__(self, master)
         self.type = type_exp
         self.starting_url = starting_url
-        print("in navigationbar")
+
         # Back button
         back = 'resources/back.png'
         self.back_image = tk.PhotoImage(file=back)
-        # self.back_image = self.back_image.zoom(25).subsample(100)
         self.back_button = tk.Button(self, image=self.back_image, command=self.go_back)
         self.back_button.grid(row=0, column=0)
 
         # Forward button
         forward = 'resources/forward.png'
         self.forward_image = tk.PhotoImage(file=forward)
-        # self.forward_image = self.forward_image.zoom(25).subsample(100)
         self.forward_button = tk.Button(self, image=self.forward_image, command=self.go_forward)
         self.forward_button.grid(row=0, column=1)
 
         #        Reload button
         refresh = 'resources/reload.png'
         self.reload_image = tk.PhotoImage(file=refresh)
-        # self.reload_image = self.reload_image.zoom(25).subsample(100)
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
@@ -257,26 +245,6 @@ class NavigationBar(tk.Frame):
         tk.Grid.rowconfigure(self, 0, weight=100)
         tk.Grid.columnconfigure(self, 3, weight=100)
 
-        #if self.type == 1:
-            #self.master.get_browser().StopLoad()
-        #    if self.starting_url is not None:
-
-        #        self.master.get_browser().LoadUrl(self.starting_url)
-
-            #self.nespresso_button = tk.Button(self, text="Nespresso", command=self.go_toNespresso)
-            #self.nespresso_button.grid(row=0, column=5, padx=20)
-
-         #   self.lavazza_button = tk.Button(self, text="Lavazza", command=self.go_toLavazza)
-         #   self.lavazza_button.grid(row=0, column=4, padx=20)
-
-        #elif self.type == 2:
-        #    self.spain_button = tk.Button(self, text="Spagna", command=self.go_toSpagna)
-        #    self.spain_button.grid(row=0, column=5, padx=20)
-
-        #    self.norway_button = tk.Button(self, text="Norvegia", command=self.go_toNorvegia)
-        #    self.norway_button.grid(row=0, column=4, padx=20)
-
-        # Update state of buttons
         self.update_state()
 
     def go_toNespresso(self):
@@ -285,7 +253,6 @@ class NavigationBar(tk.Frame):
             "https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
 
     def go_toLavazza(self):
-        #self.master.get_browser().StopLoad()
         self.master.get_browser().LoadUrl("https://www.lavazza.it/it.html")
 
     def go_toSpagna(self):
@@ -363,27 +330,10 @@ class InstructionFrame(tk.Frame):
         self.instruction = None
         tk.Frame.__init__(self, master)
         self.type = type_exp
-        # self.instruction = tk.Listbox(self)
         self.instruction = tk.Text(self, width=50, font=("Helvetica", 14))
         self.instruction.grid(row=0, column=0, sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=1)
         tk.Grid.columnconfigure(self, 0, minsize=200, weight=1)
-
-        #if self.type == 1:
-        #    self.instruction.insert(tk.INSERT, "GRUPPO A\nIstruzioni per sito Lavazza:\n     • Andare sul sito lavazza.it \n"
-        #                                   "     • Cliccare tasto “Menu”\n     • Cliccare tasto “Sostenibilità”\n"
-        #                                   "     • Cliccare tasto “Fondazione”\n     • Leggere la pagina “Fondazione Lavazza”\n"
-        #                                   "     • Leggere l’articolo “Innovazione contro il cambiamento                     climatico” cliccando il tasto “Scopri di più”\n"
-        #                                   "     • Leggere l’articolo “L’impresa di diventare impresa”\n"
-        #                                   "     • Leggere l’articolo “Il caffè per rinascere” \n\nGRUPPO B\nIstruzioni per sito Nespresso:\n"
-        #                                   "     • Andare sul sito nespresso.com\n     • Passare il mouse sul tasto “Sostenibilità e riciclo”\n"
-        #                                   "     • Cliccare tasto “Il caffè secondo Nespresso”\n     • Leggere l’articolo “Avvicinati e ascolta”\n"
-        #                                   "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Pace e speranza in Colombia”\n"
-        #                                   "     • Tornare alla pagina precedente\n     • Leggere l’articolo “Piantare radici per salvaguardare il futuro           del caffè e del nostro pianeta”")
-        #elif self.type == 2:
-        #    self.instruction.insert(tk.INSERT, "Istruzioni per il partecipante:\n\n 1.  Osservate la home page.\n\n 2.  Cercare nel menù di navigazione la voce “Cosa fare”\n\n"
-        #                                       " 3.  Scegliete l’opzione “Natura” (per il sito della Spagna) / \n      “Attrazioni naturali imperdibili” ( per il sito della Norvegia).\n\n"
-        #                                       " 4.  Scorrete fra i contenuti dell’intera pagina e cercate il \n       pulsante per prenotare un’esperienza a contatto con la \n      natura.")
 
         self.instruction.config(state='disabled')
 
@@ -401,7 +351,6 @@ def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    #print(url)
     app = MainFrame(root, url, type, id, window, old_root)
     rec = None
     if exptype is not None:
@@ -411,7 +360,6 @@ def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     app.browser_frame.mainloop()
-    #app.mainloop()
     if rec is not None:
         rec.on_stop()
     cef.Shutdown()

@@ -17,4 +17,4 @@ dependencies:
   - tobii-research
   - pygame
   - screeninfo
-  - dlib
+  - keras

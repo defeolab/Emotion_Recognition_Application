@@ -5,10 +5,6 @@ import json
 
 class loginWindow:
 
-    # user0 = 'mark'
-    # pass0 = 'mark'
-    #prova per github
-
     def __init__(self):
 
         self.window = Tk()
@@ -28,7 +24,6 @@ class loginWindow:
         ttk.Button(text='LOGIN', command=self.login_user).grid(row=4,column=3)
 
         self.window.columnconfigure(3, weight=5)
-        #self.parent.rowconfigure(1, weight=1)
 
         self.window.bind("<Return>", lambda e: self.login_user())
 

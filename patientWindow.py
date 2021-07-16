@@ -6,9 +6,6 @@ from tkinter import ttk
 import eyeTracker
 import webcam
 import sys, os
-import vlc
-import urllib
-from time import sleep
 import webBrowser
 import json
 import cv2
@@ -64,13 +61,7 @@ class PatientWindow:
         style = ttk.Style()
         style.configure('Wild.TButton', background="white")
         style.map('Wild.TButton', background=[('disabled', 'yellow'),('pressed','red')])
-        #style2 = ttk.Style()
-        #style2.configure("BW.TLabel", background="red")
-
-        #root = tk.Tk()
         var = tk.IntVar()
-        #style = ttk.Style()
-        #style.map('TRadiobutton', indicatorcolor=[('selected', '#00FF00')])
         self.x = IntVar()
         self.x.set(0)
 
@@ -87,17 +78,7 @@ class PatientWindow:
 
         if (self.x.get() == 0):
             start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
-        #start_camera_button.var = self.x
-        #print(self.x)
             start_camera_button.grid(row=2, column=2)
-        #stop_camera_button = ttk.Checkbutton(self.parent, command=self.stop_camera, text="stop camera", variable = self.x)
-        #else:
-        #    print("Camera is on!")
-
-        #start_camera_button = ttk.Scale(self.parent,command=self.start_camera, from_=0, to=1, orient=HORIZONTAL)
-        #start_camera_button.set(0)
-        #start_camera_button.grid(row=2, column=2)
-
 
         lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
         lab_button.grid(row=3, column=2)
@@ -111,22 +92,18 @@ class PatientWindow:
         neuro_frame = ttk.LabelFrame(experiments_frame, text="Experiments", relief=tk.RIDGE)
         neuro_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
-        button1 = ttk.Button(neuro_frame, text="Image Experiment", command=self.run_expGiulia)
+        button1 = ttk.Button(neuro_frame, text="Image Experiment", command=self.run_expimage)
         button1.grid(row=1, column=1, pady=15)
-        button2 = ttk.Button(neuro_frame, text="Video Experiment", command=self.run_expAlessia)
+        button2 = ttk.Button(neuro_frame, text="Video Experiment", command=self.run_expvideo)
         button2.grid(row=2, column=1, pady=15)
-        #button3 = ttk.Button(neuro_frame, text="Camilla's Experiment", command=self.run_expCamilla)
-        #button3.grid(row=3, column=1, pady=15)
-        #button4 = ttk.Button(neuro_frame, text="Chiara's Experiment", command=self.run_expChiara)
-        #button4.grid(row=4, column=1, pady=15)
-        button5 = ttk.Button(neuro_frame, text="Browser Experiment", command=self.openfile)
-        button5.grid(row=3, column=1, pady=15)
+        button3 = ttk.Button(neuro_frame, text="Browser Experiment", command=self.openfile)
+        button3.grid(row=3, column=1, pady=15)
         neuro_frame.columnconfigure(1, weight=1)
 
         show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
         show_data_but.grid(row=2, column=1, pady=30)
 
-        widgets.extend([neuro_frame, button1, button2, button5, show_data_but])
+        widgets.extend([neuro_frame, button1, button2, button3, show_data_but])
 
         return widgets
 
@@ -139,18 +116,18 @@ class PatientWindow:
         Label(self.root, text="Search url", font='Times 16').grid(row=5, column=1, pady=20)
         self.search = Entry(self.root)
         self.search.grid(row=6, column=1, columnspan=1)
-        add_search_but = Button(self.root, text="Search", command=self.run_expCamilla).grid(row=6, column=2, padx=10, pady=50)
+        add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
 
         self.parent.columnconfigure(6)
-        self.parent.bind("<Return>", lambda e: self.run_expCamilla())
+        self.parent.bind("<Return>", lambda e: self.run_expbrowser())
 
 
-    def run_expGiulia(self):
+    def run_expimage(self):
         if self.settings == "lab":
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpGiulia(self.patientId)
+                eyeTracker.runexpImage(self.patientId)
                 os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
         else:
@@ -164,15 +141,9 @@ class PatientWindow:
             path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
             if path is not None:
-                #file = os.startfile(path)
                 img = ImageTk.PhotoImage(master=top, image=Image.open(path))
                 label1 = tk.Label(top, image=img)
                 label1.pack(side="bottom", fill="both", expand="yes")
-
-            #img = ImageTk.PhotoImage(master = top, image = Image.open('Capture.PNG'))
-            #label1 = tk.Label(top, image=img)
-            #label1.pack(side="bottom", fill="both", expand="yes")
-
 
                 def countdown(time):
                     if time == -1:
@@ -187,13 +158,13 @@ class PatientWindow:
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
 
-    def run_expAlessia(self):
+    def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpAlessia(self.patientId)
+                eyeTracker.runexpVideo(self.patientId)
 
         else:
             #to be run after calibration
@@ -217,14 +188,13 @@ class PatientWindow:
             top.protocol("WM_DELETE_WINDOW", closeTop)
 
             def pause(arg):
-                # print(str(arg))
                 player.OnPause()
 
             top.bind('<space>', pause)
 
 
 
-    def run_expCamilla(self):
+    def run_expbrowser(self):
         self.search_key_var = None
         if self.settings == "lab":
             if self.camera_on is False:
@@ -232,59 +202,19 @@ class PatientWindow:
             else:
                 self.search_key_var = self.search.get()
                 if self.search_key_var is not None:
-                    #eyeTracker.runexpBrowser(self.patientId, 1)
                     eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)
         else:
             self.search_key_var = self.search.get()
             self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             if self.search_key_var is not None:
-                #print(self.search_key_var)
-                #f = urllib.request.urlopen(self.search_key_var)
-                #myfile = f.read()
-
-                #print(myfile)
                 webBrowser.launch_browser(self.search_key_var, 1,self.patientId,self.parent,self.root)
-                #self.parent.protocol("WM_DELETE_WINDOW", self.root.destroy())
-                #webBrowser.MainFrame(tk.Toplevel(),self.search_key_var, 1)
+
             else:
                 print("no url")
-        #def close():
-        #    self.root.destroy()
-
-            #webBrowser.launch_browser("https://www.lavazza.it/it.html", 1)
-        #self.parent.protocol("WM_DELETE_WINDOW", self.root.destroy())
-
-    def run_expChiara(self):
-        self.search_key_var = None
-        # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
-        if self.settings == "lab":
-            if self.camera_on is False:
-                print("You need to turn the camera on")
-            else:
-                #eyeTracker.runexpBrowser(self.patientId, 2)
-                self.search_key_var = self.search.get()
-                if self.search_key_var is not None:
-                    eyeTracker.runexpBrowser(self.search_key_var, 2,self.patientId,self.parent,self.root)
-        else:
-            self.search_key_var = self.search.get()
-            if self.search_key_var is not None:
-                self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-                webBrowser.launch_browser(self.search_key_var, 2,self.patientId,self.parent,self.root)
-            # https: // www.spain.info / it /
-            # https: // www.visitnorway.it /
-
-    #def change_color(self):
-    #    if (self.settings == 'lab'):
-    #        lab_button = ttk.Button(self.parent, text="Switch to Lab Settings", style="BW.TLabel",command=self.switch_lab)
-    #        lab_button.grid(row=3, column=2)
-    #    else:
-    #        home_button = ttk.Button(self.parent, text="Switch to Home Settings", style="BW.TLabel",
-    #                             command=self.switch_home)
-    #        home_button.grid(row=4, column=2)
 
     def switch_lab(self):
         if (self.settings == 'lab'):
-            print('already using lab settings mode !')
+            print('lab settings mode !')
         else:
             self.settings = 'lab'
 
@@ -303,7 +233,7 @@ class PatientWindow:
             print('already using home settings mode !')
         else:
             self.settings = 'home'
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def show_anagraphic(self):
         top = tk.Toplevel()

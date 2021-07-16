@@ -53,7 +53,6 @@ class ttkTimer(Thread):
     def __init__(self, callback, tick):
         Thread.__init__(self)
         self.callback = callback
-        # print("callback= ", callback())
         self.stopFlag = Event()
         self.tick = tick
         self.iters = 0
@@ -62,26 +61,12 @@ class ttkTimer(Thread):
         while not self.stopFlag.wait(self.tick):
             self.iters += 1
             self.callback()
-            # print("ttkTimer start")
 
     def stop(self):
         self.stopFlag.set()
 
     def get(self):
         return self.iters
-
-
-# def doit():
-#    print("hey dude")
-
-# code to demo ttkTimer
-# t = ttkTimer(doit, 1.0)
-# t.start()
-# time.sleep(5)
-# print("t.get= ", t.get())
-# t.stop()
-# print("timer should be stopped now")
-
 
 class Player(Tk.Frame):
     """The main window has to deal with events.
@@ -96,7 +81,6 @@ class Player(Tk.Frame):
         self.path = path
         self.rec = gsr.Record()
 
-        #self.videoPath = os.getcwd() + '/videos/movie_commercial.mp4'
         self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/video/")
         self.firstTime = True
 
@@ -105,7 +89,6 @@ class Player(Tk.Frame):
         self.parent.title(title)
 
         # Menu Bar
-        #   File Menu
         menubar = Tk.Menu(self.parent)
         self.parent.config(menu=menubar)
 
@@ -118,14 +101,11 @@ class Player(Tk.Frame):
         ctrlpanel = ttk.Frame(self.parent)
         pause = ttk.Button(ctrlpanel, text="Pause", command=self.OnPause)
         play = ttk.Button(ctrlpanel, text="Play", command=self.OnPlay)
-        #stop = ttk.Button(ctrlpanel, text="Stop", command=self.OnStop)
         volume = ttk.Button(ctrlpanel, text="Volume", command=self.OnSetVolume)
         pause.pack(side=Tk.LEFT)
         play.pack(side=Tk.LEFT)
-        #stop.pack(side=Tk.LEFT)
         volume.pack(side=Tk.LEFT)
         self.volume_var = Tk.IntVar()
-        #self.volume_var.set(100)
         self.volslider = Tk.Scale(ctrlpanel, variable=self.volume_var, command=self.volume_sel,
                                   from_=0, to=100, orient=Tk.HORIZONTAL, length=100)
         self.volslider.set(100)
@@ -147,18 +127,9 @@ class Player(Tk.Frame):
         # VLC player controls
         self.Instance = vlc.Instance()
         self.player = self.Instance.media_player_new()
-
-        # below is a test, now use the File->Open file menu
-        #media = self.Instance.media_new(self.videoPath)
-        #self.player.set_media(media)
-        #self.player.play() # hit the player button
-        # self.player.video_set_deinterlace(str_to_bytes('yadif'))
-
         self.timer = ttkTimer(self.OnTimer, 1.0)
         self.timer.start()
         self.parent.update()
-
-        # self.player.set_hwnd(self.GetHandle()) # for windows, OnOpen does does this
 
         ##########################################################################
         # if a file is already running, then stop it.
@@ -171,20 +142,16 @@ class Player(Tk.Frame):
 
         self.player.set_hwnd(self.GetHandle())
 
-        #self.OnPlay()
-
-
-        # set the volume slider to the curnt volume
-        # self.volslider.SetValue(self.player.audio_get_volume() / 2)
-        #self.volslider.set(self.player.audio_get_volume())
-
-
     def OnPlay(self):
+
+        ############################################################
         """Toggle the status to Play/Pause.
         If no file is loaded, open the dialog window.
         """
         # check if there is a file to play, otherwise open a
         # Tk.FileDialog to select a file
+        ############################################################
+
         if self.type is not None:
             self.rec.on_rec(self.path)
 
@@ -200,26 +167,33 @@ class Player(Tk.Frame):
 
     # def OnPause(self, evt):
     def OnPause(self):
-        """Pause the player.
-        """
+
+        #Pause the player.
         self.player.pause()
         self.rec.on_stop()
 
     def OnStop(self):
-        """Stop the player.
-        """
+
+        #Stop the player
         self.player.stop()
+
         # reset the time slider
         self.timeslider.set(0)
-        #pw.PatientWindow(self.old_window, self.PatientId)
+
 
     def OnTimer(self):
+
         """Update the time slider according to the current movie time.
         """
+
         if self.player == None:
             return
+
+        #################################################################
         # since the self.player.get_length can change while playing,
         # re-set the timeslider to the correct range.
+        #################################################################
+
         length = self.player.get_length()
         dbl = length * 0.001
         self.timeslider.config(to=dbl)
@@ -230,8 +204,12 @@ class Player(Tk.Frame):
             tyme = 0
         dbl = tyme * 0.001
         self.timeslider_last_val = ("%.0f" % dbl) + ".0"
+
+        ############################################################################
         # don't want to programatically change slider while user is messing with it.
         # wait 2 seconds after user lets go of slider
+        ############################################################################
+
         if time.time() > (self.timeslider_last_update + 2.0):
             self.timeslider.set(dbl)
 
@@ -241,6 +219,9 @@ class Player(Tk.Frame):
         nval = self.scale_var.get()
         sval = str(nval)
         if self.timeslider_last_val != sval:
+
+        ######################################################################################################
+
             # this is a hack. The timer updates the time slider.
             # This change causes this rtn (the 'slider has changed' rtn) to be invoked.
             # I can't tell the difference between when the user has manually moved the slider and when
@@ -256,6 +237,9 @@ class Player(Tk.Frame):
             # user)
             # selection = "Value, last = " + sval + " " + str(self.timeslider_last_val)
             # print("selection= ", selection)
+
+        ####################################################################################################
+
             self.timeslider_last_update = time.time()
             mval = "%.0f" % (nval * 1000)
             self.player.set_time(int(mval))  # expects milliseconds
@@ -269,62 +253,28 @@ class Player(Tk.Frame):
 
         self.player.audio_set_volume(volume)
 
-        # if self.firstTime:
-        #     self.firstTime = False
-        #     self.player.audio_set_volume(100)
-        # else:
-        #     if self.player.audio_set_volume(volume) == -1:
-        #         self.errorDialog("Failed to set volume")
-
     def OnToggleVolume(self, evt):
         """Mute/Unmute according to the audio button.
         """
         is_mute = self.player.audio_get_mute()
 
         self.player.audio_set_mute(not is_mute)
+
+        ####################################################################
         # update the volume slider;
         # since vlc volume range is in [0, 200],
         # and our volume slider has range [0, 100], just divide by 2.
+        ####################################################################
+
         self.volume_var.set(self.player.audio_get_volume())
 
     def OnSetVolume(self):
-        """Set the volume according to the volume sider.
-        """
+
+        """Set the volume according to the volume sider."""
+
         volume = self.volume_var.get()
         print("volume= ", volume)
-        # volume = self.volslider.get() * 2
-        # vlc.MediaPlayer.audio_set_volume returns 0 if success, -1 otherwise
         if volume > 100:
             volume = 100
 
         self.player.audio_set_volume(volume)
-
-        # if self.firstTime:
-        #     self.firstTime = False
-        #     self.player.audio_set_volume(100)
-        # else:
-        #     if self.player.audio_set_volume(volume) == -1:
-        #         self.errorDialog("Failed to set volume")
-
-    # def errorDialog(self, errormessage):
-    #     """Display a simple error dialog.
-    #     """
-    #     edialog = messagebox.showerror('Error', errormessage)
-
-
-
-# def Tk_get_root():
-#     if not hasattr(Tk_get_root, "top"):  # (1)
-#         Tk_get_root.root = Tk.Tk()  # initialization call is inside the function
-#     return Tk_get_root.root
-#
-#
-# def _quit(player):
-#     #print("_quit: bye")
-#     #player.OnStop()
-#     root = Tk_get_root()
-#     #root.quit()  # stops mainloop
-#     root.destroy()  # this is necessary on Windows to prevent
-#     # Fatal Python Error: PyEval_RestoreThread: NULL tstate
-#     #os._exit(1)
-
