@@ -1,0 +1,37 @@
+	system_time_stamp	msg
+0	772086850338	Calibration_start
+1	772086855907	calibration point 0 at position 19.169474339912615 -10.782829316200846
+2	772092412423	calibration point 1 at position -19.169474339912615 10.782829316200846
+3	772094761307	calibration point 2 at position 0.0 -0.0
+4	772097760217	Calibration_stop
+5	772127473263	Calibration_start
+6	772127480333	calibration point 0 at position -19.169474339912615 10.782829316200846
+7	772129796980	calibration point 1 at position 0.0 -0.0
+8	772132097252	calibration point 2 at position 19.169474339912615 -10.782829316200846
+9	772135080788	Calibration_stop
+10	772137040024	Calibration_start
+11	772137046470	calibration point 0 at position -19.169474339912615 10.782829316200846
+12	772139375319	calibration point 1 at position 0.0 -0.0
+13	772141679459	calibration point 2 at position 19.169474339912615 -10.782829316200846
+14	772144723217	Calibration_stop
+15	772184714642	Calibration_start
+16	772184723798	calibration point 0 at position -19.169474339912615 10.782829316200846
+17	772187508471	calibration point 1 at position 0.0 -0.0
+18	772189803929	calibration point 2 at position 19.169474339912615 -10.782829316200846
+19	772192793311	Calibration_stop
+20	772342619243	Calibration_start
+21	772342625646	calibration point 0 at position 19.169474339912615 -10.782829316200846
+22	772346287722	calibration point 1 at position -19.169474339912615 10.782829316200846
+23	772347986462	calibration point 2 at position 0.0 -0.0
+24	772350457832	Calibration_stop
+25	772350558367	Validation_start
+26	772351068565	validation point 0 at position 0.0 8.087121987150633
+27	772352551020	validation point 1 at position 0.0 -8.087121987150637
+28	772354033861	validation point 2 at position -14.377105754934458 -0.0
+29	772355516430	validation point 3 at position 14.377105754934462 -0.0
+30	772356516107	Validation_end
+31	772356798673	validation data quality Dev_L: 3.49, Dev_R: 3.65 RMS_L: 0.16, RMS_R: 0.19, SD_L: 0.11, SD_R: 0.12, LOSS_L: 0.00, LOSS_R: 0.00
+32	772366967643	fix on
+33	772367944719	fix off
+34	772367944909	stim on: beer_positioning.jpg
+35	772397931185	stim off: beer_positioning.jpg

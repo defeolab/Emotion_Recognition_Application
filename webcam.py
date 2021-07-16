@@ -2,6 +2,7 @@ import tkinter as tk
 import cv2
 import time
 import PIL
+import numpy as np
 from PIL import ImageTk
 import gaze_tracking
 import csv
@@ -10,6 +11,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import patientWindow as pw
 import userWindow as uw
+from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Flatten
+from keras.layers.convolutional import Conv2D
+from keras.layers.pooling import MaxPooling2D
 
 
 class App: #I show the webcam output
@@ -78,6 +83,7 @@ class Faceless_app: # I show just a 'Stop record' Button
         self.delay = 10
         self.update()
 
+
     def stop(self):
         self.window.destroy()
         self.vid.__del__()
@@ -100,16 +106,56 @@ class MyVideoCapture:
         # Get video source width and height
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
+        self.fer_model = self.get_emotion_prediction_label_model()
         self.coordinates = []
+    def get_emotion_prediction_label_model(self):
+        model = Sequential()
 
+        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48, 48, 1)))
+        model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(1024, activation='relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(7, activation='softmax'))
+        model.load_weights('./fer/model.h5')
+        return model
+    def get_emotion_label(self,frame):
+        # fer_model = self.get_emotion_prediction_label_model()
+        # dictionary which assigns each label an emotion (alphabetical order)
+        emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+        # face detection using CV2
+        facecasc = cv2.CascadeClassifier('./fer/haarcascade_frontalface_default.xml')
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = facecasc.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+        maxindex = 4
+        for (x, y, w, h) in faces:
+            roi_gray = gray[y:y + h, x:x + w]
+            cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
+            # predict the label for each face in the frame by CNN model that using
+            # cropped version of frame as an input
+            prediction = self.fer_model.predict(cropped_img)
+            maxindex = int(np.argmax(prediction))
+        return emotion_dict[maxindex]
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
-
+            # =========== added by Mostafa (Start) ===============================
+            predicted_label = self.get_emotion_label(frame)
+            cv2.putText(frame, "Emotion : " + predicted_label, (90, 230), cv2.FONT_HERSHEY_DUPLEX, 0.9,
+                        (147, 58, 31), 1)
+            # =========== added by Mostafa (End) ===============================
             if ret:
                 left_pupil = self.gaze.pupil_left_coords()
                 right_pupil = self.gaze.pupil_right_coords()
@@ -120,7 +166,6 @@ class MyVideoCapture:
                             (147, 58, 31), 1)
                 cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9,
                             (147, 58, 31), 1)
-
                 # Return a boolean success flag and the current frame converted to BGR
                 return ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             else:

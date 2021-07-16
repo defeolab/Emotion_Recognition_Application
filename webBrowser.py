@@ -1,5 +1,6 @@
 from cefpython3 import cefpython as cef
 import ctypes
+import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 
 try:
     import tkinter as tk
@@ -387,7 +388,7 @@ class InstructionFrame(tk.Frame):
         self.instruction.config(state='disabled')
 
 
-def launch_browser(url, type, id, window, old_root):
+def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -402,9 +403,15 @@ def launch_browser(url, type, id, window, old_root):
     root = tk.Toplevel()
     #print(url)
     app = MainFrame(root, url, type, id, window, old_root)
+    rec = None
+    if exptype is not None:
+        rec = gsr.Record()
+        rec.on_rec(path)
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     app.browser_frame.mainloop()
     #app.mainloop()
+    if rec is not None:
+        rec.on_stop()
     cef.Shutdown()
