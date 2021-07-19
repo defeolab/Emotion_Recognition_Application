@@ -71,7 +71,7 @@ class PatientWindow:
         experiments_frame.columnconfigure(1, weight=1)
 
         experiments_frame.grid(row=1, column=1, rowspan=2, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
-        ttk.Label(experiments_frame, text="Participant n " + self.patientId, font='Times 18').grid(row=0, column=1)
+        ttk.Label(experiments_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
         angraphic.grid(row=1, column=2)
@@ -104,7 +104,7 @@ class PatientWindow:
         show_data_but.grid(row=2, column=1, pady=30)
 
         widgets.extend([neuro_frame, button1, button2, button3, show_data_but])
-        #hi
+
         return widgets
 
 

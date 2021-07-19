@@ -24,7 +24,7 @@ class userWindow():
         fp.close()
         self.participants = []
         for id in self.ids :
-            self.participants.append('Participant n '+ str(id))
+            self.participants.append('Participant '+ str(id))
         self.dropdown = None
 
         self.createWindow()
@@ -42,7 +42,7 @@ class userWindow():
     def add_patient(self):
         top = Toplevel()
         top.title("Add a new Patient")
-        top.geometry("600x600")
+        top.geometry("600x1000")
 
 
         Label(top, text=' Patient anagraphic data  ', font='Times 25').grid(row=1, column=3, pady=40)
@@ -91,7 +91,7 @@ class userWindow():
                 if id not in self.ids:
                     break
 
-            self.participants.append('Participant n '+ str(id))
+            self.participants.append('Participant '+ str(id))
             self.update_menu()
 
             fp = open('anagraphicData.txt', 'r')
@@ -138,7 +138,7 @@ class userWindow():
     def createWindow(self):
         self.window = Tk()
         self.window.title("User personal page")
-        self.window.geometry("1000x600")
+        self.window.geometry("1200x1000")
         self.window.columnconfigure(1, weight=1)
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )
@@ -167,13 +167,17 @@ class userWindow():
         add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_patient).grid(row=4, column=1,
                                                                                                  padx=10, pady=50)
 
-        Label(mainframe, text="Search patient", font='Times 16').grid(row=5, column=1, pady=20)
+        del_but = ttk.Button(mainframe, text="Delete Participant", command=self.delet_patient)
+        del_but.grid(row=5, column=1, padx=10, pady=50)
+
+
+        Label(mainframe, text="Search participant", font='Times 16').grid(row=6, column=1, pady=20)
         self.search = Entry(mainframe)
-        self.search.grid(row=6, column=1, columnspan=1)
-        add_search_but = ttk.Button(mainframe, text="Search", command=self.search_patient).grid(row=7, column=1,
+        self.search.grid(row=7, column=1, columnspan=1)
+        add_search_but = ttk.Button(mainframe, text="Search", command=self.search_participant).grid(row=8, column=1,
                                                                                                 padx=10, pady=50)
         self.window.columnconfigure(6)
-        self.window.bind("<Return>", lambda e: self.search_patient())
+        self.window.bind("<Return>", lambda e: self.search_participant())
 
         no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26').grid(row=1, column=1, padx= 30, pady= 20)
 
@@ -183,7 +187,7 @@ class userWindow():
                     w.destroy()
 
 
-            pat = str.get().split()[2]
+            pat = str.get().split()[1]
             self.patient = pw.PatientWindow(self.window, pat)
 
         # on change dropdown value
@@ -201,13 +205,15 @@ class userWindow():
         pat = str.split()[2]
         self.patient = pw.PatientWindow(self.window, pat)
 
-    def search_patient(self):
+    def search_participant(self):
         self.search_key_var = self.search.get()
         if self.search_key_var is not None:
             self.searchPatient(self.search_key_var)
         else:
             print("No participant exist")
 
+    def delet_patient(self):
+        print("Participant deleted!")
 
 
 

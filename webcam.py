@@ -50,9 +50,13 @@ class App:
                         cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
     def stop(self):
+        cv2.destroyAllWindows()
         self.window.destroy()
-        self.vid.__del__()
+        #self.vid.__del__()
         pw.PatientWindow(self.old_window, self.PatientId)
+
+        # check this if it is replacable because it is creating problem
+        self.vid.__del__()
 
     def update(self):
         # Get a frame from the video source
@@ -93,7 +97,7 @@ class Faceless_app: # I show just a 'Stop record' Button
 class MyVideoCapture:
     def __init__(self, video_source=0):
         # Open the video source
-        self.vid = cv2.VideoCapture(video_source)
+        self.vid = cv2.VideoCapture(video_source, cv2.CAP_DSHOW)
         self.gaze = gaze_tracking.GazeTracking()
         if not self.vid.isOpened():
             raise ValueError("Unable to open video source", video_source)
