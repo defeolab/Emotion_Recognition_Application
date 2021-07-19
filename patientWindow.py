@@ -104,7 +104,7 @@ class PatientWindow:
         show_data_but.grid(row=2, column=1, pady=30)
 
         widgets.extend([neuro_frame, button1, button2, button3, show_data_but])
-
+        #hi
         return widgets
 
 
