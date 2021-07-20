@@ -81,7 +81,7 @@ class Player(Tk.Frame):
         self.path = path
         self.rec = gsr.Record()
 
-        self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/video/")
+        self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/videos/")
         self.firstTime = True
 
         if title == None:

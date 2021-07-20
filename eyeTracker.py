@@ -29,7 +29,8 @@ import sys  # to get file system encoding
 from psychopy.hardware import keyboard
 import threading
 from screeninfo import get_monitors
-
+from PIL import Image, ImageTk
+from tkinter import filedialog
 ###Titta imports
 import pickle
 import pandas as pd
@@ -60,7 +61,8 @@ def runexpImage(participantId):
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    im_name = 'beer_positioning.jpg'
+    #im_name = 'beer_positioning.jpg'
+    im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
     # %%  ET settings
     et_name = 'Tobii T60'
@@ -117,7 +119,7 @@ def runexpImage(participantId):
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
-    rec.on_stop()
+    #rec.on_stop()
     tracker.stop_recording(gaze_data=True)
 
     # Close window and save data

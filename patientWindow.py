@@ -76,9 +76,9 @@ class PatientWindow:
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
         angraphic.grid(row=1, column=2)
 
-        if (self.x.get() == 0):
-            start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
-            start_camera_button.grid(row=2, column=2)
+        #if (self.x.get() == 0):
+            #start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
+            #start_camera_button.grid(row=2, column=2)
 
         lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
         lab_button.grid(row=3, column=2)
@@ -124,12 +124,17 @@ class PatientWindow:
 
     def run_expimage(self):
         if self.settings == "lab":
+            """
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
                 eyeTracker.runexpImage(self.patientId)
                 os.startfile(
-                    "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+                    "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")"""
+            eyeTracker.runexpImage(self.patientId)
+            os.startfile(
+                "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
+
         else:
             self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
@@ -161,10 +166,12 @@ class PatientWindow:
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
+            eyeTracker.runexpVideo(self.patientId)
+            """
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpVideo(self.patientId)
+                eyeTracker.runexpVideo(self.patientId)"""
 
         else:
             #to be run after calibration
@@ -197,12 +204,16 @@ class PatientWindow:
     def run_expbrowser(self):
         self.search_key_var = None
         if self.settings == "lab":
+            self.search_key_var = self.search.get()
+            if self.search_key_var is not None:
+                eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)
+            """
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
                 self.search_key_var = self.search.get()
                 if self.search_key_var is not None:
-                    eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)
+                    eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)"""
         else:
             self.search_key_var = self.search.get()
             self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")

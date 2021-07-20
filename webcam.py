@@ -99,6 +99,14 @@ class MyVideoCapture:
         # Open the video source
         self.vid = cv2.VideoCapture(video_source, cv2.CAP_DSHOW)
         self.gaze = gaze_tracking.GazeTracking()
+
+        #vid record
+        capture = cv2.VideoCapture(0)
+
+        # video recorder
+        fourcc = cv2.cv.CV_FOURCC(*'XVID')  # cv2.VideoWriter_fourcc() does not exist
+        video_writer = cv2.VideoWriter("output.avi", fourcc, 20, (680, 480))
+
         if not self.vid.isOpened():
             raise ValueError("Unable to open video source", video_source)
 
