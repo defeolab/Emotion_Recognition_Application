@@ -104,8 +104,8 @@ class MyVideoCapture:
         capture = cv2.VideoCapture(0)
 
         # video recorder
-        fourcc = cv2.cv.CV_FOURCC(*'XVID')  # cv2.VideoWriter_fourcc() does not exist
-        video_writer = cv2.VideoWriter("output.avi", fourcc, 20, (680, 480))
+        #fourcc = cv2.cv.CV_FOURCC(*'XVID')  # cv2.VideoWriter_fourcc() does not exist
+        #video_writer = cv2.VideoWriter("output.avi", fourcc, 20, (680, 480))
 
         if not self.vid.isOpened():
             raise ValueError("Unable to open video source", video_source)
@@ -153,7 +153,6 @@ class MyVideoCapture:
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
-            print(ret)
             # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
