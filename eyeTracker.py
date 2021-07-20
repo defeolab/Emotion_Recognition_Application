@@ -96,8 +96,8 @@ def runexpImage(participantId):
     tracker.calibrate(win)
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    rec = gsr.Record()
-    rec.on_rec(GSRpath)
+    #rec = gsr.Record()
+    #rec.on_rec(GSRpath)
 
     # Present fixation dot and wait for one second
     for i in range(monitor_refresh_rate):
@@ -188,7 +188,8 @@ def runexpVideo(participantId):
         top.title("Experiment VLC media player")
         top.state('zoomed')
         player = None
-        player = vp.Player(top, title="tkinter vlc", type="lab", path=GSRpath)
+        #player = vp.Player(top, title="tkinter vlc", type="gsr", path=GSRpath)
+        player = vp.Player(top, title="tkinter vlc") #no gsr recorded this way
 
         def closeTop():
             player.OnStop()
@@ -273,10 +274,11 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     tracker.start_recording(gaze_data=True, store_data=True)
 
     if (type == 1):
-        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="lab", path=GSRpath)
+        #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)
+        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root) #no gsr recorded
     else:
-        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="lab", path=GSRpath)
-
+        #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="gsr", path=GSRpath)
+        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root) #no gsr recorded
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object

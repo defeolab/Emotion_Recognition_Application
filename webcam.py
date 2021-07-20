@@ -8,10 +8,10 @@ import gaze_tracking
 import pandas as pd
 import matplotlib.pyplot as plt
 import patientWindow as pw
-from keras.models import Sequential
+"""from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Conv2D
-from keras.layers.pooling import MaxPooling2D
+from keras.layers.pooling import MaxPooling2D"""
 
 
 class App:
@@ -105,7 +105,7 @@ class MyVideoCapture:
         # Get video source width and height
         self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        self.fer_model = self.get_emotion_prediction_label_model()
+        #self.fer_model = self.get_emotion_prediction_label_model()
         self.coordinates = []
     def get_emotion_prediction_label_model(self):
         model = Sequential()
@@ -145,19 +145,20 @@ class MyVideoCapture:
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
+            print(ret)
             # add features to webcam input
             self.gaze.refresh(frame)
             frame = self.gaze.annotated_frame()
             # =========== added by Mostafa (Start) ===============================
-            predicted_label = self.get_emotion_label(frame)
-            cv2.putText(frame, "Emotion : " + predicted_label, (90, 230), cv2.FONT_HERSHEY_DUPLEX, 0.9,
-                        (147, 58, 31), 1)
+            #predicted_label = self.get_emotion_label(frame)
+            #cv2.putText(frame, "Emotion : " + predicted_label, (90, 230), cv2.FONT_HERSHEY_DUPLEX, 0.9,
+            #            (147, 58, 31), 1)
             # =========== added by Mostafa (End) ===============================
             if ret:
                 left_pupil = self.gaze.pupil_left_coords()
                 right_pupil = self.gaze.pupil_right_coords()
                 if (left_pupil is not None) & (right_pupil is not None):
-                    self.coordinates.append([left_pupil[0], left_pupil[1],right_pupil[0], right_pupil[1]])
+                    self.coordinates.append([self.vid.get(cv2.CAP_PROP_FPS), left_pupil[0], left_pupil[1],right_pupil[0], right_pupil[1]])
 
                 cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9,
                             (147, 58, 31), 1)
@@ -173,7 +174,7 @@ class MyVideoCapture:
     # Release the video source when the object is destroyed
     def __del__(self):
         if self.vid.isOpened():
-            fieldnames = ['left_pupil_x', 'left_pupil_y', 'right_pupil_x', 'right_pupil_y']
+            fieldnames = ['timestamp', 'left_pupil_x', 'left_pupil_y', 'right_pupil_x', 'right_pupil_y']
 
             my_df = pd.DataFrame(self.coordinates, columns=fieldnames)
             my_df.to_csv('test.csv', index=False, header=True)

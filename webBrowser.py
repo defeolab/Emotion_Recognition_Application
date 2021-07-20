@@ -353,7 +353,7 @@ def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     root = tk.Toplevel()
     app = MainFrame(root, url, type, id, window, old_root)
     rec = None
-    if exptype is not None:
+    if exptype == "gsr":
         rec = gsr.Record()
         rec.on_rec(path)
 

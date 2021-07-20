@@ -152,7 +152,7 @@ class Player(Tk.Frame):
         # Tk.FileDialog to select a file
         ############################################################
 
-        if self.type is not None:
+        if self.type == "gsr":
             self.rec.on_rec(self.path)
 
         if not self.player.get_media():
