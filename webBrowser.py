@@ -25,7 +25,7 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root, frame = None):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -37,6 +37,8 @@ class MainFrame(tk.Frame):
         root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
+
+        self.frame = frame
 
         # MainFrame
         tk.Frame.__init__(self, root)
@@ -93,6 +95,8 @@ class MainFrame(tk.Frame):
             self.browser_frame.on_root_close()
         self.master.destroy()
         self.old_root.destroy()
+        if self.frame is not None:
+            self.frame.stop()
         pw.PatientWindow(self.old_window, self.id)
 
 
@@ -338,7 +342,7 @@ class InstructionFrame(tk.Frame):
         self.instruction.config(state='disabled')
 
 
-def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
+def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=None):
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -351,7 +355,7 @@ def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    app = MainFrame(root, url, type, id, window, old_root)
+    app = MainFrame(root, url, type, id, window, old_root, frame)
     rec = None
     if exptype == "gsr":
         rec = gsr.Record()
@@ -360,6 +364,6 @@ def launch_browser(url, type, id, window, old_root, path=None, exptype=None):
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     app.browser_frame.mainloop()
-    if rec is not None:
-        rec.on_stop()
     cef.Shutdown()
+    #if rec is not None:
+    #    rec.on_stop()

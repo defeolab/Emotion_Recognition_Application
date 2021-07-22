@@ -84,7 +84,7 @@ class PatientWindow:
         lab_button.grid(row=3, column=2)
 
         home_button = ttk.Radiobutton(self.parent, text="Switch to Home Settings",
-                                 command=self.switch_home, variable = var, value=2)
+                                 command=self.switch_home, variable=var, value=2)
         home_button.grid(row=4, column=2)
 
         widgets.append(experiments_frame)
@@ -136,7 +136,7 @@ class PatientWindow:
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         else:
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
@@ -145,6 +145,7 @@ class PatientWindow:
 
             path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
+            self.frame = webcam.Faceless_app() #start recording
             if path is not None:
                 img = ImageTk.PhotoImage(master=top, image=Image.open(path))
                 label1 = tk.Label(top, image=img)
@@ -159,6 +160,7 @@ class PatientWindow:
 
             countdown(30)
             top.mainloop()
+            self.frame.stop()
             os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
@@ -175,22 +177,22 @@ class PatientWindow:
 
         else:
             #to be run after calibration
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
             player = None
-            player = vp.Player(top, title="tkinter vlc")
-
+            self.frame = True
+            player = vp.Player(top, self.frame, title="tkinter vlc")
             def closeTop():
-
+                player.timer.stop()
+                if player.frame is not None:
+                    player.frame.stop()
                 top.destroy()
-                self.frame.stop()
-
                 os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
                 player.OnStop()
-
 
             top.protocol("WM_DELETE_WINDOW", closeTop)
 
@@ -203,6 +205,7 @@ class PatientWindow:
 
     def run_expbrowser(self):
         self.search_key_var = None
+        self.frame = None
         if self.settings == "lab":
             self.search_key_var = self.search.get()
             if self.search_key_var is not None:
@@ -216,10 +219,10 @@ class PatientWindow:
                     eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)"""
         else:
             self.search_key_var = self.search.get()
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             if self.search_key_var is not None:
-                webBrowser.launch_browser(self.search_key_var, 1,self.patientId,self.parent,self.root)
-
+                self.frame = webcam.Faceless_app()
+                webBrowser.launch_browser(self.search_key_var, 1,self.patientId,self.parent,self.root, self.frame)
             else:
                 print("no url")
 
@@ -244,7 +247,7 @@ class PatientWindow:
             print('already using home settings mode !')
         else:
             self.settings = 'home'
-            self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def show_anagraphic(self):
         top = tk.Toplevel()

@@ -29,7 +29,7 @@ Date: 23-09-2015
 # import external libraries
 import vlc
 import sys
-
+import webcam
 
 import tkinter as Tk
 from tkinter import ttk
@@ -72,7 +72,7 @@ class Player(Tk.Frame):
     """The main window has to deal with events.
     """
 
-    def __init__(self, parent, title=None, type=None, path=None, sec=None):
+    def __init__(self, parent, frame = None, title=None, type=None, path=None, sec=None):
         Tk.Frame.__init__(self, parent)
 
         self.parent = parent
@@ -80,6 +80,9 @@ class Player(Tk.Frame):
         self.type = type
         self.path = path
         self.rec = gsr.Record()
+
+        self.frame = frame
+        #self.flag_frame = flag_frame
 
         self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/videos/")
         self.firstTime = True
@@ -152,6 +155,9 @@ class Player(Tk.Frame):
         # Tk.FileDialog to select a file
         ############################################################
 
+        if self.frame is True:
+            self.frame = webcam.Faceless_app()
+
         if self.type == "gsr":
             self.rec.on_rec(self.path)
 
@@ -179,7 +185,6 @@ class Player(Tk.Frame):
 
         # reset the time slider
         self.timeslider.set(0)
-
 
     def OnTimer(self):
 

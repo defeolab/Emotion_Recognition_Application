@@ -70,28 +70,28 @@ class App:
 
 
 class Faceless_app: # I show just a 'Stop record' Button
-    def __init__(self, window, window_title, video_source=0):
-        self.window = window
-        self.window.title(window_title)
+    def __init__(self, video_source=0):
+        #self.window = window
+        #self.window.title(window_title)
         self.video_source = video_source
 
         # open video source (by default this will try to open the computer webcam)
         self.vid = MyVideoCapture(self.video_source)
-        self.btn_stop = tk.Button(window, text="STOP RECORDING", width=50, command=self.stop)
-        self.btn_stop.pack(anchor=tk.CENTER, expand=True)
+        #self.btn_stop = tk.Button(window, text="STOP RECORDING", width=50, command=self.stop)
+        #self.btn_stop.pack(anchor=tk.CENTER, expand=True)
         self.delay = 10
         self.update()
 
 
     def stop(self):
-        self.window.destroy()
+        #self.window.destroy()
         self.vid.__del__()
 
     def update(self):
         # Get a frame from the video source
 
-        self.vid.get_frame()
-        self.window.after(self.delay, self.update)
+        ret, frame = self.vid.get_frame()
+        #self.window.after(self.delay, self.update)
 
 
 class MyVideoCapture:
@@ -99,9 +99,6 @@ class MyVideoCapture:
         # Open the video source
         self.vid = cv2.VideoCapture(video_source, cv2.CAP_DSHOW)
         self.gaze = gaze_tracking.GazeTracking()
-
-        #vid record
-        capture = cv2.VideoCapture(0)
 
         # video recorder
         #fourcc = cv2.cv.CV_FOURCC(*'XVID')  # cv2.VideoWriter_fourcc() does not exist
@@ -115,6 +112,13 @@ class MyVideoCapture:
         self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         #self.fer_model = self.get_emotion_prediction_label_model()
         self.coordinates = []
+
+        #vid record
+        self.name = 'output.mp4'
+        self.fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+        self.out = cv2.VideoWriter(self.name, self.fourcc, 20.0, (640, 480))
+        print(self.out)
+
     def get_emotion_prediction_label_model(self):
         model = Sequential()
 
@@ -135,6 +139,7 @@ class MyVideoCapture:
         model.add(Dense(7, activation='softmax'))
         model.load_weights('./fer/model.h5')
         return model
+
     def get_emotion_label(self,frame):
         emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
         # face detection using CV2
@@ -150,11 +155,14 @@ class MyVideoCapture:
             prediction = self.fer_model.predict(cropped_img)
             maxindex = int(np.argmax(prediction))
         return emotion_dict[maxindex]
+
     def get_frame(self):
         if self.vid.isOpened():
             ret, frame = self.vid.read()
             # add features to webcam input
             self.gaze.refresh(frame)
+            self.out.write(frame)
+            print(self.out.write(frame))
             frame = self.gaze.annotated_frame()
             # =========== added by Mostafa (Start) ===============================
             #predicted_label = self.get_emotion_label(frame)
@@ -191,4 +199,6 @@ class MyVideoCapture:
             plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
             plt.savefig('heatmap.png')
             self.vid.release()
+            self.out.release()
+            cv2.destroyAllWindows()
 
