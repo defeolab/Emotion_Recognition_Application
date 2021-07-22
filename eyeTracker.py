@@ -66,7 +66,7 @@ def runexpImage(participantId):
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = True
+    dummy_mode = False
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
@@ -159,7 +159,7 @@ def runexpVideo(participantId):
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = True
+    dummy_mode = False
     bimonocular_calibration = False
 
     settings = Titta.get_defaults(et_name)
@@ -245,7 +245,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
 
     # %%  ET settings
     et_name = 'Tobii T60'
-    dummy_mode = True
+    dummy_mode = False
 
     settings = Titta.get_defaults(et_name)
     if type == 1:
