@@ -119,7 +119,6 @@ class userWindow():
             elem = {'id': id, 'name': name.get(), 'surname': surname.get(), 'age': age.get(),
                     'gender': varGend.get(), 'edu': varEdu.get()}
 
-            elem1 = {id,name.get(),surname.get(),age.get(),varGend.get(),varEdu.get()}
 
             data['Participants'].append(elem)
 
@@ -133,6 +132,21 @@ class userWindow():
 
 
         Button(top, text='Add Participant', command=add_to_participants).grid(row=9, column=3, pady=20)
+
+    def my_remove_sel(self):
+        part = self.tkvar.get().split()[1]
+        fp = open('anagraphicData.txt', 'r')
+        data = json.load(fp)
+        print(data['IDs'])
+        data['IDs'].remove(int(part))
+
+        fp = open('anagraphicData.txt', 'w')
+        json.dump(data, fp)
+        fp.close()
+
+        r_index = self.dropdown["menu"].index(self.tkvar.get())  # index of selected option.
+        self.dropdown["menu"].delete(r_index)  # deleted the option
+        self.tkvar.set(self.dropdown["menu"].entrycget(0, "label"))  # select the first one
 
 
     def createWindow(self):
@@ -165,17 +179,16 @@ class userWindow():
         self.dropdown.grid(row=3, column=1, sticky=(N, W, E, S))
 
         add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_patient).grid(row=4, column=1,
-                                                                                                 padx=10, pady=50)
+                                                                                                 padx=10, pady=20)
 
-        del_but = ttk.Button(mainframe, text="Delete Participant", command=self.delet_patient)
-        del_but.grid(row=5, column=1, padx=10, pady=50)
-
+        del_but = ttk.Button(mainframe, text="Delete Participant", command=lambda: self.my_remove_sel())
+        del_but.grid(row=5, column=1, padx=10, pady=20)
 
         Label(mainframe, text="Search participant", font='Times 16').grid(row=6, column=1, pady=20)
         self.search = Entry(mainframe)
         self.search.grid(row=7, column=1, columnspan=1)
         add_search_but = ttk.Button(mainframe, text="Search", command=self.search_participant).grid(row=8, column=1,
-                                                                                                padx=10, pady=50)
+                                                                                                padx=10, pady=20)
         self.window.columnconfigure(6)
         self.window.bind("<Return>", lambda e: self.search_participant())
 
@@ -202,7 +215,7 @@ class userWindow():
             for w in self.patient.widgets:
                 w.destroy()
 
-        pat = str.split()[2]
+        pat = str.split()[1]
         self.patient = pw.PatientWindow(self.window, pat)
 
     def search_participant(self):
@@ -211,12 +224,4 @@ class userWindow():
             self.searchPatient(self.search_key_var)
         else:
             print("No participant exist")
-
-    def delet_patient(self):
-        print("Participant deleted!")
-
-
-
-
-
 

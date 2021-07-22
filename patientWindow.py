@@ -26,7 +26,7 @@ class PatientWindow:
 
         self.parent = parent  # window
         self.widgets = self.addWidgets()
-        self.settings = 'lab' #possible settings : 'lab' or 'home'
+        self.settings = None #possible settings : 'lab' or 'home'
 
         self.frame = None
         self.camera_on = False
@@ -108,19 +108,104 @@ class PatientWindow:
         return widgets
 
 
+    #def openfile1(self):
+
     def openfile(self):
-        self.root = Tk()
-        self.root.title("Enter URL")
-        self.root.geometry("600x600")
+        if (self.settings == 'lab') | (self.settings == 'home'):
+            self.root = Tk()
+            self.root.title("Enter URL")
+            self.root.geometry("600x600")
 
-        Label(self.root, text="Search url", font='Times 16').grid(row=5, column=1, pady=20)
-        self.search = Entry(self.root)
-        self.search.grid(row=6, column=1, columnspan=1)
-        add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
+            Label(self.root, text="Search url", font='Times 16').grid(row=5, column=1, pady=20)
+            self.search = Entry(self.root)
+            self.search.grid(row=6, column=1, columnspan=1)
+            add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
 
-        self.parent.columnconfigure(6)
-        self.parent.bind("<Return>", lambda e: self.run_expbrowser())
+            but1 = Button(self.root, text="web1", command=self.website1).grid(row=7, column=1, padx=10,
+                                                                                            pady=20)
+            but2 = Button(self.root, text="web2", command=self.website2).grid(row=8, column=1, padx=10,
+                                                                                            pady=20)
+            but3 = Button(self.root, text="web3", command=self.website3).grid(row=9, column=1, padx=10,
+                                                                                            pady=20)
+            but4 = Button(self.root, text="web4", command=self.website4).grid(row=10, column=1, padx=10,
+                                                                            pady=20)
+            self.parent.columnconfigure(6)
+            self.parent.bind("<Return>", lambda e: self.run_expbrowser())
+        else:
+            print("No Mode Selected!")
 
+    def website1(self):
+        #self.frame = None
+        fp = open('websites.txt', 'r')
+        websites = json.load(fp)
+        fp.close()
+
+        self.web1 = websites['website1']
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
+        elif self.settings == "home":
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app()
+            webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
+        else:
+            print("No mode selected!")
+
+    def website2(self):
+        fp = open('websites.txt', 'r')
+        websites = json.load(fp)
+        fp.close()
+
+        self.web2 = websites['website2']
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
+        elif self.settings == "home":
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app()
+            webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
+        else:
+            print("No mode selected!")
+
+    def website3(self):
+        fp = open('websites.txt', 'r')
+        websites = json.load(fp)
+        fp.close()
+
+        self.web3 = websites['website3']
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
+        elif self.settings == "home":
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app()
+            webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
+        else:
+            print("No mode selected!")
+
+    def website4(self):
+        fp = open('websites.txt', 'r')
+        websites = json.load(fp)
+        fp.close()
+
+        self.web4 = websites['website4']
+        if self.settings == "lab":
+            if self.camera_on is False:
+                print("You need to turn the camera on")
+            else:
+                eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
+        elif self.settings == "home":
+            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
+            self.frame = webcam.Faceless_app()
+            webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
+        else:
+            print("No mode selected!")
 
     def run_expimage(self):
         if self.settings == "lab":
@@ -135,7 +220,7 @@ class PatientWindow:
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
-        else:
+        elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
@@ -164,7 +249,8 @@ class PatientWindow:
             os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
-
+        else:
+            print("No mode selected!")
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
@@ -175,7 +261,7 @@ class PatientWindow:
             else:
                 eyeTracker.runexpVideo(self.patientId)"""
 
-        else:
+        elif self.settings == "home":
             #to be run after calibration
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
@@ -201,7 +287,8 @@ class PatientWindow:
 
             top.bind('<space>', pause)
 
-
+        else:
+            print("No mode selected!")
 
     def run_expbrowser(self):
         self.search_key_var = None
@@ -217,7 +304,7 @@ class PatientWindow:
                 self.search_key_var = self.search.get()
                 if self.search_key_var is not None:
                     eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)"""
-        else:
+        elif self.settings == "home":
             self.search_key_var = self.search.get()
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             if self.search_key_var is not None:
@@ -281,7 +368,7 @@ class PatientWindow:
 
 
         else:
-            ttk.Label(top, text="Data on Participant n " + self.patientId + " not found.", font='Times 18').grid(row=0,
+            ttk.Label(top, text="Data on Participant " + self.patientId + " not found.", font='Times 18').grid(row=0,
                                                                                                                  column=1,
                                                                                                                  padx=5)
             top.rowconfigure(0, weight=1)
