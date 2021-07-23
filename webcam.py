@@ -117,8 +117,7 @@ class MyVideoCapture:
         self.name = 'output.mp4'
         self.fourcc = cv2.VideoWriter_fourcc(*'MP4V')
         self.out = cv2.VideoWriter(self.name, self.fourcc, 20.0, (640, 480))
-        print(self.out)
-
+        
     def get_emotion_prediction_label_model(self):
         model = Sequential()
 
@@ -162,7 +161,6 @@ class MyVideoCapture:
             # add features to webcam input
             self.gaze.refresh(frame)
             self.out.write(frame)
-            print(self.out.write(frame))
             frame = self.gaze.annotated_frame()
             # =========== added by Mostafa (Start) ===============================
             #predicted_label = self.get_emotion_label(frame)
