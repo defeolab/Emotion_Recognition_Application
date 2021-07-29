@@ -155,9 +155,6 @@ class Player(Tk.Frame):
         # Tk.FileDialog to select a file
         ############################################################
 
-        if self.frame is True:
-            self.frame = webcam.Faceless_app()
-
         if self.type == "gsr":
             self.rec.on_rec(self.path)
 

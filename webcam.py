@@ -116,7 +116,7 @@ class MyVideoCapture:
         #vid record
         self.name = 'output.mp4'
         self.fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-        self.out = cv2.VideoWriter(self.name, self.fourcc, 20.0, (640, 480))
+        #self.out = cv2.VideoWriter(self.name, self.fourcc, 20.0, (640, 480))
         
     def get_emotion_prediction_label_model(self):
         model = Sequential()
@@ -160,7 +160,7 @@ class MyVideoCapture:
             ret, frame = self.vid.read()
             # add features to webcam input
             self.gaze.refresh(frame)
-            self.out.write(frame)
+            #self.out.write(frame)
             frame = self.gaze.annotated_frame()
             # =========== added by Mostafa (Start) ===============================
             #predicted_label = self.get_emotion_label(frame)
@@ -197,6 +197,6 @@ class MyVideoCapture:
             plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
             plt.savefig('heatmap.png')
             self.vid.release()
-            self.out.release()
+            #self.out.release()
             cv2.destroyAllWindows()
 
