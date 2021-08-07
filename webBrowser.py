@@ -1,3 +1,5 @@
+import threading
+
 from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
@@ -62,10 +64,6 @@ class MainFrame(tk.Frame):
                                 sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 1, weight=1)
         tk.Grid.columnconfigure(self, 0, weight=1)
-
-        # InstructionFrame
-        #self.instruction_frame = InstructionFrame(self, self.type)
-        #self.instruction_frame.grid(row=1, column=1, sticky=(tk.N + tk.S + tk.E + tk.W))
 
         # Pack MainFrame
         self.pack(fill=tk.BOTH, expand=tk.YES)
@@ -251,22 +249,6 @@ class NavigationBar(tk.Frame):
 
         self.update_state()
 
-    def go_toNespresso(self):
-        self.master.get_browser().StopLoad()
-        self.master.get_browser().LoadUrl(
-            "https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee")
-
-    def go_toLavazza(self):
-        self.master.get_browser().LoadUrl("https://www.lavazza.it/it.html")
-
-    def go_toSpagna(self):
-        self.master.get_browser().StopLoad()
-        self.master.get_browser().LoadUrl("https://www.spain.info/it/")
-
-    def go_toNorvegia(self):
-        self.master.get_browser().StopLoad()
-        self.master.get_browser().LoadUrl("https://www.visitnorway.it/")
-
     def go_back(self):
         if self.master.get_browser():
             self.master.get_browser().GoBack()
@@ -343,6 +325,7 @@ class InstructionFrame(tk.Frame):
 
 
 def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=None):
+    #browser_frame = None
     logger.setLevel(_logging.INFO)
     stream_handler = _logging.StreamHandler()
     formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -355,7 +338,9 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    app = MainFrame(root, url, type, id, window, old_root, frame)
+    app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
+    app.start()
+    #app.join()
     rec = None
     if exptype == "gsr":
         rec = gsr.Record()
@@ -363,7 +348,6 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
+
     app.browser_frame.mainloop()
     cef.Shutdown()
-    #if rec is not None:
-    #    rec.on_stop()

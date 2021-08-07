@@ -147,12 +147,12 @@ class PatientWindow:
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' +  str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' +  str(self.patientId) + '/video_output')
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -167,12 +167,12 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -187,12 +187,12 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -207,12 +207,12 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
-            #base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Browser/' + str(self.patientId) + '/video_output')
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -226,7 +226,7 @@ class PatientWindow:
                 eyeTracker.runexpImage(self.patientId)
                 os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")"""
-            #base.VideoWriterWidget(os.getcwd() + '/data/Image/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Image/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpImage(self.patientId)
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
@@ -240,8 +240,9 @@ class PatientWindow:
             top.configure(background='grey')
 
             path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
-            #base.VideoWriterWidget(os.getcwd() + '/data/Image/' + str(self.patientId) + '/video_output')
+
             #self.frame = webcam.Faceless_app() #start recording
+            base.VideoWriterWidget(os.getcwd() + '/data/Image/' + str(self.patientId) + '/video_output')
             if path is not None:
                 img = ImageTk.PhotoImage(master=top, image=Image.open(path))
                 label1 = tk.Label(top, image=img)
@@ -250,7 +251,7 @@ class PatientWindow:
                 def countdown(time):
                     if time == -1:
                         top.destroy()
-                        #self.frame.stop()
+                        self.frame.stop()
                     else:
                         top.after(1000, countdown, time - 1)
 
@@ -265,7 +266,7 @@ class PatientWindow:
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
-            #base.VideoWriterWidget(os.getcwd() + '/data/Video/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Video/' + str(self.patientId) + '/video_output')
             eyeTracker.runexpVideo(self.patientId)
             """
             if self.camera_on is False:
@@ -276,12 +277,13 @@ class PatientWindow:
         elif self.settings == "home":
             #to be run after calibration
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            #base.VideoWriterWidget(os.getcwd() + '/data/Video/' + str(self.patientId) + '/video_output')
+            base.VideoWriterWidget(os.getcwd() + '/data/Video/' + str(self.patientId) + '/video_output')
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
             player = None
-            player = vp.Player(top, title="tkinter vlc")
+            self.frame = True
+            player = vp.Player(top, self.frame, title="tkinter vlc")
             def closeTop():
                 player.timer.stop()
                 if player.frame is not None:
