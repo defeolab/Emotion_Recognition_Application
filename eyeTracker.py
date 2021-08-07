@@ -42,7 +42,7 @@ import os
 import tkinter as tk
 import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
-import postprocessing
+#import postprocessing
 
 
 def runexpImage(participantId):
@@ -138,7 +138,7 @@ def runexpImage(participantId):
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-    postprocessing.process(settings.FILENAME)
+    #postprocessing.process(settings.FILENAME)
 
 
 def runexpVideo(participantId):
@@ -215,7 +215,7 @@ def runexpVideo(participantId):
             df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
             df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
             df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-            postprocessing.process(settings.FILENAME)
+            #postprocessing.process(settings.FILENAME)
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
@@ -298,6 +298,6 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-    postprocessing.process(settings.FILENAME)
+    #postprocessing.process(settings.FILENAME)
 
     print("saved")

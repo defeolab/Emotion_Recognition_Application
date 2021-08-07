@@ -134,10 +134,18 @@ class userWindow():
         Button(top, text='Add Participant', command=add_to_participants).grid(row=9, column=3, pady=20)
 
     def my_remove_sel(self):
+        self.win = Tk()
+        self.win.geometry("600x300")
+        Label(self.win, text="Are you sure to delete participant?", font='Times 16').grid(row=2, column=2, pady=20)
+        yes = ttk.Button(self.win, text="Yes", command=self.delete_participant)
+        yes.grid(row=4, column=2, padx=10, pady=20)
+        no = ttk.Button(self.win, text="No", command=self.no_action)
+        no.grid(row=4, column=3, padx=10, pady=20)
+
+    def delete_participant(self):
         part = self.tkvar.get().split()[1]
         fp = open('anagraphicData.txt', 'r')
         data = json.load(fp)
-        print(data['IDs'])
         data['IDs'].remove(int(part))
 
         fp = open('anagraphicData.txt', 'w')
@@ -147,6 +155,11 @@ class userWindow():
         r_index = self.dropdown["menu"].index(self.tkvar.get())  # index of selected option.
         self.dropdown["menu"].delete(r_index)  # deleted the option
         self.tkvar.set(self.dropdown["menu"].entrycget(0, "label"))  # select the first one
+        self.win.destroy()
+
+    def no_action(self):
+        print('Not deleted')
+        self.win.destroy()
 
 
     def createWindow(self):
