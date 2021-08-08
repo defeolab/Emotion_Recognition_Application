@@ -118,10 +118,10 @@ class PatientWindow:
             self.root.title("Enter URL")
             self.root.geometry("600x600")
 
-            Label(self.root, text="Search url", font='Times 16').grid(row=5, column=1, pady=20)
-            self.search = Entry(self.root)
-            self.search.grid(row=6, column=1, columnspan=1)
-            add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
+            Label(self.root, text="Select Experiment", font='Times 16').grid(row=5, column=1, pady=20)
+            #self.search = Entry(self.root)
+            #self.search.grid(row=6, column=1, columnspan=1)
+            #add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
 
             but1 = Button(self.root, text="web1", command=self.website1).grid(row=7, column=1, padx=10,
                                                                                             pady=20)

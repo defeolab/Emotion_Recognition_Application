@@ -60,6 +60,8 @@ class MainFrame(tk.Frame):
 
         # BrowserFrame
         self.browser_frame = BrowserFrame(self, starting_url, self.navigation_bar)
+        #self.browser_frame = threading.Thread(target=BrowserFrame, args=(self, starting_url, self.navigation_bar,))
+        #self.browser.start()
         self.browser_frame.grid(row=1, column=0,
                                 sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 1, weight=1)
@@ -338,8 +340,9 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
-    app.start()
+    app = MainFrame(root, url, type, id, window, old_root, frame)
+    #app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
+    #app.start()
     #app.join()
     rec = None
     if exptype == "gsr":
@@ -348,6 +351,6 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
-
     app.browser_frame.mainloop()
     cef.Shutdown()
+
