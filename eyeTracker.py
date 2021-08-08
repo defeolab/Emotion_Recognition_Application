@@ -194,6 +194,8 @@ def runexpVideo(participantId):
         player = None
         #player = vp.Player(top, title="tkinter vlc", type="gsr", path=GSRpath)
         player = vp.Player(top, title="tkinter vlc") #no gsr recorded this way
+        #player = threading.Thread(target = vp.Player, args=(top,"tkinter vlc", ))
+        #player.start()
 
         def closeTop():
             player.OnStop()

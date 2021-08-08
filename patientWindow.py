@@ -147,11 +147,8 @@ class PatientWindow:
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            t1 = threading.Thread(target=eyeTracker.runexpBrowser,
-                              args=(self.web1, 1, self.patientId, self.parent, self.root,))
-            t1.start()
 
-            #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
@@ -170,11 +167,8 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            t2 = threading.Thread(target=eyeTracker.runexpBrowser,
-                                  args=(self.web2, 1, self.patientId, self.parent, self.root,))
-            t2.start()
 
-            #eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
@@ -193,11 +187,7 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            t3 = threading.Thread(target=eyeTracker.runexpBrowser,
-                                  args=(self.web3, 1, self.patientId, self.parent, self.root,))
-            t3.start()
-
-            #eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
@@ -215,10 +205,6 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            t4 = threading.Thread(target=eyeTracker.runexpBrowser,
-                                  args=(self.web4, 1, self.patientId, self.parent, self.root,))
-            t4.start()
-
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
@@ -265,7 +251,8 @@ class PatientWindow:
                     else:
                         top.after(1000, countdown, time - 1)
 
-            countdown(30)
+            im_timer = threading.Thread(target=countdown,args=(30,))
+            im_timer.start()
             top.mainloop()
             #self.frame.stop()
             os.startfile(
@@ -293,6 +280,8 @@ class PatientWindow:
             player = None
             self.frame = True
             player = vp.Player(top, self.frame, title="tkinter vlc")
+            #player = threading.Thread(target = vp.Player, args=(top, self.frame,"tkinter vlc", ))
+            #player.start()
             def closeTop():
                 player.timer.stop()
                 if player.frame is not None:
