@@ -340,9 +340,9 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    app = MainFrame(root, url, type, id, window, old_root, frame)
-    #app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
-    #app.start()
+    #app = MainFrame(root, url, type, id, window, old_root, frame)
+    app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
+    app.start()
     #app.join()
     rec = None
     if exptype == "gsr":
