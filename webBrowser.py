@@ -341,6 +341,17 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     #app.browser_frame.mainloop()
+    def countdown(time):
+        if time == -1:
+            root.destroy()
+            #self.frame.stop()
+        else:
+            root.after(1000, countdown, time - 1)
+
+
+    im_timer = threading.Thread(target=countdown, args=(30,))
+    im_timer.start()
+
     t1 = threading.Thread(target=app.browser_frame.mainloop())
     t1.start()
     #app.mainloop()
