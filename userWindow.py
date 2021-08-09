@@ -207,6 +207,7 @@ class userWindow():
 
         no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26').grid(row=1, column=1, padx= 30, pady= 20)
 
+
         def selectPatient(str):
             if self.patient is not None:
                 for w in self.patient.widgets:

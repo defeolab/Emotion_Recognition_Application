@@ -101,6 +101,9 @@ class PatientWindow:
         button3 = ttk.Button(neuro_frame, text="Browser Experiment", command=self.openfile)
         button3.grid(row=3, column=1, pady=15)
         neuro_frame.columnconfigure(1, weight=1)
+        no_participant1 = ttk.Label(neuro_frame, text="Please select one mode of settings.", font='Times 18').grid(
+            row=4, column=1,
+            padx=30, pady=20)
 
         show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
         show_data_but.grid(row=2, column=1, pady=30)
@@ -116,7 +119,7 @@ class PatientWindow:
         if (self.settings == 'lab') | (self.settings == 'home'):
             self.root = Tk()
             self.root.title("Enter URL")
-            self.root.geometry("600x600")
+            self.root.geometry("800x800")
 
             Label(self.root, text="Select Experiment", font='Times 16').grid(row=5, column=1, pady=20)
             #self.search = Entry(self.root)
@@ -131,6 +134,12 @@ class PatientWindow:
                                                                                             pady=20)
             but4 = Button(self.root, text="web4", command=self.website4).grid(row=10, column=1, padx=10,
                                                                             pady=20)
+            Label(self.root, text="lavazza Experiment", font='Times 14').grid(row=7, column=2, pady=20)
+            Label(self.root, text="nespresso Experiment", font='Times 14').grid(row=8, column=2, pady=20)
+            Label(self.root, text="spain Experiment", font='Times 14').grid(row=9, column=2, pady=20)
+            Label(self.root, text="visitnorway Experiment", font='Times 14').grid(row=10, column=2, pady=20)
+            Label(self.root, text="To change website configuration please edit 'websites.txt' file", font='Times 16').grid(row=12, column=2, pady=20)
+
             self.parent.columnconfigure(6)
             self.parent.bind("<Return>", lambda e: self.run_expbrowser())
         else:

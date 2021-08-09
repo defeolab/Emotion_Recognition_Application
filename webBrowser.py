@@ -1,5 +1,4 @@
 import threading
-
 from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
@@ -27,7 +26,7 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root, frame = None):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame = None):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -35,6 +34,7 @@ class MainFrame(tk.Frame):
         self.id = id
         self.old_window = old_window
         self.old_root = old_root
+
         # Root
         root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
@@ -109,6 +109,8 @@ class MainFrame(tk.Frame):
         if self.browser_frame:
             return self.browser_frame
         return None
+
+
 
 
 class BrowserFrame(tk.Frame):
@@ -313,19 +315,6 @@ class NavigationBar(tk.Frame):
         self.after(100, self.update_state)
 
 
-class InstructionFrame(tk.Frame):
-    def __init__(self, master, type_exp):
-        self.instruction = None
-        tk.Frame.__init__(self, master)
-        self.type = type_exp
-        self.instruction = tk.Text(self, width=50, font=("Helvetica", 14))
-        self.instruction.grid(row=0, column=0, sticky=(tk.N + tk.S + tk.E + tk.W))
-        tk.Grid.rowconfigure(self, 0, weight=1)
-        tk.Grid.columnconfigure(self, 0, minsize=200, weight=1)
-
-        self.instruction.config(state='disabled')
-
-
 def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=None):
     #browser_frame = None
     logger.setLevel(_logging.INFO)
@@ -340,9 +329,9 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
-    #app = MainFrame(root, url, type, id, window, old_root, frame)
-    app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
-    app.start()
+    app = MainFrame(root, url, type, id, window, old_root, frame)
+    #app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
+    #app.start()
     #app.join()
     rec = None
     if exptype == "gsr":
@@ -351,6 +340,10 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
-    app.browser_frame.mainloop()
+    #app.browser_frame.mainloop()
+    t1 = threading.Thread(target=app.browser_frame.mainloop())
+    t1.start()
+    #app.mainloop()
+    #browser_frame.mainloop()
     cef.Shutdown()
 
