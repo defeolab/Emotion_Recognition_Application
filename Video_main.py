@@ -35,9 +35,9 @@ class VideoRecording:
 x= 0
 
 def screen_record():
-    fld = "C:\\Users\\zeel9\\PycharmProjects\\Emotion_Recognition_Application - v3\\output\\output"
+    #fld = "C:\\Users\\zeel9\\PycharmProjects\\Emotion_Recognition_Application - v3\\output\\output"
     #fld = "C:\\Users\\zeel9\\PycharmProjects\\ffmpeg - v1\\output\\output"
-    filename = fld + str(x) + ".mp4"
+    filename =  "output.mp4"
     audio = "Microphone Array (Realtek Audio)"
     video_size = "2366x1300"
     #os.system("""ffmpeg -f dshow -t 00:00:15 -i video="screen-capture-recorder" output.mp4""")

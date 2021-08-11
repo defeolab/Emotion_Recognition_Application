@@ -2,6 +2,7 @@ import tkinter as tk
 import threading
 #import base
 import Video_main
+import ffmpeg_video_audio
 import videoPlayer as vp
 from tkinter import *
 from tkinter import filedialog
@@ -102,7 +103,7 @@ class PatientWindow:
         button3 = ttk.Button(neuro_frame, text="Browser Experiment", command=self.openfile)
         button3.grid(row=3, column=1, pady=15)
         neuro_frame.columnconfigure(1, weight=1)
-        no_participant1 = ttk.Label(neuro_frame, text="Please select one mode of settings.", font='Times 18').grid(
+        no_participant1 = ttk.Label(neuro_frame, text="Please select one mode of settings!", font='Times 18').grid(
             row=4, column=1,
             padx=30, pady=20)
 
@@ -121,6 +122,9 @@ class PatientWindow:
             self.root = Tk()
             self.root.title("Enter URL")
             self.root.geometry("800x800")
+            fp = open('websites.txt', 'r')
+            self.websites = json.load(fp)
+            fp.close()
 
             Label(self.root, text="Select Experiment", font='Times 16').grid(row=5, column=1, pady=20)
             #self.search = Entry(self.root)
@@ -135,10 +139,10 @@ class PatientWindow:
                                                                                             pady=20)
             but4 = Button(self.root, text="web4", command=self.website4).grid(row=10, column=1, padx=10,
                                                                             pady=20)
-            Label(self.root, text="lavazza Experiment", font='Times 14').grid(row=7, column=2, pady=20)
-            Label(self.root, text="nespresso Experiment", font='Times 14').grid(row=8, column=2, pady=20)
-            Label(self.root, text="spain Experiment", font='Times 14').grid(row=9, column=2, pady=20)
-            Label(self.root, text="visitnorway Experiment", font='Times 14').grid(row=10, column=2, pady=20)
+            Label(self.root, text=self.websites['website1'], font='Times 14').grid(row=7, column=2, pady=20)
+            Label(self.root, text=self.websites['website2'], font='Times 14').grid(row=8, column=2, pady=20)
+            Label(self.root, text=self.websites['website3'], font='Times 14').grid(row=9, column=2, pady=20)
+            Label(self.root, text=self.websites['website4'], font='Times 14').grid(row=10, column=2, pady=20)
             Label(self.root, text="To change website configuration please edit 'websites.txt' file", font='Times 16').grid(row=12, column=2, pady=20)
 
             self.parent.columnconfigure(6)
@@ -148,32 +152,36 @@ class PatientWindow:
 
     def website1(self):
         #self.frame = None
-        fp = open('websites.txt', 'r')
-        websites = json.load(fp)
-        fp.close()
+        #fp = open('websites.txt', 'r')
+        #websites = json.load(fp)
+        #fp.close()
 
-        self.web1 = websites['website1']
+        self.web1 = self.websites['website1']
         if self.settings == "lab":
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            cam1 = threading.Thread(target=Video_main.VideoRecording,args=(self.patientId,))
+            cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam1.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
+            cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam1.start()
 
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
 
     def website2(self):
-        fp = open('websites.txt', 'r')
-        websites = json.load(fp)
-        fp.close()
+        #fp = open('websites.txt', 'r')
+        #websites = json.load(fp)
+        #fp.close()
 
-        self.web2 = websites['website2']
+        self.web2 = self.websites['website2']
         if self.settings == "lab":
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
@@ -191,11 +199,11 @@ class PatientWindow:
             print("No mode selected!")
 
     def website3(self):
-        fp = open('websites.txt', 'r')
-        websites = json.load(fp)
-        fp.close()
+        #fp = open('websites.txt', 'r')
+        #websites = json.load(fp)
+        #fp.close()
 
-        self.web3 = websites['website3']
+        self.web3 = self.websites['website3']
         if self.settings == "lab":
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
@@ -212,11 +220,11 @@ class PatientWindow:
             print("No mode selected!")
 
     def website4(self):
-        fp = open('websites.txt', 'r')
-        websites = json.load(fp)
-        fp.close()
+        #fp = open('websites.txt', 'r')
+        #websites = json.load(fp)
+        #fp.close()
 
-        self.web4 = websites['website4']
+        self.web4 = self.websites['website4']
         if self.settings == "lab":
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
