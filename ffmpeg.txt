@@ -1,0 +1,1 @@
+{"mic":"Microphone Array (Realtek Audio)","gsr":"Microphone Array (Realtek Audio)","screen":"screen-capture-recorder","video":"Integrated Webcam"}

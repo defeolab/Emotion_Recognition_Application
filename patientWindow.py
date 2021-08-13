@@ -171,6 +171,8 @@ class PatientWindow:
             #self.frame = webcam.Faceless_app()
             cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam1.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
 
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -186,13 +188,19 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            cam2 = threading.Thread(target=Video_main.VideoRecording, args=(self.patientId,))
+            cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam2.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
 
             eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
+            cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam2.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
 
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -208,13 +216,20 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            cam3 = threading.Thread(target=Video_main.VideoRecording, args=(self.patientId,))
+            cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam3.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
 
             eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
+
+            cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam3.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -229,14 +244,20 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            cam4 = threading.Thread(target=Video_main.VideoRecording, args=(self.patientId,))
-            cam4.start()
 
+            cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam4.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
             #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             #self.frame = webcam.Faceless_app()
 
+            cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam4.start()
+            sc = threading.Thread(target=Video_main.screen_record)
+            sc.start()
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
