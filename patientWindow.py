@@ -1,6 +1,7 @@
 import tkinter as tk
 import threading
 #import base
+import ScreenRecording
 import Video_main
 import ffmpeg_video_audio
 import videoPlayer as vp
@@ -81,8 +82,8 @@ class PatientWindow:
         angraphic.grid(row=1, column=2)
 
         #if (self.x.get() == 0):
-            #start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
-            #start_camera_button.grid(row=2, column=2)
+        start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
+        start_camera_button.grid(row=2, column=2)
 
         lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
         lab_button.grid(row=3, column=2)
@@ -147,28 +148,25 @@ class PatientWindow:
 
             self.parent.columnconfigure(6)
             self.parent.bind("<Return>", lambda e: self.run_expbrowser())
+            #Video_main.Recording(self.patientId)
+
         else:
             print("No Mode Selected!")
 
     def website1(self):
-        #self.frame = None
-        #fp = open('websites.txt', 'r')
-        #websites = json.load(fp)
-        #fp.close()
 
         self.web1 = self.websites['website1']
         if self.settings == "lab":
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam1.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
+            #cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            #cam1.start()
+            #sc = threading.Thread(target=ScreenRecording.screen_record)
+            #sc.start()
+            #Video_main.Recording(self.patientId)
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            #self.frame = webcam.Faceless_app()
             cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam1.start()
             sc = threading.Thread(target=Video_main.screen_record)
@@ -188,15 +186,13 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam2.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
+            #cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            #cam2.start()
+            #sc = threading.Thread(target=Video_main.screen_record)
+            #sc.start()
 
             eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            #self.frame = webcam.Faceless_app()
             cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam2.start()
             sc = threading.Thread(target=Video_main.screen_record)
@@ -207,25 +203,18 @@ class PatientWindow:
             print("No mode selected!")
 
     def website3(self):
-        #fp = open('websites.txt', 'r')
-        #websites = json.load(fp)
-        #fp.close()
-
         self.web3 = self.websites['website3']
         if self.settings == "lab":
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam3.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
+            #cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            #cam3.start()
+            #sc = threading.Thread(target=Video_main.screen_record)
+            #sc.start()
 
             eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            #self.frame = webcam.Faceless_app()
-
             cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam3.start()
             sc = threading.Thread(target=Video_main.screen_record)
@@ -235,9 +224,6 @@ class PatientWindow:
             print("No mode selected!")
 
     def website4(self):
-        #fp = open('websites.txt', 'r')
-        #websites = json.load(fp)
-        #fp.close()
 
         self.web4 = self.websites['website4']
         if self.settings == "lab":
@@ -245,15 +231,12 @@ class PatientWindow:
             #    print("You need to turn the camera on")
             #else:
 
-            cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam4.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
+            #cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            #cam4.start()
+            #sc = threading.Thread(target=Video_main.screen_record)
+            #sc.start()
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            #self.frame = webcam.Faceless_app()
-
             cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
             cam4.start()
             sc = threading.Thread(target=Video_main.screen_record)
@@ -382,7 +365,11 @@ class PatientWindow:
 
         if not self.camera_on & (self.settings == 'lab'):
             self.camera_on = True
-            self.frame = webcam.App(tk.Toplevel(), "Recording", self.patientId, self.parent)
+            cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
+            cam1.start()
+            sc = threading.Thread(target=ScreenRecording.screen_record)
+            sc.start()
+
         else:
             print("camera is already on !")
 
@@ -393,7 +380,6 @@ class PatientWindow:
             print('already using home settings mode !')
         else:
             self.settings = 'home'
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
 
     def show_anagraphic(self):
         top = tk.Toplevel()
