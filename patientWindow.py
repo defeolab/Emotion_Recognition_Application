@@ -1,10 +1,7 @@
 import tkinter as tk
 import threading
-#import base
-import GSR
 import GSR_rec
 import ScreenRecording
-import Video_main
 import ffmpeg_video_audio
 import videoPlayer as vp
 from tkinter import *
