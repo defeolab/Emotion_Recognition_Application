@@ -1,6 +1,8 @@
 import tkinter as tk
 import threading
 #import base
+import GSR
+import GSR_rec
 import ScreenRecording
 import Video_main
 import ffmpeg_video_audio
@@ -78,12 +80,11 @@ class PatientWindow:
         experiments_frame.grid(row=1, column=1, rowspan=2, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
         ttk.Label(experiments_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
-        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
-        angraphic.grid(row=1, column=2)
+        start_camera_button = ttk.Button(self.parent, command=self.start_camera, text="Start Recording")
+        start_camera_button.grid(row=1, column=2)
 
-        #if (self.x.get() == 0):
-        start_camera_button = ttk.Checkbutton(self.parent, command=self.start_camera, text="start camera", variable = self.x)
-        start_camera_button.grid(row=2, column=2)
+        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
+        angraphic.grid(row=2, column=2,sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
         lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
         lab_button.grid(row=3, column=2)
@@ -116,8 +117,6 @@ class PatientWindow:
         return widgets
 
 
-    #def openfile1(self):
-
     def openfile(self):
         if (self.settings == 'lab') | (self.settings == 'home'):
             self.root = Tk()
@@ -128,9 +127,6 @@ class PatientWindow:
             fp.close()
 
             Label(self.root, text="Select Experiment", font='Times 16').grid(row=5, column=1, pady=20)
-            #self.search = Entry(self.root)
-            #self.search.grid(row=6, column=1, columnspan=1)
-            #add_search_but = Button(self.root, text="Search", command=self.run_expbrowser).grid(row=6, column=2, padx=10, pady=50)
 
             but1 = Button(self.root, text="web1", command=self.website1).grid(row=7, column=1, padx=10,
                                                                                             pady=20)
@@ -147,8 +143,7 @@ class PatientWindow:
             Label(self.root, text="To change website configuration please edit 'websites.txt' file", font='Times 16').grid(row=12, column=2, pady=20)
 
             self.parent.columnconfigure(6)
-            self.parent.bind("<Return>", lambda e: self.run_expbrowser())
-            #Video_main.Recording(self.patientId)
+            self.parent.bind("<Return>", lambda e: self.web1())
 
         else:
             print("No Mode Selected!")
@@ -160,44 +155,21 @@ class PatientWindow:
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            #cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            #cam1.start()
-            #sc = threading.Thread(target=ScreenRecording.screen_record)
-            #sc.start()
-            #Video_main.Recording(self.patientId)
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            cam1 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam1.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
-
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
 
     def website2(self):
-        #fp = open('websites.txt', 'r')
-        #websites = json.load(fp)
-        #fp.close()
 
         self.web2 = self.websites['website2']
         if self.settings == "lab":
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            #cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            #cam2.start()
-            #sc = threading.Thread(target=Video_main.screen_record)
-            #sc.start()
-
             eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            cam2 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam2.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
-
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -208,17 +180,9 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            #cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            #cam3.start()
-            #sc = threading.Thread(target=Video_main.screen_record)
-            #sc.start()
 
             eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            cam3 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam3.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -231,16 +195,8 @@ class PatientWindow:
             #    print("You need to turn the camera on")
             #else:
 
-            #cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            #cam4.start()
-            #sc = threading.Thread(target=Video_main.screen_record)
-            #sc.start()
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
         elif self.settings == "home":
-            cam4 = threading.Thread(target=ffmpeg_video_audio.extract_audio)
-            cam4.start()
-            sc = threading.Thread(target=Video_main.screen_record)
-            sc.start()
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -260,7 +216,6 @@ class PatientWindow:
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         elif self.settings == "home":
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
@@ -269,7 +224,6 @@ class PatientWindow:
 
             path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
-            #self.frame = webcam.Faceless_app() #start recording
             if path is not None:
                 img = ImageTk.PhotoImage(master=top, image=Image.open(path))
                 label1 = tk.Label(top, image=img)
@@ -285,7 +239,6 @@ class PatientWindow:
             im_timer = threading.Thread(target=countdown,args=(30,))
             im_timer.start()
             top.mainloop()
-            #self.frame.stop()
             os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
@@ -304,15 +257,12 @@ class PatientWindow:
 
         elif self.settings == "home":
             #to be run after calibration
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
             player = None
             self.frame = True
             player = vp.Player(top, self.frame, title="tkinter vlc")
-            #player = threading.Thread(target = vp.Player, args=(top, self.frame,"tkinter vlc", ))
-            #player.start()
             def closeTop():
                 player.timer.stop()
                 if player.frame is not None:
@@ -332,29 +282,6 @@ class PatientWindow:
         else:
             print("No mode selected!")
 
-    def run_expbrowser(self):
-        self.search_key_var = None
-        self.frame = None
-        if self.settings == "lab":
-            self.search_key_var = self.search.get()
-            if self.search_key_var is not None:
-                eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)
-            """
-            if self.camera_on is False:
-                print("You need to turn the camera on")
-            else:
-                self.search_key_var = self.search.get()
-                if self.search_key_var is not None:
-                    eyeTracker.runexpBrowser(self.search_key_var, 1, self.patientId, self.parent, self.root)"""
-        elif self.settings == "home":
-            self.search_key_var = self.search.get()
-            #self.frame = webcam.Faceless_app(tk.Toplevel(), "Recording")
-            if self.search_key_var is not None:
-                self.frame = webcam.Faceless_app()
-                webBrowser.launch_browser(self.search_key_var, 1,self.patientId,self.parent,self.root, self.frame)
-            else:
-                print("no url")
-
     def switch_lab(self):
         if (self.settings == 'lab'):
             print('lab settings mode !')
@@ -369,6 +296,8 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.screen_record)
             sc.start()
+            gsr = threading.Thread(target=GSR_rec.GSR_recording)
+            gsr.start()
 
         else:
             print("camera is already on !")
