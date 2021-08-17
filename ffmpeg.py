@@ -9,6 +9,8 @@ import sys
 import threading
 import subprocess
 
+import win32process
+
 
 def extract_audio():
     cmd = ('ffmpeg -f dshow -t 00:00:15 -i video="Integrated Webcam":audio="Microphone Array (Realtek Audio)" '
@@ -18,6 +20,10 @@ def extract_audio():
     #os.system('ffmpeg -f dshow -t 00:00:15 -i video="Integrated Webcam":audio="Microphone Array (Realtek Audio)" '
     #       '-vcodec libx264 -r 10 -vb 512k -s 640x360 video_output.mp4 '
     #       '-acodec libmp3lame -ab 128k -ac 2 -ar 44100 audio_output.wav')
+    #if keyboard.is_pressed('q'):
+    #    print('VIDEO ABOUT TO BE STOPPED')
+    #    subprocess.Popen.kill(process)
+
 
 if __name__ == "__main__":
     print('Recording')
@@ -25,9 +31,12 @@ if __name__ == "__main__":
     #thread = threading.Thread(target=extract_audio, )
     #thread.start()
     extract_audio()
+    #
     while True:
         if keyboard.is_pressed('q'):
             print('VIDEO ABOUT TO BE STOPPED')
+    #    subprocess.Popen.kill(process)
+
     #        thread.join()
     #        if thread.is_alive():
     #            print('still recording')

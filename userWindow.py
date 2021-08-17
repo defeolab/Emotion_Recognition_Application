@@ -100,6 +100,8 @@ class userWindow():
             data['IDs'].append(id)
 
             try:
+                id_path = os.getcwd()+'/data/'+str(id)
+                os.mkdir(id_path)
                 Image_path = os.getcwd()+'/data/Image/'+str(id)
                 os.mkdir(Image_path)
                 GSRPath1 = os.getcwd()+'/data/Image/'+str(id) + '/GSR_data/'
