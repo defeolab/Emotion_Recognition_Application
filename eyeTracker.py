@@ -35,6 +35,9 @@ from tkinter import filedialog
 import pickle
 import pandas as pd
 
+import GSR_rec
+import ScreenRecording
+import ffmpeg_video_audio
 import webBrowser
 from titta import Titta, helpers_tobii as helpers
 import os
@@ -230,7 +233,7 @@ def runexpVideo(participantId):
 
     createVideoFrame()
 
-def runexpBrowser(search_key_var, type, participantId, parent, root):
+def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -279,6 +282,14 @@ def runexpBrowser(search_key_var, type, participantId, parent, root):
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
+
+    if camera_start == True:
+        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(participantId,3))
+        cam1.start()
+        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(participantId,3))
+        sc.start()
+        gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(participantId,3))
+        gsr.start()
 
     if (type == 1):
         #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)

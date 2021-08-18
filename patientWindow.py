@@ -107,12 +107,18 @@ class PatientWindow:
             padx=30, pady=20)
 
         show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
-        show_data_but.grid(row=2, column=1, pady=30)
+        show_data_but.grid(row=2, column=1, pady=10)
+
+        del_data_but = ttk.Button(experiments_frame, text="Delete data", command=self.delete_data)
+        del_data_but.grid(row=3, column=1, pady=10)
 
         widgets.extend([neuro_frame, button1, button2, button3, show_data_but])
 
         return widgets
 
+    def delete_data(self):
+        print("data has been deleted!")
+        path = filedialog.askopenfilename(initialdir=os.getcwd() + "/data/")
 
     def openfile(self):
         if (self.settings == 'lab') | (self.settings == 'home'):
@@ -152,7 +158,7 @@ class PatientWindow:
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
-            eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -165,7 +171,7 @@ class PatientWindow:
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -178,7 +184,7 @@ class PatientWindow:
             #    print("You need to turn the camera on")
             #else:
 
-            eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -192,7 +198,7 @@ class PatientWindow:
             #    print("You need to turn the camera on")
             #else:
 
-            eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root)
+            eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
@@ -289,12 +295,12 @@ class PatientWindow:
 
         if not self.camera_on & (self.settings == 'lab'):
             self.camera_on = True
-            cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,))
-            cam1.start()
-            sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,))
-            sc.start()
-            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
-            gsr.start()
+            #cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,))
+            #cam1.start()
+            #sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,))
+            #sc.start()
+            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
+            #gsr.start()
 
         else:
             print("camera is already on !")

@@ -5,4 +5,6 @@
 "video_size": "2560x1440",
 "x":"-1280",
 "y":"0",
-"duration":"00:00:05"}
+"duration":"00:00:05",
+"framerate":"60",
+"samplingrate":"44100"}
