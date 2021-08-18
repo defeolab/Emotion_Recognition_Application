@@ -293,17 +293,17 @@ class PatientWindow:
 
     def start_camera(self):
 
-        if not self.camera_on & (self.settings == 'lab'):
+        if (self.settings == 'lab'):
             self.camera_on = True
-            #cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,))
-            #cam1.start()
-            #sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,))
-            #sc.start()
-            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
-            #gsr.start()
+            # cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,))
+            # cam1.start()
+            # sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,))
+            # sc.start()
+            # gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
+            # gsr.start()
 
         else:
-            print("camera is already on !")
+            print("experiment is not started yet!")
 
     def switch_home(self):
         print("home setting mode")
