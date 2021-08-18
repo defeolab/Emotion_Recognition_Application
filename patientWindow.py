@@ -310,6 +310,9 @@ class PatientWindow:
             # gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
             # gsr.start()
 
+        elif (self.settings == 'home'):
+            self.camera_on = True
+
         else:
             print("experiment is not started yet!")
 
