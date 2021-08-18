@@ -160,6 +160,14 @@ class PatientWindow:
         #    else:
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
+            if self.camera_on == True:
+                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId, 3))
+                cam1.start()
+                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 3))
+                sc.start()
+                gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 3))
+                gsr.start()
+
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
