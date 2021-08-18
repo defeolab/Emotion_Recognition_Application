@@ -1,21 +1,7 @@
-#!/usr/bin/env python3
-"""Simple GUI for recording into a WAV file.
-There are 3 concurrent activities: GUI, audio callback, file-writing thread.
-Neither the GUI nor the audio callback is supposed to block.
-Blocking in any of the GUI functions could make the GUI "freeze", blocking in
-the audio callback could lead to drop-outs in the recording.
-Blocking the file-writing thread for some time is no problem, as long as the
-recording can be stopped successfully when it is supposed to.
-"""
-import contextlib
-import datetime
 import queue
-import sys
 import tempfile
 import threading
-from tkinter import ttk
 import tkinter as tk
-from tkinter.simpledialog import Dialog
 from psychopy import data
 import numpy as np
 import sounddevice as sd
@@ -59,12 +45,7 @@ class Record(tk.Tk):
     def audio_callback(self, indata, frames, time, status):
         """This is called (from a separate thread) for each audio block."""
         if status.input_overflow:
-            # NB: This increment operation is not atomic, but this doesn't
-            #     matter since no other thread is writing to the attribute.
-            self.input_overflows += 1
-        # NB: self.recording is accessed from different threads.
-        #     This is safe because here we are only accessing it once (with a
-        #     single bytecode instruction).
+            self.input_overflows += 1.
         if self.recording:
             self.audio_q.put(indata.copy())
             self.previously_recording = True
@@ -118,7 +99,6 @@ class Record(tk.Tk):
         self.thread.join()
         self.thread1.join()
 
-"""
 path = os.getcwd()
 print(path)
 main = Record()
@@ -153,7 +133,6 @@ def printAfterStop():
     print("Filename after stop: " + str(filename))
     return filename
 
-file = printAfterStop()
 
 root = tk.Tk()
 frame = tk.Frame(root)
@@ -165,5 +144,5 @@ btn2.pack()
 btn3.pack()
 frame.pack()
 root.mainloop()
-"""
+
 
