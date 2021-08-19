@@ -17,7 +17,7 @@ class ScreenRec:
         duration = mic['duration']
         frame_rate = mic['framerate']
         if self.exp_type == 3:
-            filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_rec.MP4"
             file_path = "data/Browser/" + str(self.PatientID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
@@ -43,7 +43,7 @@ class ScreenRec:
         #    print("file removed")
         #    os.remove(filename)
 
-        os.system(f"""ffmpeg -f gdigrab -show_region 1 -t {duration} -framerate {frame_rate} -video_size {video_size} -offset_x {x} -offset_y {y} -i desktop -f dshow -t {duration} -i audio="{audio}" "{filename}" """)
+        os.system(f"""ffmpeg -f gdigrab -t {duration} -framerate {frame_rate} -video_size {video_size} -offset_x {x} -offset_y {y} -i desktop -f dshow -t {duration} -i audio="{audio}" "{filename}" """)
 
     #os.system(f"""ffmpeg -f gdigrab -show_region 1 -t {duration} -framerate 60 -video_size {video_size} -offset_x {x} -offset_y {y} -i desktop -f dshow -t {duration} -i audio="{audio}" "{filename}" """)
 

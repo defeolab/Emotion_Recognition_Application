@@ -2,6 +2,9 @@ import threading
 from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
+import ScreenRecording
+import GSR_rec
+import ffmpeg_video_audio
 
 try:
     import tkinter as tk
@@ -52,7 +55,7 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, self.type, starting_url)
+        self.navigation_bar = NavigationBar(self, self.type, starting_url,self.id)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -60,8 +63,6 @@ class MainFrame(tk.Frame):
 
         # BrowserFrame
         self.browser_frame = BrowserFrame(self, starting_url, self.navigation_bar)
-        #self.browser_frame = threading.Thread(target=BrowserFrame, args=(self, starting_url, self.navigation_bar,))
-        #self.browser.start()
         self.browser_frame.grid(row=1, column=0,
                                 sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 1, weight=1)
@@ -218,7 +219,7 @@ class FocusHandler(object):
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, type_exp, starting_url):
+    def __init__(self, master, type_exp, starting_url, id):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -227,6 +228,7 @@ class NavigationBar(tk.Frame):
         tk.Frame.__init__(self, master)
         self.type = type_exp
         self.starting_url = starting_url
+        self.id = id
 
         # Back button
         back = 'resources/back.png'
@@ -246,6 +248,13 @@ class NavigationBar(tk.Frame):
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
+        start_rec = tk.Button(self, text="Start recording",command =self.start_recording)
+        start_rec.grid(row=0, column=3)
+
+        self.chronometer = tk.Label(self, text="", width=10)
+        self.chronometer.grid(row=0, column=4)
+        self.remaining = 0
+        self.countdown(20)
         # Url entry
         self.url_entry = tk.Entry(self)
         tk.Grid.rowconfigure(self, 0, weight=100)
@@ -256,6 +265,24 @@ class NavigationBar(tk.Frame):
     def go_back(self):
         if self.master.get_browser():
             self.master.get_browser().GoBack()
+
+    def countdown(self, remaining=None):
+        if remaining is not None:
+            self.remaining = remaining
+
+        if self.remaining <= 0:
+            self.chronometer.configure(text="time's up!")
+        else:
+            self.chronometer.configure(text="%d" % self.remaining)
+            self.remaining = self.remaining - 1
+            self.after(1000, self.countdown)
+
+    def start_recording(self):
+        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id,3))
+        cam1.start()
+        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id,3))
+        sc.start()
+        GSR_rec.GSR_recording(self.id, 3)
 
     def go_forward(self):
         if self.master.get_browser():

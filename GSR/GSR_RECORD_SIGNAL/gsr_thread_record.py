@@ -24,7 +24,7 @@ class Record(tk.Tk):
 
     stream = None
 
-    def __init__(self):
+    def __init__(self,id, exp_type):
         self.input_overflows = 0
         self.recording = self.previously_recording = False
         self.audio_q = queue.Queue()
@@ -34,7 +34,8 @@ class Record(tk.Tk):
         self.metering_q = queue.Queue(maxsize=1)
         self.filename = None
         self.name = None
-
+        self.participantID = id
+        self.exp_type = exp_type
 
     def create_stream(self,):
         if self.stream is not None:
@@ -62,18 +63,21 @@ class Record(tk.Tk):
         else:
             self.peak = 0
 
-    def on_rec(self, path):
+    def on_rec(self):
         self.recording = True
 
-        cpath = os.path.join(path, 'gsr_file')
-        if os.path.exists(cpath):
-            name = cpath
-        else:
-            os.makedirs(cpath)
-            name = cpath
+        #cpath = os.path.join(path, 'gsr_file')
+        #if os.path.exists(cpath):
+        #    name = cpath
+        #else:
+        #    os.makedirs(cpath)
+        #    name = cpath
+        if self.exp_type == 3:
+            path = "C:\\Users\\zeel9\\PycharmProjects\\Emotion_Recognition_Application_3\\data\\Browser\\"+str(self.participantID)+"\\"
+            print(path)
 
-        self.filename = tempfile.mktemp(prefix=data.getDateStr(), suffix='.wav', dir=name)
-
+        self.filename = tempfile.mktemp(prefix=data.getDateStr(), suffix='.wav', dir=path)
+        #self.filename =
         self.thread1 = threading.Thread(target=self.create_stream, args=(), daemon=True)
         if self.audio_q.qsize() != 0:
             print('WARNING: Queue not empty!')
@@ -99,50 +103,48 @@ class Record(tk.Tk):
         self.thread.join()
         self.thread1.join()
 
-path = os.getcwd()
-print(path)
-main = Record()
+#main = Record()
 
 
-def quit():
-    root.destroy()
+#def quit():
+#    root.destroy()
 
 
-def start():
-    main.create_stream()
-    main.on_rec(path)
-    btn1.config(state=tk.DISABLED)
-    btn2.configure(state=tk.NORMAL)
+#def start():
+#    main.create_stream()
+#    main.on_rec(path)
+#    btn1.config(state=tk.DISABLED)
+#    btn2.configure(state=tk.NORMAL)
 
 
-filename = None
+#filename = None
 
 
-def stop():
-    global filename
-    filename = main.on_stop()
-    print('Closing streaming')
-    btn2.config(state=tk.DISABLED)
-    btn1.configure(state=tk.NORMAL)
-    print(filename)
-    printAfterStop()
-    return filename
+#def stop():
+#    global filename
+#    filename = main.on_stop()
+#    print('Closing streaming')
+#    btn2.config(state=tk.DISABLED)
+#    btn1.configure(state=tk.NORMAL)
+#    print(filename)
+#    printAfterStop()
+#    return filename
 
 
-def printAfterStop():
-    print("Filename after stop: " + str(filename))
-    return filename
+#def printAfterStop():
+#    print("Filename after stop: " + str(filename))
+#    return filename
 
 
-root = tk.Tk()
-frame = tk.Frame(root)
-btn1 = tk.Button(frame, text='Start Record', command=start)
-btn2 = tk.Button(frame, text="Stop Record", command=stop, state=tk.DISABLED)
-btn3 = tk.Button(frame, text="Exit", command=quit)
-btn1.pack()
-btn2.pack()
-btn3.pack()
-frame.pack()
-root.mainloop()
+#root = tk.Tk()
+#frame = tk.Frame(root)
+#btn1 = tk.Button(frame, text='Start Record', command=start)
+#btn2 = tk.Button(frame, text="Stop Record", command=stop, state=tk.DISABLED)
+#btn3 = tk.Button(frame, text="Exit", command=quit)
+#btn1.pack()
+#btn2.pack()
+#btn3.pack()
+#frame.pack()
+#root.mainloop()
 
 

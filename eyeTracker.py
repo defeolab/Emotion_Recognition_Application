@@ -283,13 +283,13 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
 
     tracker.start_recording(gaze_data=True, store_data=True)
 
-    if camera_start == True:
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(participantId,3))
-        cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(participantId,3))
-        sc.start()
-        gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(participantId,3))
-        gsr.start()
+    #if camera_start == True:
+    #    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(participantId,3))
+    #    cam1.start()
+    #    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(participantId,3))
+    #    sc.start()
+    #    gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(participantId,3))
+    #    gsr.start()
 
     if (type == 1):
         #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)

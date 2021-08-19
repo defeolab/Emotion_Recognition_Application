@@ -19,6 +19,7 @@ import time
 
 
 # from PyQt5.QtWebEngineWidgets import QWebEngineView
+from GSR.GSR_RECORD_SIGNAL import gsr_thread_record
 
 
 class PatientWindow:
@@ -34,6 +35,7 @@ class PatientWindow:
 
         self.frame = None
         self.camera_on = False
+        self.experiment = False
 
     def add_webcam_frame(self):
         top = Toplevel()
@@ -42,20 +44,21 @@ class PatientWindow:
         Label(top, text=' Webcam ', font='Times 25').grid(row=1, column=3, pady=40)
 
     def browseFiles(self):
-        filename = filedialog.askopenfile(initialdir=os.getcwd() + "/data/" + str(self.patientId),
-                                          title="Select a File",
-                                          filetypes=(("csv files",
-                                                      "*.csv"),
-                                                     ("all files",
-                                                      "*.*")))
+        print("Mark is our friend.")
+        #filename = filedialog.askopenfile(initialdir=os.getcwd() + "/data/" + str(self.patientId),
+        #                                  title="Select a File",
+        #                                  filetypes=(("csv files",
+        #                                              "*.csv"),
+        #                                             ("all files",
+        #                                              "*.*")))
 
-        if filename is not None:
+        #if filename is not None:
 
-            comand = "start " + filename.name
-            try:
-                os.system(comand)
-            except:
-                print(comand)
+        #    comand = "start " + filename.name
+        #    try:
+        #        os.system(comand)
+        #    except:
+        #        print(comand)
 
 
 
@@ -106,7 +109,7 @@ class PatientWindow:
             row=4, column=1,
             padx=30, pady=20)
 
-        show_data_but = ttk.Button(experiments_frame, text="Show Previous Data", command=self.browseFiles)
+        show_data_but = ttk.Button(experiments_frame, text="Mark", command=self.browseFiles)
         show_data_but.grid(row=2, column=1, pady=10)
 
         del_data_but = ttk.Button(experiments_frame, text="Delete data", command=self.delete_data)
@@ -158,16 +161,11 @@ class PatientWindow:
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
+            self.experiment = True
             eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
-            if self.camera_on == True:
-                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId, 3))
-                cam1.start()
-                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 3))
-                sc.start()
-                gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 3))
-                gsr.start()
-
+            #if self.camera_on == True:
+            self.experiment = True
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -176,11 +174,13 @@ class PatientWindow:
 
         self.web2 = self.websites['website2']
         if self.settings == "lab":
+            self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
             eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
+            self.experiment = True
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -188,12 +188,14 @@ class PatientWindow:
     def website3(self):
         self.web3 = self.websites['website3']
         if self.settings == "lab":
+            self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
 
             eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
+            self.experiment = True
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -202,12 +204,14 @@ class PatientWindow:
 
         self.web4 = self.websites['website4']
         if self.settings == "lab":
+            self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
 
             eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
+            self.experiment = True
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             print("No mode selected!")
@@ -301,17 +305,26 @@ class PatientWindow:
 
     def start_camera(self):
 
-        if (self.settings == 'lab'):
+        if (self.settings == 'lab') & (self.experiment == True):
             self.camera_on = True
-            # cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,))
-            # cam1.start()
-            # sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,))
-            # sc.start()
-            # gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,))
-            # gsr.start()
+            cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,3))
+            cam1.start()
+            sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
+            sc.start()
+            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            #gsr.start()
 
-        elif (self.settings == 'home'):
+        elif (self.settings == 'home') & (self.experiment == True):
             self.camera_on = True
+            #gsr = threading.Thread(target=gsr_thread_record.Record)
+            #gsr.start()
+            cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId,3))
+            cam1.start()
+            sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
+            sc.start()
+            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            #gsr.start()
+
 
         else:
             print("experiment is not started yet!")
