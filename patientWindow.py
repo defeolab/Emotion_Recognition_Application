@@ -2,6 +2,7 @@ import tkinter as tk
 import threading
 import GSR_rec
 import ScreenRecording
+import ffmpeg
 import ffmpeg_video_audio
 import videoPlayer as vp
 from tkinter import *
@@ -44,7 +45,8 @@ class PatientWindow:
         Label(top, text=' Webcam ', font='Times 25').grid(row=1, column=3, pady=40)
 
     def browseFiles(self):
-        print("Mark is our friend.")
+        #print("Mark is our friend.")
+        self.no_participant1.config(text="Mark is our friend!")
         #filename = filedialog.askopenfile(initialdir=os.getcwd() + "/data/" + str(self.patientId),
         #                                  title="Select a File",
         #                                  filetypes=(("csv files",
@@ -63,7 +65,7 @@ class PatientWindow:
 
 
 
-    def addWidgets(self):
+    def addWidgets(self, neuro_frame=None):
         widgets = []
         style = ttk.Style()
         style.configure('Wild.TButton', background="white")
@@ -83,15 +85,18 @@ class PatientWindow:
         start_camera_button = ttk.Button(self.parent, command=self.start_camera, text="Start Recording")
         start_camera_button.grid(row=1, column=2)
 
+        stop_camera = ttk.Button(self.parent, command=self.stop_cam, text="Stop Recording")
+        stop_camera.grid(row=2, column=2)
+
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
-        angraphic.grid(row=2, column=2,sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
+        angraphic.grid(row=3, column=2,sticky=tk.E + tk.W + tk.N + tk.S, padx=5, pady=5)
 
-        lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
-        lab_button.grid(row=3, column=2)
+        self.lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
+        self.lab_button.grid(row=4, column=2)
 
-        home_button = ttk.Radiobutton(self.parent, text="Switch to Home Settings",
+        self.home_button = ttk.Radiobutton(self.parent, text="Switch to Home Settings",
                                  command=self.switch_home, variable=var, value=2)
-        home_button.grid(row=4, column=2)
+        self.home_button.grid(row=5, column=2)
 
         widgets.append(experiments_frame)
 
@@ -105,9 +110,8 @@ class PatientWindow:
         button3 = ttk.Button(neuro_frame, text="Browser Experiment", command=self.openfile)
         button3.grid(row=3, column=1, pady=15)
         neuro_frame.columnconfigure(1, weight=1)
-        no_participant1 = ttk.Label(neuro_frame, text="Please select one mode of settings!", font='Times 18').grid(
-            row=4, column=1,
-            padx=30, pady=20)
+        self.no_participant1 = ttk.Label(neuro_frame, text="Please select one mode of settings!", font='Times 18')
+        self.no_participant1.grid(row=4, column=1,padx=30, pady=20)
 
         show_data_but = ttk.Button(experiments_frame, text="Mark", command=self.browseFiles)
         show_data_but.grid(row=2, column=1, pady=10)
@@ -118,6 +122,9 @@ class PatientWindow:
         widgets.extend([neuro_frame, button1, button2, button3, show_data_but])
 
         return widgets
+
+    def stop_cam(self):
+        ffmpeg.stop()
 
     def delete_data(self):
         print("data has been deleted!")
@@ -299,8 +306,9 @@ class PatientWindow:
 
     def switch_lab(self):
         if (self.settings == 'lab'):
-            print('lab settings mode !')
+            self.no_participant1.config(text="Already in the lab setting Mode!")
         else:
+            self.no_participant1.config(text="lab setting Mode selected!")
             self.settings = 'lab'
 
     def start_camera(self):
@@ -316,14 +324,12 @@ class PatientWindow:
 
         elif (self.settings == 'home') & (self.experiment == True):
             self.camera_on = True
-            #gsr = threading.Thread(target=gsr_thread_record.Record)
-            #gsr.start()
             cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId,3))
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
-            #gsr.start()
+            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr.start()
 
 
         else:
@@ -333,8 +339,10 @@ class PatientWindow:
         print("home setting mode")
 
         if (self.settings == 'home'):
+            self.no_participant1.config(text="Already in the home setting Mode!")
             print('already using home settings mode !')
         else:
+            self.no_participant1.config(text="home setting Mode selected!")
             self.settings = 'home'
 
     def show_anagraphic(self):

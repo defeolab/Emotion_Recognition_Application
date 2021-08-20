@@ -4,6 +4,8 @@ Using ffmpeg to capture video and audio
 
 import os
 import json
+import subprocess
+
 
 class Camera_recording:
 
@@ -38,7 +40,8 @@ class Camera_recording:
 
 
         os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
-
+        #cmd = ('ffmpeg -y -f dshow -t 00:00:10 -i video="Integrated Webcam":audio="Microphone Array (Realtek Audio)" out.MP4 ')
+        #proc = subprocess.Popen(cmd, shell=True, stderr=subprocess.STDOUT)
 #ffmpeg -list_devices true -f dshow -i dummy
 
 #Camera_recording()

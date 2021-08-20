@@ -26,7 +26,7 @@ class GSR_recording:
                                               channels=2, blocking='False', sample=self.sample_rate,
                                               filename = self.filename), )
         thread.start()
-
+        print(sd.query_devices())
 
     def manage(self,filename, sample, **soundfile_args):
         self.signal = sd.rec(**soundfile_args)

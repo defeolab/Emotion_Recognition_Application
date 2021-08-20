@@ -207,11 +207,13 @@ class userWindow():
         self.window.columnconfigure(6)
         self.window.bind("<Return>", lambda e: self.search_participant())
 
-        no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26').grid(row=1, column=1, padx= 30, pady= 20)
+        no_participant = ttk.Label(self.window, text="No Participant Selected", font='Times 26')
+        no_participant.grid(row=1, column=1, padx= 30, pady= 20)
 
 
         def selectPatient(str):
             if self.patient is not None:
+                no_participant.destroy()
                 for w in self.patient.widgets:
                     w.destroy()
 

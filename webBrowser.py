@@ -1,4 +1,7 @@
+import json
 import threading
+import datetime
+
 from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
@@ -230,6 +233,12 @@ class NavigationBar(tk.Frame):
         self.starting_url = starting_url
         self.id = id
 
+        fp = open('ffmpeg.txt', 'r')
+        dur = json.load(fp)
+        fp.close()
+
+        self.duration = dur['dur']
+
         # Back button
         back = 'resources/back.png'
         self.back_image = tk.PhotoImage(file=back)
@@ -248,13 +257,14 @@ class NavigationBar(tk.Frame):
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
-        start_rec = tk.Button(self, text="Start recording",command =self.start_recording)
+        start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
         start_rec.grid(row=0, column=3)
 
-        self.chronometer = tk.Label(self, text="", width=10)
-        self.chronometer.grid(row=0, column=4)
-        self.remaining = 0
-        self.countdown(20)
+        #self.chronometer = tk.Label(self, text=" ", width=20)
+        #self.chronometer.grid(row=0, column=4)
+        #self.remaining = 0
+        #self.countdown(int(self.duration))
+
         # Url entry
         self.url_entry = tk.Entry(self)
         tk.Grid.rowconfigure(self, 0, weight=100)
@@ -266,18 +276,29 @@ class NavigationBar(tk.Frame):
         if self.master.get_browser():
             self.master.get_browser().GoBack()
 
+
     def countdown(self, remaining=None):
+        #self.chronometer['text'] = self.convert_seconds_left_to_time()
         if remaining is not None:
             self.remaining = remaining
 
         if self.remaining <= 0:
             self.chronometer.configure(text="time's up!")
         else:
-            self.chronometer.configure(text="%d" % self.remaining)
+            self.chronometer.configure(text="remaining %d" % self.remaining)
             self.remaining = self.remaining - 1
             self.after(1000, self.countdown)
 
+    #def convert_seconds_left_to_time(self):
+
+    #    return datetime.timedelta(seconds=self.remaining)
+
     def start_recording(self):
+        self.chronometer = tk.Label(self, text=" ", width=20)
+        self.chronometer.grid(row=0, column=4)
+        self.remaining = 0
+        self.countdown(int(self.duration))
+
         cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id,3))
         cam1.start()
         sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id,3))
@@ -357,9 +378,6 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
     root = tk.Toplevel()
     app = MainFrame(root, url, type, id, window, old_root, frame)
-    #app = threading.Thread(target=MainFrame, args=(root, url, type, id, window, old_root, frame))
-    #app.start()
-    #app.join()
     rec = None
     if exptype == "gsr":
         rec = gsr.Record()
@@ -367,11 +385,9 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
 
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
-    #app.browser_frame.mainloop()
     def countdown(time):
         if time == -1:
             root.destroy()
-            #self.frame.stop()
         else:
             root.after(1000, countdown, time - 1)
 
@@ -381,7 +397,5 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
 
     t1 = threading.Thread(target=app.browser_frame.mainloop())
     t1.start()
-    #app.mainloop()
-    #browser_frame.mainloop()
     cef.Shutdown()
 
