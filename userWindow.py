@@ -172,7 +172,7 @@ class userWindow():
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )
 
-        logout_but = ttk.Button(self.window, text="Logout", command=self.logout).grid(sticky=E, row=0, column=10, padx=10)
+        logout_but = ttk.Button(self.window, text="Logout", command=self.logout).grid(sticky=N, row=0, column=10, padx=10)
         Label(text="", font='Times 25').grid(row=0, column=1, pady=40, padx = 20 )
 
 

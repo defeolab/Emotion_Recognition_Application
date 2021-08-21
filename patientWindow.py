@@ -74,22 +74,22 @@ class PatientWindow:
         self.x = IntVar()
         self.x.set(0)
 
-        self.parent.columnconfigure(1, weight=2)
+        #self.parent.columnconfigure(1, weight=2)
 
         experiments_frame = ttk.LabelFrame(self.parent)
         experiments_frame.columnconfigure(1, weight=1)
 
-        experiments_frame.grid(row=1, column=1, rowspan=2, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
+        experiments_frame.grid(row=1, column=1, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
         ttk.Label(experiments_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
         start_camera_button = ttk.Button(self.parent, command=self.start_camera, text="Start Recording")
-        start_camera_button.grid(row=1, column=2)
+        start_camera_button.grid(row=0, column=2)
 
         stop_camera = ttk.Button(self.parent, command=self.stop_cam, text="Stop Recording")
-        stop_camera.grid(row=2, column=2)
+        stop_camera.grid(row=1, column=2)
 
         angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
-        angraphic.grid(row=3, column=2,sticky=tk.E + tk.W + tk.N + tk.S, padx=5, pady=5)
+        angraphic.grid(row=3, column=2, padx=5, pady=5)
 
         self.lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
         self.lab_button.grid(row=4, column=2)
@@ -333,7 +333,8 @@ class PatientWindow:
 
 
         else:
-            print("experiment is not started yet!")
+            self.no_participant1.config(text="experiment is not started yet!")
+            #print("experiment is not started yet!")
 
     def switch_home(self):
         print("home setting mode")
