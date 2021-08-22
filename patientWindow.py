@@ -166,7 +166,8 @@ class PatientWindow:
             self.parent.bind("<Return>", lambda e: self.web1())
 
         else:
-            print("No Mode Selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No Mode Selected!")
 
     def website1(self):
 
@@ -182,7 +183,8 @@ class PatientWindow:
             self.experiment = True
             webBrowser.launch_browser(self.web1, 1,self.patientId,self.parent,self.root,self.frame)
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
 
     def website2(self):
 
@@ -197,7 +199,8 @@ class PatientWindow:
             self.experiment = True
             webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
 
     def website3(self):
         self.web3 = self.websites['website3']
@@ -212,7 +215,8 @@ class PatientWindow:
             self.experiment = True
             webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
 
     def website4(self):
 
@@ -228,7 +232,8 @@ class PatientWindow:
             self.experiment = True
             webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
 
     def run_expimage(self):
         if self.settings == "lab":
@@ -324,7 +329,8 @@ class PatientWindow:
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
@@ -361,7 +367,8 @@ class PatientWindow:
             top.bind('<space>', pause)
 
         else:
-            print("No mode selected!")
+            self.no_participant1.config(text="No mode selected!")
+            #print("No mode selected!")
 
     def switch_lab(self):
         if (self.settings == 'lab'):
@@ -378,8 +385,8 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
-            #gsr.start()
+            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr.start()
 
         elif (self.settings == 'home') & (self.experiment == True):
             self.camera_on = True
