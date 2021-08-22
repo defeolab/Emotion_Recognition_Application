@@ -37,6 +37,7 @@ class PatientWindow:
         self.frame = None
         self.camera_on = False
         self.experiment = False
+        self.timer = 0
 
     def add_webcam_frame(self):
         top = Toplevel()
@@ -79,24 +80,30 @@ class PatientWindow:
         experiments_frame = ttk.LabelFrame(self.parent)
         experiments_frame.columnconfigure(1, weight=1)
 
-        experiments_frame.grid(row=1, column=1, pady=3, padx=100, sticky=tk.E + tk.W + tk.N + tk.S)
+        experiments_frame.grid(row=1, column=1, pady=3, padx=50, sticky=tk.E + tk.W + tk.N + tk.S)
         ttk.Label(experiments_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
-        start_camera_button = ttk.Button(self.parent, command=self.start_camera, text="Start Recording")
-        start_camera_button.grid(row=0, column=2)
+        but_frame = ttk.LabelFrame(self.parent)
+        but_frame.columnconfigure(2, weight=1)
 
-        stop_camera = ttk.Button(self.parent, command=self.stop_cam, text="Stop Recording")
-        stop_camera.grid(row=1, column=2)
+        but_frame.grid(row=1, column=2, pady=1, padx=50, sticky=tk.E + tk.W + tk.N + tk.S)
+        ##ttk.Label(but_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
-        angraphic = ttk.Button(self.parent, text="Show Anagraphic", command=self.show_anagraphic)
-        angraphic.grid(row=3, column=2, padx=5, pady=5)
+        start_camera_button = ttk.Button(but_frame, command=self.start_camera, text="Start Recording")
+        start_camera_button.grid(row=0, column=1,pady=10)
 
-        self.lab_button = ttk.Radiobutton(self.parent, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
-        self.lab_button.grid(row=4, column=2)
+        stop_camera = ttk.Button(but_frame, command=self.stop_cam, text="Stop Recording")
+        stop_camera.grid(row=1, column=1,pady=10)
 
-        self.home_button = ttk.Radiobutton(self.parent, text="Switch to Home Settings",
+        angraphic = ttk.Button(but_frame, command=self.show_anagraphic, text="Show Anagraphic")
+        angraphic.grid(row=2, column=1, pady=100)
+
+        self.lab_button = ttk.Radiobutton(but_frame, text="Switch to Lab Settings",command=self.switch_lab, variable = var, value=1)
+        self.lab_button.grid(row=4, column=1)
+
+        self.home_button = ttk.Radiobutton(but_frame, text="Switch to Home Settings",
                                  command=self.switch_home, variable=var, value=2)
-        self.home_button.grid(row=5, column=2)
+        self.home_button.grid(row=5, column=1)
 
         widgets.append(experiments_frame)
 
@@ -238,28 +245,80 @@ class PatientWindow:
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         elif self.settings == "home":
+            timer = 0
             top = tk.Toplevel()
             top.title("Experiment VLC media player")
             top.state('zoomed')
             top.geometry("300x300")
             top.configure(background='grey')
 
-            path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
+            fp = open('Images.txt', 'r')
+            image = json.load(fp)
+            fp.close()
 
-            if path is not None:
-                img = ImageTk.PhotoImage(master=top, image=Image.open(path))
-                label1 = tk.Label(top, image=img)
-                label1.pack(side="bottom", fill="both", expand="yes")
+            img1 = image['img1']
+            img2 = image['img2']
+            img3 = image['img3']
+            img4 = image['img4']
+            count_1 = image['count_1']
+            count_2 = image['count_2']
+            count_3 = image['count_3']
+            count_4 = image['count_4']
 
-                def countdown(time):
-                    if time == -1:
-                        top.destroy()
-                        self.frame.stop()
-                    else:
-                        top.after(1000, countdown, time - 1)
+            #path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
+            #path = os.getcwd() + "/Image/Capture.PNG"
+            #if path is not None:
+            img_1 = ImageTk.PhotoImage(master=top, image=Image.open(img1))
+            img_2 = ImageTk.PhotoImage(master=top, image=Image.open(img2))
+            img_3 = ImageTk.PhotoImage(master=top, image=Image.open(img3))
+            img_4 = ImageTk.PhotoImage(master=top, image=Image.open(img4))
 
-            im_timer = threading.Thread(target=countdown,args=(30,))
-            im_timer.start()
+            label1 = tk.Label(top, image=img_1)
+            label1.pack(side="bottom", fill="both", expand="yes")
+
+            def countdown_4(time):
+                if time == -1:
+                    top.destroy()
+
+                else:
+                    top.after(1000, countdown_4, time - 1)
+
+            def countdown_3(time):
+                if time == -1:
+                    # top.destroy()
+                    label1.config(image=img_4)
+                    im_timer_4 = threading.Thread(target=countdown_4, args=(int(count_4),))
+                    im_timer_4.start()
+
+
+                else:
+                    top.after(1000, countdown_3, time - 1)
+
+            def countdown_2(time):
+                if time == -1:
+                    #top.destroy()
+                    label1.config(image = img_3)
+                    im_timer_3 = threading.Thread(target=countdown_3, args=(int(count_3),))
+                    im_timer_3.start()
+
+                else:
+                    top.after(1000, countdown_2, time - 1)
+
+
+            def countdown_1(time):
+                if time == -1:
+                    #top.destroy()
+                    label1.config(image = img_2)
+                    im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
+                    im_timer_2.start()
+
+                else:
+                    top.after(1000, countdown_1, time - 1)
+
+            im_timer_1 = threading.Thread(target=countdown_1, args=(int(count_1),))
+            im_timer_1.start()
+
+
             top.mainloop()
             os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")

@@ -1,0 +1,8 @@
+{"img1":"C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/Image/Capture.PNG",
+"img2":"C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/Image/beer_positioning.jpg",
+"img3":"C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/Image/Capture.PNG",
+"img4":"C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/Image/beer_positioning.jpg",
+"count_1":"5",
+"count_2":"5",
+"count_3":"5",
+"count_4":"5"}

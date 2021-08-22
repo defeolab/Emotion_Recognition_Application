@@ -65,8 +65,8 @@ def runexpImage(participantId):
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    #im_name = 'beer_positioning.jpg'
-    im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
+    im_name = os.getcwd() + "/Image/beer_positioning.jpg"
+    #im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
     # %%  ET settings
     et_name = 'Tobii T60'
@@ -282,14 +282,6 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
-
-    #if camera_start == True:
-    #    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(participantId,3))
-    #    cam1.start()
-    #    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(participantId,3))
-    #    sc.start()
-    #    gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(participantId,3))
-    #    gsr.start()
 
     if (type == 1):
         #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)
