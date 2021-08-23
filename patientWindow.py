@@ -251,86 +251,109 @@ class PatientWindow:
 
         elif self.settings == "home":
             timer = 0
-            top = tk.Toplevel()
-            top.title("Experiment VLC media player")
-            top.state('zoomed')
-            top.geometry("300x300")
-            top.configure(background='grey')
 
-            fp = open('Images.txt', 'r')
-            image = json.load(fp)
+            inst_win = tk.Toplevel()
+            inst_win.title("Instruction")
+            inst_win.geometry("1000x1000")
+
+            fp = open('instruction.txt', 'r')
+            image_inst = json.load(fp)
             fp.close()
 
-            img1 = image['img1']
-            img2 = image['img2']
-            img3 = image['img3']
-            img4 = image['img4']
-            count_1 = image['count_1']
-            count_2 = image['count_2']
-            count_3 = image['count_3']
-            count_4 = image['count_4']
+            Label(inst_win, text="Instruction \n" + image_inst['inst'], font='Times 14').grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
-            #path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
-            #path = os.getcwd() + "/Image/Capture.PNG"
-            #if path is not None:
-            img_1 = ImageTk.PhotoImage(master=top, image=Image.open(img1))
-            img_2 = ImageTk.PhotoImage(master=top, image=Image.open(img2))
-            img_3 = ImageTk.PhotoImage(master=top, image=Image.open(img3))
-            img_4 = ImageTk.PhotoImage(master=top, image=Image.open(img4))
-
-            label1 = tk.Label(top, image=img_1)
-            label1.pack(side="bottom", fill="both", expand="yes")
-
-            def countdown_4(time):
-                if time == -1:
-                    top.destroy()
-
-                else:
-                    top.after(1000, countdown_4, time - 1)
-
-            def countdown_3(time):
-                if time == -1:
-                    # top.destroy()
-                    label1.config(image=img_4)
-                    im_timer_4 = threading.Thread(target=countdown_4, args=(int(count_4),))
-                    im_timer_4.start()
+            start_but = ttk.Button(inst_win, text="Start Experiment!", command=self.start_image_exp)
+            start_but.grid(row=2, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=500, pady=500)
 
 
-                else:
-                    top.after(1000, countdown_3, time - 1)
-
-            def countdown_2(time):
-                if time == -1:
-                    #top.destroy()
-                    label1.config(image = img_3)
-                    im_timer_3 = threading.Thread(target=countdown_3, args=(int(count_3),))
-                    im_timer_3.start()
-
-                else:
-                    top.after(1000, countdown_2, time - 1)
-
-
-            def countdown_1(time):
-                if time == -1:
-                    #top.destroy()
-                    label1.config(image = img_2)
-                    im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
-                    im_timer_2.start()
-
-                else:
-                    top.after(1000, countdown_1, time - 1)
-
-            im_timer_1 = threading.Thread(target=countdown_1, args=(int(count_1),))
-            im_timer_1.start()
-
-
-            top.mainloop()
+            inst_win.mainloop()
             os.startfile(
                     "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
+    def start_image_exp(self):
+        top = tk.Toplevel()
+        top.title("Experiment VLC media player")
+        top.state('zoomed')
+        top.geometry("300x300")
+        top.configure(background='grey')
+
+        fp = open('Images.txt', 'r')
+        image = json.load(fp)
+        fp.close()
+
+        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId, 3))
+        cam1.start()
+        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 3))
+        sc.start()
+        gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 3))
+        gsr.start()
+
+        img1 = image['img1']
+        img2 = image['img2']
+        img3 = image['img3']
+        img4 = image['img4']
+        count_1 = image['count_1']
+        count_2 = image['count_2']
+        count_3 = image['count_3']
+        count_4 = image['count_4']
+
+        # path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
+        # path = os.getcwd() + "/Image/Capture.PNG"
+        # if path is not None:
+        img_1 = ImageTk.PhotoImage(master=top, image=Image.open(img1))
+        img_2 = ImageTk.PhotoImage(master=top, image=Image.open(img2))
+        img_3 = ImageTk.PhotoImage(master=top, image=Image.open(img3))
+        img_4 = ImageTk.PhotoImage(master=top, image=Image.open(img4))
+
+        label1 = tk.Label(top, image=img_1)
+        label1.pack(side="bottom", fill="both", expand="yes")
+
+        def countdown_4(time):
+            if time == -1:
+                top.destroy()
+
+            else:
+                top.after(1000, countdown_4, time - 1)
+
+        def countdown_3(time):
+            if time == -1:
+                # top.destroy()
+                label1.config(image=img_4)
+                im_timer_4 = threading.Thread(target=countdown_4, args=(int(count_4),))
+                im_timer_4.start()
+
+
+            else:
+                top.after(1000, countdown_3, time - 1)
+
+        def countdown_2(time):
+            if time == -1:
+                # top.destroy()
+                label1.config(image=img_3)
+                im_timer_3 = threading.Thread(target=countdown_3, args=(int(count_3),))
+                im_timer_3.start()
+
+            else:
+                top.after(1000, countdown_2, time - 1)
+
+        def countdown_1(time):
+            if time == -1:
+                # top.destroy()
+                label1.config(image=img_2)
+                im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
+                im_timer_2.start()
+
+            else:
+                top.after(1000, countdown_1, time - 1)
+
+        im_timer_1 = threading.Thread(target=countdown_1, args=(int(count_1),))
+        im_timer_1.start()
+
+        top.mainloop()
+
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
