@@ -395,6 +395,11 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
         rec = gsr.Record()
         rec.on_rec(path)
 
+    fp = open('ffmpeg.txt', 'r')
+    duration = json.load(fp)
+    fp.close()
+
+    dur = int(duration['dur'])
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     def countdown(time):
@@ -404,7 +409,7 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
             root.after(1000, countdown, time - 1)
 
 
-    im_timer = threading.Thread(target=countdown, args=(30,))
+    im_timer = threading.Thread(target=countdown, args=(dur,))
     im_timer.start()
 
     t1 = threading.Thread(target=app.browser_frame.mainloop())
