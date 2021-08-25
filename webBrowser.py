@@ -261,30 +261,13 @@ class NavigationBar(tk.Frame):
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
-        #start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
-        #start_rec.grid(row=0, column=3)
+        start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
+        start_rec.grid(row=0, column=3)
 
         #self.chronometer = tk.Label(self, text=" ", width=20)
         #self.chronometer.grid(row=0, column=4)
         #self.remaining = 0
         #self.countdown(int(self.duration))
-        self.chronometer = tk.Label(self, text=" ", width=20)
-        self.chronometer.grid(row=0, column=4)
-        self.remaining = 0
-        self.countdown(int(self.duration))
-
-        fp = open('websites.txt', 'r')
-        self.websites = json.load(fp)
-        fp.close()
-
-        # if self.type == 1:
-        #    self.master.destroy()
-        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        sc.start()
-        GSR_rec.GSR_recording(self.id, 3)
 
         # Url entry
         self.url_entry = tk.Entry(self)
@@ -313,7 +296,24 @@ class NavigationBar(tk.Frame):
     #def convert_seconds_left_to_time(self):
 
     #    return datetime.timedelta(seconds=self.remaining)
-    #def start_recording(self):
+    def start_recording(self):
+        self.chronometer = tk.Label(self, text=" ", width=20)
+        self.chronometer.grid(row=0, column=4)
+        self.remaining = 0
+        self.countdown(int(self.duration))
+
+        fp = open('websites.txt', 'r')
+        self.websites = json.load(fp)
+        fp.close()
+
+        # if self.type == 1:
+        #    self.master.destroy()
+        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
+        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
+        cam1.start()
+        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
+        sc.start()
+        # GSR_rec.GSR_recording(self.id, 3)
 
     #a = start_recording
 
