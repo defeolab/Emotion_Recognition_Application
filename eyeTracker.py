@@ -297,12 +297,12 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
 
     if (type == 1):
         #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)
-        #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, frame = None) #no gsr recorded
-        webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
+        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, frame = None) #no gsr recorded
+        #webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
     else:
         #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="gsr", path=GSRpath)
-        #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, frame = None) #no gsr recorded
-        webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
+        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, frame = None) #no gsr recorded
+        #webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
