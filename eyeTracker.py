@@ -13,6 +13,8 @@ If you publish work using this script the most relevant publication is:
 
 from __future__ import absolute_import, division
 
+import json
+
 from psychopy import locale_setup
 from psychopy import prefs
 from psychopy import sound, gui, visual, core, data, event, logging, clock, monitors
@@ -39,6 +41,7 @@ import GSR_rec
 import ScreenRecording
 import ffmpeg_video_audio
 import webBrowser
+import webInstruction
 from titta import Titta, helpers_tobii as helpers
 import os
 
@@ -282,13 +285,18 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
+    fp = open('websites.txt', 'r')
+    websites = json.load(fp)
+    fp.close()
 
     if (type == 1):
         #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)
-        webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, frame = None) #no gsr recorded
+        #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, frame = None) #no gsr recorded
+        webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
     else:
         #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="gsr", path=GSRpath)
-        webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, frame = None) #no gsr recorded
+        #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, frame = None) #no gsr recorded
+        webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
