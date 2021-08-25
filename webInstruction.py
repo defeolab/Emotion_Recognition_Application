@@ -99,10 +99,10 @@ class MainFrame(tk.Frame):
         if self.browser_frame:
             self.browser_frame.on_root_close()
         self.master.destroy()
-        self.old_root.destroy()
+        #self.old_root.destroy()
         if self.frame is not None:
             self.frame.stop()
-        pw.PatientWindow(self.old_window, self.id)
+        #pw.PatientWindow(self.old_window, self.id)
 
 
     def get_browser(self):
@@ -261,7 +261,7 @@ class NavigationBar(tk.Frame):
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
-        start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
+        start_rec = tk.Button(self, text="Start Experiment!",command =self.start_experiment)
         start_rec.grid(row=0, column=3)
 
         #self.chronometer = tk.Label(self, text=" ", width=20)
@@ -281,42 +281,29 @@ class NavigationBar(tk.Frame):
             self.master.get_browser().GoBack()
 
 
-    def countdown(self, remaining=None):
+    #def countdown(self, remaining=None):
         #self.chronometer['text'] = self.convert_seconds_left_to_time()
-        if remaining is not None:
-            self.remaining = remaining
+    #    if remaining is not None:
+    #        self.remaining = remaining
 
-        if self.remaining <= 0:
-            self.chronometer.configure(text="time's up!")
-        else:
-            self.chronometer.configure(text="remaining %d" % self.remaining)
-            self.remaining = self.remaining - 1
-            self.after(1000, self.countdown)
+    #    if self.remaining <= 0:
+    #        self.chronometer.configure(text="time's up!")
+    #    else:
+    #        self.chronometer.configure(text="remaining %d" % self.remaining)
+    #        self.remaining = self.remaining - 1
+    #        self.after(1000, self.countdown)
 
     #def convert_seconds_left_to_time(self):
 
     #    return datetime.timedelta(seconds=self.remaining)
-    def start_recording(self):
-        self.chronometer = tk.Label(self, text=" ", width=20)
-        self.chronometer.grid(row=0, column=4)
-        self.remaining = 0
-        self.countdown(int(self.duration))
 
+    def start_experiment(self):
+        tk.Frame.destroy(self.master)
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
 
-        # if self.type == 1:
-        #    self.master.destroy()
-        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        sc.start()
-        # GSR_rec.GSR_recording(self.id, 3)
-
-    #a = start_recording
-
+        webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
     def go_forward(self):
         if self.master.get_browser():
             self.master.get_browser().GoForward()
@@ -395,12 +382,6 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
         rec = gsr.Record()
         rec.on_rec(path)
 
-    fp = open('ffmpeg.txt', 'r')
-    duration = json.load(fp)
-    fp.close()
-    print('file done')
-
-    dur = int(duration['dur'])
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
     cef.Initialize()
     def countdown(time):
@@ -410,11 +391,10 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
             root.after(1000, countdown, time - 1)
 
 
-    im_timer = threading.Thread(target=countdown, args=(dur,))
+    im_timer = threading.Thread(target=countdown, args=(30,))
     im_timer.start()
 
     t1 = threading.Thread(target=app.browser_frame.mainloop())
     t1.start()
     cef.Shutdown()
-
 
