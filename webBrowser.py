@@ -398,6 +398,7 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     fp = open('ffmpeg.txt', 'r')
     duration = json.load(fp)
     fp.close()
+    print('file done')
 
     dur = int(duration['dur'])
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
@@ -415,4 +416,5 @@ def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=No
     t1 = threading.Thread(target=app.browser_frame.mainloop())
     t1.start()
     cef.Shutdown()
+
 
