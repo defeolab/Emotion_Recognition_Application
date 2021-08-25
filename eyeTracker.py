@@ -53,12 +53,14 @@ def runexpImage(participantId):
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
-    print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+    #print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    SCREEN_RES = [tmp[0].width, tmp[0].height]
-    SCREEN_WIDTH = 52.7  # cm
+    #SCREEN_RES = [tmp[1].width, tmp[1].height]
+    #SCREEN_WIDTH = tmp[1].width  # cm
+    SCREEN_RES = [1280, 1024]
+    SCREEN_WIDTH = 33.8  # cm
     VIEWING_DIST = 63  # distance from eye to center of screen (cm)
     monitor_refresh_rate = 60  # frames per second (fps)
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
@@ -153,8 +155,10 @@ def runexpVideo(participantId):
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    SCREEN_RES = [tmp[0].width, tmp[0].height]
-    SCREEN_WIDTH = 52.7  # cm
+    #SCREEN_RES = [tmp[0].width, tmp[0].height]
+    #SCREEN_WIDTH = 52.7  # cm
+    SCREEN_RES = [1280, 1024]
+    SCREEN_WIDTH = 33.8  # cm
     VIEWING_DIST = 63  # distance from eye to center of screen (cm) #TODO : measure the actual distance
     monitor_refresh_rate = 60  # frames per second (fps)
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
@@ -242,8 +246,10 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    SCREEN_RES = [tmp[0].width, tmp[0].height]
-    SCREEN_WIDTH = 52.7  # cm
+    #SCREEN_RES = [tmp[0].width, tmp[0].height]
+    #SCREEN_WIDTH = 52.7  # cm
+    SCREEN_RES = [1280, 1024]
+    SCREEN_WIDTH = 33.8  # cm
     VIEWING_DIST = 63  # distance from eye to center of screen (cm)
     monitor_refresh_rate = 60  # frames per second (fps)
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
