@@ -181,7 +181,7 @@ class PatientWindow:
         #    else:
             self.experiment = True
             #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
-            eyeTracker.runexpBrowser(self.websites['website5'], 1, self.patientId, self.parent, self.root, self.camera_on)
+            eyeTracker.runexpBrowser(self.websites['website1'], 1, self.patientId, self.parent, self.root, self.camera_on)
         elif self.settings == "home":
             #if self.camera_on == True:
             self.experiment = True
