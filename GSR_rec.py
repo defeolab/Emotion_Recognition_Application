@@ -12,8 +12,32 @@ class GSR_recording:
         duration = json.load(fp)
         fp.close()
 
-        self.duration = duration['dur']
+        self.duration = int(duration['dur'])
         self.sample_rate = 300000
+        if self.exp_type == 1:
+            self.filename = "data/Image/" + str(self.ParticipantID) + "/" + str(self.ParticipantID) + "_GSR_rec.wav"
+            file_path = "data/Image/" + str(self.ParticipantID) + "/"
+            if len(os.listdir(file_path)) == 0:
+                print("Directory is empty")
+            else:
+                if os.path.exists(self.filename):
+                    print("file removed")
+                    os.remove(self.filename)
+                else:
+                    print("No file exist")
+
+        if self.exp_type == 2:
+            self.filename = "data/Video/" + str(self.ParticipantID) + "/" + str(self.ParticipantID) + "_GSR_rec.wav"
+            file_path = "data/Video/" + str(self.ParticipantID) + "/"
+            if len(os.listdir(file_path)) == 0:
+                print("Directory is empty")
+            else:
+                if os.path.exists(self.filename):
+                    print("file removed")
+                    os.remove(self.filename)
+                else:
+                    print("No file exist")
+
         if self.exp_type == 3:
             self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(self.ParticipantID) + "_GSR_rec.wav"
             file_path = "data/Browser/" + str(self.ParticipantID) + "/"

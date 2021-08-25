@@ -28,7 +28,6 @@ from GSR.GSR_RECORD_SIGNAL import gsr_thread_record
 class PatientWindow:
 
     def __init__(self, parent, id, name=None, surname=None, video_source=0):
-        self.next_image = None
         self.name = name
         self.surname = surname
         self.patientId = id
@@ -292,11 +291,11 @@ class PatientWindow:
             self.remaining = remaining
 
         if self.remaining <= 0:
-            self.chronometer.configure(text="time's up!")
+            self.chronometer.configure(label="time's up!")
         else:
-            self.chronometer.configure(text="remaining %d" % self.remaining)
+            self.chronometer.configure(label="remaining %d" % self.remaining)
             self.remaining = self.remaining - 1
-            self.top.after(1000, self.countdown)
+            self.after(1000, self.countdown)
 
 
     def start_image_exp(self):
@@ -307,27 +306,20 @@ class PatientWindow:
         self.duration = dur['dur']
 
         self.inst_win.destroy()
-        self.top = Toplevel()
-        self.top.title("Image Experiment")
-        self.top.geometry("1100x900")
+        top = Toplevel()
+        top.title("Image Experiment")
+        top.geometry("1400x1100")
 
-        frame_1 = ttk.LabelFrame(self.top)
-        frame_1.columnconfigure(1, weight=1)
+        menubar = Menu(top)
+        filemenu = Menu(menubar, tearoff=0)
+        #self.chronometer = Menu(menubar, tearoff=0)
+        top.config(menu=menubar)
 
-        frame_1.grid(row=0, column=2, pady=3, padx=10, sticky=tk.E + tk.W + tk.N + tk.S)
+        menubar.add_cascade(label="skip", menu=filemenu)
 
-        skip = ttk.Button(frame_1, command=self.next_image, text="Skip")
-        skip.grid(row=0, column=1, pady=5)
-
-        self.chronometer = tk.Label(frame_1, text=" ", width=20)
-        self.chronometer.grid(row=0, column=4)
-        self.remaining = 0
-        self.countdown(int(self.duration))
-
-        frame_2 = ttk.LabelFrame(self.top)
-        frame_2.columnconfigure(1, weight=2)
-
-        frame_2.grid(row=1, column=2, pady=3, padx=5, sticky=tk.E + tk.W + tk.N + tk.S)
+        #menubar.add_cascade(label = " ", menu=self.chronometer)
+        #self.remaining = 0
+        #self.countdown(int(self.duration))
 
         fp = open('Images.txt', 'r')
         image = json.load(fp)
@@ -353,22 +345,22 @@ class PatientWindow:
         #path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
         # path = os.getcwd() + "/Image/Capture.PNG"
         # if path is not None:
-        img_1 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img1))
-        img_2 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img2))
-        img_3 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img3))
-        img_4 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img4))
+        img_1 = ImageTk.PhotoImage(master=top, image=Image.open(img1))
+        img_2 = ImageTk.PhotoImage(master=top, image=Image.open(img2))
+        img_3 = ImageTk.PhotoImage(master=top, image=Image.open(img3))
+        img_4 = ImageTk.PhotoImage(master=top, image=Image.open(img4))
 
-        label1 = tk.Label(frame_2, image=img_1)
-        label1.pack(side="top", fill="both", expand="yes")
+        label1 = tk.Label(top, image=img_1)
+        label1.pack(side="bottom", fill="both", expand="yes")
 
 
         def countdown_4(time):
             if time == -1:
-                self.top.destroy()
+                top.destroy()
 
             else:
                 self.count_number = 4
-                self.top.after(1000, countdown_4, time - 1)
+                top.after(1000, countdown_4, time - 1)
 
         def countdown_3(time):
             if time == -1:
@@ -380,7 +372,7 @@ class PatientWindow:
 
             else:
                 self.count_number = 3
-                self.top.after(1000, countdown_3, time - 1)
+                top.after(1000, countdown_3, time - 1)
 
         def countdown_2(time):
             if time == -1:
@@ -391,7 +383,7 @@ class PatientWindow:
 
             else:
                 self.count_number = 2
-                self.top.after(1000, countdown_2, time - 1)
+                top.after(1000, countdown_2, time - 1)
 
         def countdown_1(time):
             if time == -1:
@@ -402,7 +394,7 @@ class PatientWindow:
 
             else:
                 self.count_number = 1
-                self.top.after(1000, countdown_1, time - 1)
+                top.after(1000, countdown_1, time - 1)
 
         im_timer_1 = threading.Thread(target=countdown_1, args=(int(count_1),))
         im_timer_1.start()
@@ -419,7 +411,9 @@ class PatientWindow:
         #if self.count_number == 4:
             #filemenu.add_command(command=top.destroy)
 
-        self.top.mainloop()
+
+
+        top.mainloop()
 
     def raise_exception(self):
         thread_id = self.get_id()

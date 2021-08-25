@@ -21,6 +21,30 @@ class Camera_recording:
         video = mic['video']
         duration = mic['duration']
 
+        if self.exp_type == 1:
+            filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            file_path = "data/Image/" + str(self.PatientID) + "/"
+            if len(os.listdir(file_path)) == 0:
+                print("Directory is empty")
+            else:
+                if os.path.exists(filename):
+                    print("file removed")
+                    os.remove(filename)
+                else:
+                    print("No file exist")
+
+        if self.exp_type == 2:
+            filename = "data/Video/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            file_path = "data/Video/" + str(self.PatientID) + "/"
+            if len(os.listdir(file_path)) == 0:
+                print("Directory is empty")
+            else:
+                if os.path.exists(filename):
+                    print("file removed")
+                    os.remove(filename)
+                else:
+                    print("No file exist")
+
         if self.exp_type == 3:
             filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
             file_path = "data/Browser/" + str(self.PatientID) + "/"
