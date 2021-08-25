@@ -1,7 +1,7 @@
 import ctypes
 import tkinter as tk
 import threading
-import GSR_rec
+import GSR_rec2
 import ScreenRecording
 import ffmpeg
 import ffmpeg_video_audio
@@ -338,7 +338,7 @@ class PatientWindow:
         cam1.start()
         sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 1))
         sc.start()
-        gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 1))
+        gsr = threading.Thread(target=self.GSR_record, args=(self.patientId, 1))
         gsr.start()
 
 
@@ -484,6 +484,11 @@ class PatientWindow:
             self.no_participant1.config(text="lab setting Mode selected!")
             self.settings = 'lab'
 
+    def GSR_record(self, pat, id):
+        gsr = GSR_rec2.Record(pat, id)
+        gsr.create_stream()
+        gsr.on_rec()
+
     def start_camera(self):
 
         if (self.settings == 'lab') & (self.experiment == True):
@@ -492,7 +497,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr = threading.Thread(target=self.GSR_record, args=(self.patientId,3))
             gsr.start()
 
         elif (self.settings == 'home') & (self.experiment == True):
@@ -501,7 +506,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr = threading.Thread(target=self.GSR_record, args=(self.patientId,3))
             gsr.start()
 
 
