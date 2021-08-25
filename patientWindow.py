@@ -174,17 +174,17 @@ class PatientWindow:
 
     def website1(self):
 
-        self.web5 = self.websites['website5']
+        self.web1 = self.websites['website1']
         if self.settings == "lab":
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             #if self.camera_on == True:
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.websites['web5'], 1,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
