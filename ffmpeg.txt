@@ -6,6 +6,6 @@
 "x":"0",
 "y":"0",
 "duration":"00:00:05",
-"dur": 5,
+"dur": "5",
 "framerate":"60",
-"samplingrate":"300000"}
+"samplingrate":"44100"}
