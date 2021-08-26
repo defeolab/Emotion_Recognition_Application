@@ -314,12 +314,12 @@ class NavigationBar(tk.Frame):
         self.chronometer = tk.Label(self, text=" ", width=20)
         self.chronometer.grid(row=0, column=4)
         self.remaining = 0
-        self.chrono_countdown(self.websites['exp_duration'])
+
 
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
-
+        self.chrono_countdown(self.websites['exp_duration'])
 
         # if self.type == 1:
         #    self.master.destroy()
