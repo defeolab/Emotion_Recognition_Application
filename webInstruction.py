@@ -59,7 +59,7 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, self.type, starting_url,self.id,self.old_window, self.old_root,self.frame)
+        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root,self.frame)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -222,8 +222,38 @@ class FocusHandler(object):
         self.browser_frame.focus_set()
 
 
+class launch_browser:
+    def __init__(self,url, type, id, window, old_root, frame, path=None, exptype=None):
+        logger.setLevel(_logging.INFO)
+        stream_handler = _logging.StreamHandler()
+        formatter = _logging.Formatter("[%(filename)s] %(message)s")
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
+        logger.info("CEF Python {ver}".format(ver=cef.__version__))
+        logger.info("Python {ver} {arch}".format(
+            ver=platform.python_version(), arch=platform.architecture()[0]))
+        logger.info("Tk {ver}".format(ver=tk.Tcl().eval('info patchlevel')))
+        assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
+        sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
+        self.root = tk.Toplevel()
+        app = MainFrame(self.root, url, type, id, window, old_root, frame)
+        rec = None
+        if exptype == "gsr":
+            rec = gsr.Record()
+            rec.on_rec(path)
+
+
+    # Tk must be initialized before CEF otherwise fatal error (Issue #306)
+        cef.Initialize()
+
+        t1 = threading.Thread(target=app.browser_frame.mainloop())
+        t1.start()
+        cef.Shutdown()
+
+
+
 class NavigationBar(tk.Frame):
-    def __init__(self, master, type_exp, starting_url, id, old_window,old_root,frame = None):
+    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -231,6 +261,7 @@ class NavigationBar(tk.Frame):
         self.reload_image = None
         tk.Frame.__init__(self, master)
         self.type = type_exp
+        self.root = root
         self.starting_url = starting_url
         self.id = id
         self.old_window = old_window
@@ -264,11 +295,6 @@ class NavigationBar(tk.Frame):
         start_rec = tk.Button(self, text="Start Experiment!",command =self.start_experiment)
         start_rec.grid(row=0, column=3)
 
-        #self.chronometer = tk.Label(self, text=" ", width=20)
-        #self.chronometer.grid(row=0, column=4)
-        #self.remaining = 0
-        #self.countdown(int(self.duration))
-
         # Url entry
         self.url_entry = tk.Entry(self)
         tk.Grid.rowconfigure(self, 0, weight=100)
@@ -281,29 +307,15 @@ class NavigationBar(tk.Frame):
             self.master.get_browser().GoBack()
 
 
-    #def countdown(self, remaining=None):
-        #self.chronometer['text'] = self.convert_seconds_left_to_time()
-    #    if remaining is not None:
-    #        self.remaining = remaining
-
-    #    if self.remaining <= 0:
-    #        self.chronometer.configure(text="time's up!")
-    #    else:
-    #        self.chronometer.configure(text="remaining %d" % self.remaining)
-    #        self.remaining = self.remaining - 1
-    #        self.after(1000, self.countdown)
-
-    #def convert_seconds_left_to_time(self):
-
-    #    return datetime.timedelta(seconds=self.remaining)
-
     def start_experiment(self):
-        tk.Frame.destroy(self.master)
+        #tk.Frame.destroy(self.master)
+        self.root.destroy()
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
 
-        webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
+        if self.type == 1:
+            webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
     def go_forward(self):
         if self.master.get_browser():
             self.master.get_browser().GoForward()
@@ -361,40 +373,4 @@ class NavigationBar(tk.Frame):
                 self.forward_state = tk.DISABLED
         self.after(100, self.update_state)
 
-
-def launch_browser(url, type, id, window, old_root, frame, path=None, exptype=None):
-    #browser_frame = None
-    logger.setLevel(_logging.INFO)
-    stream_handler = _logging.StreamHandler()
-    formatter = _logging.Formatter("[%(filename)s] %(message)s")
-    stream_handler.setFormatter(formatter)
-    logger.addHandler(stream_handler)
-    logger.info("CEF Python {ver}".format(ver=cef.__version__))
-    logger.info("Python {ver} {arch}".format(
-        ver=platform.python_version(), arch=platform.architecture()[0]))
-    logger.info("Tk {ver}".format(ver=tk.Tcl().eval('info patchlevel')))
-    assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
-    sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
-    root = tk.Toplevel()
-    app = MainFrame(root, url, type, id, window, old_root, frame)
-    rec = None
-    if exptype == "gsr":
-        rec = gsr.Record()
-        rec.on_rec(path)
-
-    # Tk must be initialized before CEF otherwise fatal error (Issue #306)
-    cef.Initialize()
-    def countdown(time):
-        if time == -1:
-            root.destroy()
-        else:
-            root.after(1000, countdown, time - 1)
-
-
-    im_timer = threading.Thread(target=countdown, args=(30,))
-    im_timer.start()
-
-    t1 = threading.Thread(target=app.browser_frame.mainloop())
-    t1.start()
-    cef.Shutdown()
 

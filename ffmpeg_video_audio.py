@@ -20,6 +20,7 @@ class Camera_recording:
         audio = mic['mic']
         video = mic['video']
         duration = mic['duration']
+        framerate = mic['framerate']
 
         if self.exp_type == 1:
             filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
@@ -58,7 +59,7 @@ class Camera_recording:
                     print("No file exist")
 
 
-        os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+        os.system(f"""ffmpeg -f dshow -framerate {framerate} -t {duration} -i video="{video}":audio="{audio}" -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
 
 #ffmpeg -list_devices true -f dshow -i dummy
 
