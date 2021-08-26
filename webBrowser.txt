@@ -300,8 +300,8 @@ class NavigationBar(tk.Frame):
         self.reload_button = tk.Button(self, image=self.reload_image, command=self.reload)
         self.reload_button.grid(row=0, column=2)
 
-        #start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
-        #start_rec.grid(row=0, column=3)
+        start_rec = tk.Button(self, text="Start Experiment!",command =self.start_recording)
+        start_rec.grid(row=0, column=3)
 
 
         # Url entry
@@ -310,26 +310,6 @@ class NavigationBar(tk.Frame):
         tk.Grid.columnconfigure(self, 3, weight=100)
 
         self.update_state()
-
-        self.chronometer = tk.Label(self, text=" ", width=20)
-        self.chronometer.grid(row=0, column=4)
-        self.remaining = 0
-        self.chrono_countdown(self.websites['exp_duration'])
-
-        fp = open('websites.txt', 'r')
-        self.websites = json.load(fp)
-        fp.close()
-
-
-        # if self.type == 1:
-        #    self.master.destroy()
-        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        sc.start()
-        im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
-        im_timer.start()
 
     def countdown(self, time):
         if time == -1:
@@ -358,25 +338,25 @@ class NavigationBar(tk.Frame):
     #def convert_seconds_left_to_time(self):
 
     #    return datetime.timedelta(seconds=self.remaining)
-    #def start_recording(self):
-        #self.chronometer = tk.Label(self, text=" ", width=20)
-        #self.chronometer.grid(row=0, column=4)
-        #self.remaining = 0
-        #self.chrono_countdown(int(self.duration))
+    def start_recording(self):
+        self.chronometer = tk.Label(self, text=" ", width=20)
+        self.chronometer.grid(row=0, column=4)
+        self.remaining = 0
+        self.chrono_countdown(int(self.duration))
 
-        #fp = open('websites.txt', 'r')
-        #self.websites = json.load(fp)
-        #fp.close()
+        fp = open('websites.txt', 'r')
+        self.websites = json.load(fp)
+        fp.close()
 
         # if self.type == 1:
         #    self.master.destroy()
         #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        #cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        #cam1.start()
-        #sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        #sc.start()
-        #im_timer = threading.Thread(target=self.countdown, args=(self.duration,))
-        #im_timer.start()
+        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
+        cam1.start()
+        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
+        sc.start()
+        im_timer = threading.Thread(target=self.countdown, args=(self.duration,))
+        im_timer.start()
 
         # GSR_rec.GSR_recording(self.id, 3)
 

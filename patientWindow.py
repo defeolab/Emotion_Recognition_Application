@@ -1,7 +1,7 @@
 import ctypes
 import tkinter as tk
 import threading
-import GSR_rec2
+import GSR_rec
 import ScreenRecording
 import ffmpeg
 import ffmpeg_video_audio
@@ -32,6 +32,8 @@ class PatientWindow:
         self.name = name
         self.surname = surname
         self.patientId = id
+        self.count_number = 0
+        self.after_id = None
 
         self.parent = parent  # window
         self.widgets = self.addWidgets()
@@ -181,11 +183,11 @@ class PatientWindow:
         #    else:
             self.experiment = True
             #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
-            eyeTracker.runexpBrowser(self.websites['website1'], 1, self.patientId, self.parent, self.root, self.camera_on)
+            eyeTracker.runexpBrowser(self.websites['website5'], 1, self.patientId, self.parent, self.root, self.camera_on)
         elif self.settings == "home":
             #if self.camera_on == True:
             self.experiment = True
-            webBrowser.launch_browser(self.websites['website1'], 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.websites['website5'], 1,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
@@ -273,10 +275,12 @@ class PatientWindow:
             #Label(inst_win, text="Instruction \n" + image_inst['inst'], font='Times 14').grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
             label1 = tk.Label(self.inst_win, image=img_5)
-            label1.grid(row=1, column=1, padx=10, pady=10,sticky = tk.W)
+            label1.pack()
+            #label1.grid(row=1, column=1, padx=10, pady=10,sticky = tk.W)
 
             start_but = ttk.Button(self.inst_win, text="Start Experiment!", command=self.start_image_exp)
-            start_but.grid(row=2, column=1, padx=10, pady=10)
+            #start_but.grid(row=2, column=1, padx=10, pady=10)
+            start_but.pack()
 
 
             self.inst_win.mainloop()
@@ -301,34 +305,36 @@ class PatientWindow:
 
 
     def start_image_exp(self):
-        self.count_number = 0
+
         file = open('ffmpeg.txt', 'r')
         dur = json.load(file)
         file.close()
         self.duration = dur['dur']
 
         self.inst_win.destroy()
-        self.top = Toplevel()
+        self.top = tk.Tk()
         self.top.title("Image Experiment")
         self.top.geometry("1100x900")
 
-        frame_1 = ttk.LabelFrame(self.top)
-        frame_1.columnconfigure(1, weight=1)
+        frame_1 = tk.Frame(self.top)
+        frame_1.columnconfigure(0, weight=1)
+        frame_1.pack()
 
-        frame_1.grid(row=0, column=2, pady=3, padx=10, sticky=tk.E + tk.W + tk.N + tk.S)
+        #frame_1.grid(row=0, column=2, pady=3, padx=10, sticky=tk.E + tk.W + tk.N + tk.S)
 
-        skip = ttk.Button(frame_1, command=self.next_image, text="Skip")
-        skip.grid(row=0, column=1, pady=5)
+        #skip = ttk.Button(frame_1, command=self.next_image, text="Skip")
+        #skip.grid(row=0, column=8, pady=5)
 
         self.chronometer = tk.Label(frame_1, text=" ", width=20)
-        self.chronometer.grid(row=0, column=4)
+        self.chronometer.grid(row=0, column=2)
         self.remaining = 0
         self.countdown(int(self.duration))
 
-        frame_2 = ttk.LabelFrame(self.top)
+        frame_2 = ttk.Frame(self.top)
         frame_2.columnconfigure(1, weight=2)
+        frame_2.pack()
 
-        frame_2.grid(row=1, column=2, pady=3, padx=5, sticky=tk.E + tk.W + tk.N + tk.S)
+        #frame_2.grid(row=1, column=2, pady=3, padx=5, sticky=tk.E + tk.W + tk.N + tk.S)
 
         fp = open('Images.txt', 'r')
         image = json.load(fp)
@@ -338,8 +344,8 @@ class PatientWindow:
         cam1.start()
         sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 1))
         sc.start()
-        gsr = threading.Thread(target=self.GSR_record, args=(self.patientId, 1))
-        gsr.start()
+        #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 1))
+        #gsr.start()
 
 
         img1 = image['img1']
@@ -363,81 +369,92 @@ class PatientWindow:
         label1.pack(side="top", fill="both", expand="yes")
 
 
-        def countdown_4(time):
-            if time == -1:
+        def countdown_4(counter):
+            if counter == -1:
+                #print(counter)
+                self.top.after_cancel(self.after_id)
                 self.top.destroy()
 
             else:
+                #print("count4 " + str(counter))
                 self.count_number = 4
-                self.top.after(1000, countdown_4, time - 1)
+                self.after_id = self.top.after(1000, countdown_4, counter - 1)
 
-        def countdown_3(time):
-            if time == -1:
+        def countdown_3(counter):
+            if counter == -1:
+                #print(counter)
                 # top.destroy()
+                self.top.after_cancel(self.after_id)
                 label1.config(image=img_4)
-                im_timer_4 = threading.Thread(target=countdown_4, args=(int(count_4),))
-                im_timer_4.start()
+                countdown_4(int(count_4))
 
 
             else:
+                #print("count3 " + str(counter))
                 self.count_number = 3
-                self.top.after(1000, countdown_3, time - 1)
+                self.after_id = self.top.after(1000, countdown_3, counter - 1)
 
-        def countdown_2(time):
-            if time == -1:
+        def countdown_2(counter):
+            if counter == -1:
+                #print(counter)
                 # top.destroy()
                 label1.config(image=img_3)
-                im_timer_3 = threading.Thread(target=countdown_3, args=(int(count_3),))
-                im_timer_3.start()
-
+                self.top.after_cancel(self.after_id)
+                #im_timer_3 = threading.Thread(target=countdown_3, args=(int(count_3),))
+                #im_timer_3.start()
+                countdown_3(int(count_3))
             else:
+                #print("count2 " + str(counter))
                 self.count_number = 2
-                self.top.after(1000, countdown_2, time - 1)
+                self.after_id = self.top.after(1000, countdown_2, counter - 1)
 
-        def countdown_1(time):
-            if time == -1:
-                # top.destroy()
+        def countdown_1(counter):
+            if counter == -1:
+                #print(counter)
+                self.top.after_cancel(self.after_id)
                 label1.config(image=img_2)
-                im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
-                im_timer_2.start()
-
+                #im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
+                #im_timer_2.start()
+                countdown_2(int(count_2))
             else:
+                #print("count1 " + str(counter))
                 self.count_number = 1
-                self.top.after(1000, countdown_1, time - 1)
+                self.after_id = self.top.after(1000, countdown_1, counter - 1)
 
-        im_timer_1 = threading.Thread(target=countdown_1, args=(int(count_1),))
-        im_timer_1.start()
-        if self.count_number == 1:
-            #im_timer_1.self.raise_exception()
-            im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
-            #filemenu.add_command(command=im_timer_2.start)
-        if self.count_number == 2:
-            im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
-            #filemenu.add_command(command=im_timer_2.start)
-        if self.count_number == 3:
-            im_timer_2 = threading.Thread(target=countdown_2, args=(int(count_2),))
-            #filemenu.add_command(command=im_timer_2.start)
-        #if self.count_number == 4:
-            #filemenu.add_command(command=top.destroy)
+        if self.count_number == 0:
+            #print("count 1 start")
+            countdown_1(int(count_1))
+
+        def next_image():
+            #if (enable == 1):
+            if self.count_number == 0:
+                    #enable = 0
+                print("count 1 start")
+                    #countdown_1(int(count_1))
+            elif self.count_number == 1:
+                    #enable = 0
+                #print("count 2 start")
+                countdown_1(-1)
+                    #countdown_2(int(count_2))
+            elif self.count_number == 2:
+                    #enable = 0
+                #print("count 3 start")
+                countdown_2(-1)
+                    #countdown_3(int(count_3))
+            elif self.count_number == 3:
+                #enable = 0
+                #print("count 4 start")
+                countdown_3(-1)
+                    #countdown_4(int(count_4))
+            else:
+                print("No images!")
+            #else:
+            #    print("disabled")
+        skip = ttk.Button(frame_1, command=next_image, text="Skip")
+        skip.grid(row=0, column=10, pady=5)
 
         self.top.mainloop()
 
-    def raise_exception(self):
-        thread_id = self.get_id()
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
-                                                         ctypes.py_object(SystemExit))
-        if res > 1:
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
-            print('Exception raise failure')
-
-    def get_id(self):
-
-        # returns id of the respective thread
-        if hasattr(self, '_thread_id'):
-            return self._thread_id
-        for id, thread in threading._active.items():
-            if thread is self:
-                return id
     def run_expvideo(self):
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
@@ -484,11 +501,6 @@ class PatientWindow:
             self.no_participant1.config(text="lab setting Mode selected!")
             self.settings = 'lab'
 
-    def GSR_record(self, pat, id):
-        gsr = GSR_rec2.Record(pat, id)
-        gsr.create_stream()
-        gsr.on_rec()
-
     def start_camera(self):
 
         if (self.settings == 'lab') & (self.experiment == True):
@@ -497,7 +509,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=self.GSR_record, args=(self.patientId,3))
+            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
             gsr.start()
 
         elif (self.settings == 'home') & (self.experiment == True):
@@ -506,7 +518,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=self.GSR_record, args=(self.patientId,3))
+            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
             gsr.start()
 
 
