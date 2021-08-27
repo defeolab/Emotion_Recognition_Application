@@ -324,17 +324,6 @@ class NavigationBar(tk.Frame):
         #self.loading_countdown(self.websites['loading_time'])
         loading_time = threading.Thread(target=self.loading_countdown, args=(self.websites['loading_time'],))
         loading_time.start()
-        #if self.enable == 1:
-        #    self.enable = 0
-        #    self.chrono_countdown(self.websites['exp_duration'])
-
-
-        #    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        #    cam1.start()
-        #    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        #    sc.start()
-        #    im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
-        #    im_timer.start()
 
     def GSR_rec(self, pat, id):
         main = GSR_rec2.Record(pat, id)

@@ -59,7 +59,7 @@ class Camera_recording:
                     print("No file exist")
 
 
-        os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -framerate {framerate} -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+        os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -framerate {framerate} -rtbufsize 100M -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
 
 #ffmpeg -list_devices true -f dshow -i dummy
 
