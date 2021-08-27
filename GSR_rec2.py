@@ -43,7 +43,7 @@ class Record:
         fp.close()
 
         self.input_device = data_file['gsr']
-        self.sample_rate = data_file['sampling_rate']
+        self.sample_rate = data_file['samplingrate']
         self.seconds = data_file['dur']
 
         self.ParticipantID = id
@@ -96,7 +96,7 @@ class Record:
             kwargs=dict(
                 file=self.filename,
                 mode='x',
-                samplerate=300000,
+                samplerate=self.sample_rate,
                 channels=2,
                 q=self.audio_q,
             ), daemon=True,
