@@ -267,7 +267,7 @@ class PatientWindow:
             fp = open('Images.txt', 'r')
             image_inst = json.load(fp)
             fp.close()
-            img5 = image_inst['img5']
+            img5 = os.getcwd() + image_inst['img5']
 
             img_5 = ImageTk.PhotoImage(master=self.inst_win, image=Image.open(img5))
             #img_5.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
@@ -348,10 +348,10 @@ class PatientWindow:
         #gsr.start()
 
 
-        img1 = image['img1']
-        img2 = image['img2']
-        img3 = image['img3']
-        img4 = image['img4']
+        img1 = os.getcwd() + image['img1']
+        img2 = os.getcwd() + image['img2']
+        img3 = os.getcwd() + image['img3']
+        img4 = os.getcwd() + image['img4']
         count_1 = image['count_1']
         count_2 = image['count_2']
         count_3 = image['count_3']

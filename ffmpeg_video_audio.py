@@ -23,7 +23,7 @@ class Camera_recording:
         framerate = mic['framerate']
 
         if self.exp_type == 1:
-            filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.mp4"
             file_path = "data/Image/" + str(self.PatientID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
@@ -35,7 +35,7 @@ class Camera_recording:
                     print("No file exist")
 
         if self.exp_type == 2:
-            filename = "data/Video/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            filename = "data/Video/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.mp4"
             file_path = "data/Video/" + str(self.PatientID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
@@ -47,7 +47,7 @@ class Camera_recording:
                     print("No file exist")
 
         if self.exp_type == 3:
-            filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.MP4"
+            filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Camera_output.mp4"
             file_path = "data/Browser/" + str(self.PatientID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
@@ -59,7 +59,7 @@ class Camera_recording:
                     print("No file exist")
 
 
-        os.system(f"""ffmpeg -f dshow -framerate {framerate} -t {duration} -i video="{video}":audio="{audio}" -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+        os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -framerate {framerate} -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
 
 #ffmpeg -list_devices true -f dshow -i dummy
 
