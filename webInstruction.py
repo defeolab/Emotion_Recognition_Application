@@ -272,7 +272,7 @@ class NavigationBar(tk.Frame):
         dur = json.load(fp)
         fp.close()
 
-        self.duration = dur['dur']
+        #self.duration = dur['dur']
 
         # Back button
         back = 'resources/back.png'
@@ -316,6 +316,14 @@ class NavigationBar(tk.Frame):
 
         if self.type == 1:
             webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
+        elif self.type == 2:
+            webBrowser.launch_browser(self.websites['website2'], 1, self.id, self.old_window, self.old_root, self.frame)
+        elif self.type == 3:
+            webBrowser.launch_browser(self.websites['website3'], 1, self.id, self.old_window, self.old_root, self.frame)
+        elif self.type == 4:
+            webBrowser.launch_browser(self.websites['website4'], 1, self.id, self.old_window, self.old_root, self.frame)
+        else:
+            print("no browser!")
     def go_forward(self):
         if self.master.get_browser():
             self.master.get_browser().GoForward()

@@ -42,3 +42,25 @@ _tkinter.TclError: invalid command name ".!toplevel.!mainframe.!navigationbar.!e
     self.tk.call(self._w, 'delete', first, last)
 _tkinter.TclError: invalid command name ".!toplevel.!mainframe.!navigationbar.!entry"
 
+
+[2021-08-27 13:55:40] Traceback (most recent call last):
+  File "load_handler.pyx", line 40, in cefpython_py36.LoadHandler_OnLoadStart
+  File "C:\Users\zeel9\PycharmProjects\Emotion_Recognition_Application_3\webBrowser.py", line 201, in OnLoadStart
+    self.browser_frame.master.navigation_bar.set_url(browser.GetUrl())
+  File "C:\Users\zeel9\PycharmProjects\Emotion_Recognition_Application_3\webBrowser.py", line 397, in set_url
+    self.url_entry.delete(0, tk.END)
+  File "C:\Users\zeel9\anaconda3\envs\psychopyenv\lib\tkinter\__init__.py", line 2679, in delete
+    self.tk.call(self._w, 'delete', first, last)
+_tkinter.TclError: invalid command name ".!toplevel2.!mainframe.!navigationbar.!entry"
+
+
+[2021-08-27 13:57:04] Traceback (most recent call last):
+  File "load_handler.pyx", line 40, in cefpython_py36.LoadHandler_OnLoadStart
+  File "C:\Users\zeel9\PycharmProjects\Emotion_Recognition_Application_3\webBrowser.py", line 201, in OnLoadStart
+    self.browser_frame.master.navigation_bar.set_url(browser.GetUrl())
+  File "C:\Users\zeel9\PycharmProjects\Emotion_Recognition_Application_3\webBrowser.py", line 397, in set_url
+    self.url_entry.delete(0, tk.END)
+  File "C:\Users\zeel9\anaconda3\envs\psychopyenv\lib\tkinter\__init__.py", line 2679, in delete
+    self.tk.call(self._w, 'delete', first, last)
+_tkinter.TclError: invalid command name ".!toplevel2.!mainframe.!navigationbar.!entry"
+

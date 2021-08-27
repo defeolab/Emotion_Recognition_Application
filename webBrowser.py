@@ -6,7 +6,7 @@ from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
-import GSR_rec
+import GSR_rec2
 import ffmpeg_video_audio
 import webBrowser
 
@@ -275,14 +275,16 @@ class NavigationBar(tk.Frame):
         self.old_window = old_window
         self.old_root = old_root
         self.frame = frame
+        self.enable = 0
 
         fp = open('ffmpeg.txt', 'r')
         dur = json.load(fp)
         fp.close()
 
-        self.duration = int(dur['dur'])
+        #self.duration = int(dur['dur'])
 
         # Back button
+
         back = 'resources/back.png'
         self.back_image = tk.PhotoImage(file=back)
         self.back_button = tk.Button(self, image=self.back_image, command=self.go_back)
@@ -319,24 +321,41 @@ class NavigationBar(tk.Frame):
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
-        self.chrono_countdown(self.websites['exp_duration'])
+        #self.loading_countdown(self.websites['loading_time'])
+        loading_time = threading.Thread(target=self.loading_countdown, args=(self.websites['loading_time'],))
+        loading_time.start()
 
-        # if self.type == 1:
-        #    self.master.destroy()
-        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        sc.start()
-        im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
-        im_timer.start()
+    def GSR_rec(self, pat, id):
+        main = GSR_rec2.Record(pat, id)
+        main.create_stream()
+        main.on_rec()
 
     def countdown(self, time):
         if time == -1:
+            self.enable = 1
             self.root.destroy()
             #self.master.destroy()
         else:
             self.root.after(1000, self.countdown, time - 1)
+    def loading_countdown(self, time):
+        if time == -1:
+            #self.enable = 1
+            print("loading time end")
+            self.chrono_countdown(self.websites['exp_duration'])
+
+            cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
+            cam1.start()
+            sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
+            sc.start()
+            gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3))
+            gsr.start()
+            im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
+            im_timer.start()
+
+            #self.root.destroy()
+            #self.master.destroy()
+        else:
+            self.root.after(1000, self.loading_countdown, time - 1)
 
     def go_back(self):
         if self.master.get_browser():
@@ -354,33 +373,6 @@ class NavigationBar(tk.Frame):
             self.chronometer.configure(text="remaining %d" % self.remaining)
             self.remaining = self.remaining - 1
             self.after(1000, self.chrono_countdown)
-
-    #def convert_seconds_left_to_time(self):
-
-    #    return datetime.timedelta(seconds=self.remaining)
-    #def start_recording(self):
-        #self.chronometer = tk.Label(self, text=" ", width=20)
-        #self.chronometer.grid(row=0, column=4)
-        #self.remaining = 0
-        #self.chrono_countdown(int(self.duration))
-
-        #fp = open('websites.txt', 'r')
-        #self.websites = json.load(fp)
-        #fp.close()
-
-        # if self.type == 1:
-        #    self.master.destroy()
-        #    webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
-        #cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-        #cam1.start()
-        #sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-        #sc.start()
-        #im_timer = threading.Thread(target=self.countdown, args=(self.duration,))
-        #im_timer.start()
-
-        # GSR_rec.GSR_recording(self.id, 3)
-
-    #a = start_recording
 
     def go_forward(self):
         if self.master.get_browser():

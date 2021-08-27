@@ -3,4 +3,5 @@
 "website3":"https://www.spain.info/it/",
 "website4":"https://www.visitnorway.it/",
 "website5":"file:///C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/instruction.html",
-"exp_duration":10}
+"exp_duration":10,
+"loading_time":3}

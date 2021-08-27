@@ -1,7 +1,7 @@
 import ctypes
 import tkinter as tk
 import threading
-import GSR_rec
+import GSR_rec2
 import ScreenRecording
 import ffmpeg
 import ffmpeg_video_audio
@@ -177,17 +177,18 @@ class PatientWindow:
     def website1(self):
 
         self.web1 = self.websites['website1']
+        self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
         #    if self.camera_on is False:
         #        print("You need to turn the camera on")
         #    else:
             self.experiment = True
             #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
-            eyeTracker.runexpBrowser(self.websites['website5'], 1, self.patientId, self.parent, self.root, self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root, self.camera_on)
         elif self.settings == "home":
             #if self.camera_on == True:
             self.experiment = True
-            webInstruction.launch_browser(self.websites['website5'], 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
@@ -195,31 +196,35 @@ class PatientWindow:
     def website2(self):
 
         self.web2 = self.websites['website2']
+        self.web5 = os.getcwd() + self.websites['website5']
+
         if self.settings == "lab":
             self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
-            eyeTracker.runexpBrowser(self.web2, 1, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             self.experiment = True
-            webBrowser.launch_browser(self.web2, 1,self.patientId,self.parent,self.root,self.frame)
+            #webBrowser.launch_browser(self.web5, 2,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
 
     def website3(self):
         self.web3 = self.websites['website3']
+        self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
 
-            eyeTracker.runexpBrowser(self.web3, 1, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             self.experiment = True
-            webBrowser.launch_browser(self.web3, 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
@@ -227,16 +232,18 @@ class PatientWindow:
     def website4(self):
 
         self.web4 = self.websites['website4']
+        self.web5 = os.getcwd() + self.websites['website5']
+
         if self.settings == "lab":
             self.experiment = True
             #if self.camera_on is False:
             #    print("You need to turn the camera on")
             #else:
 
-            eyeTracker.runexpBrowser(self.web4, 1, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,self.camera_on)
         elif self.settings == "home":
             self.experiment = True
-            webBrowser.launch_browser(self.web4, 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
             #print("No mode selected!")
@@ -267,7 +274,7 @@ class PatientWindow:
             fp = open('Images.txt', 'r')
             image_inst = json.load(fp)
             fp.close()
-            img5 = image_inst['img5']
+            img5 = os.getcwd() + image_inst['img5']
 
             img_5 = ImageTk.PhotoImage(master=self.inst_win, image=Image.open(img5))
             #img_5.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
@@ -306,10 +313,10 @@ class PatientWindow:
 
     def start_image_exp(self):
 
-        file = open('ffmpeg.txt', 'r')
+        file = open('images.txt', 'r')
         dur = json.load(file)
         file.close()
-        self.duration = dur['dur']
+        self.duration = dur['image_exp_duration']
 
         self.inst_win.destroy()
         self.top = tk.Tk()
@@ -344,14 +351,14 @@ class PatientWindow:
         cam1.start()
         sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 1))
         sc.start()
-        #gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId, 1))
-        #gsr.start()
+        gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId, 1))
+        gsr.start()
 
 
-        img1 = image['img1']
-        img2 = image['img2']
-        img3 = image['img3']
-        img4 = image['img4']
+        img1 = os.getcwd() + image['img1']
+        img2 = os.getcwd() + image['img2']
+        img3 = os.getcwd() + image['img3']
+        img4 = os.getcwd() + image['img4']
         count_1 = image['count_1']
         count_2 = image['count_2']
         count_3 = image['count_3']
@@ -360,14 +367,22 @@ class PatientWindow:
         #path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
         # path = os.getcwd() + "/Image/Capture.PNG"
         # if path is not None:
-        img_1 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img1))
-        img_2 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img2))
-        img_3 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img3))
-        img_4 = ImageTk.PhotoImage(master=frame_2, image=Image.open(img4))
+        image1 = Image.open(img1)
+        image1 = image1.resize((1000, 600), Image.ANTIALIAS)
+        image2 = Image.open(img2)
+        image2 = image2.resize((1000, 600), Image.ANTIALIAS)
+        image3 = Image.open(img3)
+        image3 = image3.resize((1000, 600), Image.ANTIALIAS)
+        image4 = Image.open(img4)
+        image4 = image4.resize((1000, 600), Image.ANTIALIAS)
+        img_1 = ImageTk.PhotoImage(master=frame_2, image=image1)
+        img_2 = ImageTk.PhotoImage(master=frame_2, image=image2)
+        img_3 = ImageTk.PhotoImage(master=frame_2, image=image3)
+        img_4 = ImageTk.PhotoImage(master=frame_2, image=image4)
 
         label1 = tk.Label(frame_2, image=img_1)
-        label1.pack(side="top", fill="both", expand="yes")
-
+        #label1.pack(side="top", fill="both", expand="yes")
+        label1.pack()
 
         def countdown_4(counter):
             if counter == -1:
@@ -501,6 +516,11 @@ class PatientWindow:
             self.no_participant1.config(text="lab setting Mode selected!")
             self.settings = 'lab'
 
+    def GSR_rec(self, pat, id):
+        main = GSR_rec2.Record(pat, id)
+        main.create_stream()
+        main.on_rec()
+
     def start_camera(self):
 
         if (self.settings == 'lab') & (self.experiment == True):
@@ -509,7 +529,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId,3))
             gsr.start()
 
         elif (self.settings == 'home') & (self.experiment == True):
@@ -518,7 +538,7 @@ class PatientWindow:
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3))
             sc.start()
-            gsr = threading.Thread(target=GSR_rec.GSR_recording, args=(self.patientId,3))
+            gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId,3))
             gsr.start()
 
 
