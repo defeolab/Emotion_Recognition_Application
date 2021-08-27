@@ -6,7 +6,7 @@ from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
-import GSR_rec
+import GSR_rec2
 import ffmpeg_video_audio
 import webBrowser
 
@@ -336,6 +336,11 @@ class NavigationBar(tk.Frame):
         #    im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
         #    im_timer.start()
 
+    def GSR_rec(self, pat, id):
+        main = GSR_rec2.Record(pat, id)
+        main.create_stream()
+        main.on_rec()
+
     def countdown(self, time):
         if time == -1:
             self.enable = 1
@@ -353,6 +358,8 @@ class NavigationBar(tk.Frame):
             cam1.start()
             sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
             sc.start()
+            gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3))
+            gsr.start()
             im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
             im_timer.start()
 

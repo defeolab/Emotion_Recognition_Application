@@ -272,7 +272,7 @@ class NavigationBar(tk.Frame):
         dur = json.load(fp)
         fp.close()
 
-        self.duration = dur['dur']
+        #self.duration = dur['dur']
 
         # Back button
         back = 'resources/back.png'
