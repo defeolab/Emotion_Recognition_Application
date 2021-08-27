@@ -44,7 +44,7 @@ class Record:
 
         self.input_device = data_file['gsr']
         self.sample_rate = data_file['samplingrate']
-        self.seconds = data_file['dur']
+        self.seconds = data_file['gsr_duration']
 
         self.ParticipantID = id
         self.exp_type = exp_type
