@@ -516,8 +516,8 @@ class PatientWindow:
             self.no_participant1.config(text="lab setting Mode selected!")
             self.settings = 'lab'
 
-    def GSR_rec(self, pat, id):
-        main = GSR_rec2.Record(pat, id)
+    def GSR_rec(self, pat, id, type):
+        main = GSR_rec2.Record(pat, id, type)
         main.create_stream()
         main.on_rec()
 

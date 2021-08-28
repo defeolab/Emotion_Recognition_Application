@@ -236,6 +236,7 @@ class launch_browser:
         assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
         sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
         self.root = tk.Toplevel()
+        sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
         app = MainFrame(self.root, url, type, id, window, old_root, frame)
         rec = None
         if exptype == "gsr":
@@ -317,11 +318,11 @@ class NavigationBar(tk.Frame):
         if self.type == 1:
             webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
         elif self.type == 2:
-            webBrowser.launch_browser(self.websites['website2'], 1, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website2'], 2, self.id, self.old_window, self.old_root, self.frame)
         elif self.type == 3:
-            webBrowser.launch_browser(self.websites['website3'], 1, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website3'], 3, self.id, self.old_window, self.old_root, self.frame)
         elif self.type == 4:
-            webBrowser.launch_browser(self.websites['website4'], 1, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website4'], 4, self.id, self.old_window, self.old_root, self.frame)
         else:
             print("no browser!")
     def go_forward(self):

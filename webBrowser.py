@@ -42,8 +42,10 @@ class MainFrame(tk.Frame):
         self.old_window = old_window
         self.old_root = old_root
 
+        self.sw,self.sh = root.winfo_screenwidth(),root.winfo_screenheight()
         # Root
-        root.geometry("900x640")
+        root.geometry('%sx%s+%s+%s' % (900, 640, self.sw, 0))
+        #root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
 
@@ -325,8 +327,8 @@ class NavigationBar(tk.Frame):
         loading_time = threading.Thread(target=self.loading_countdown, args=(self.websites['loading_time'],))
         loading_time.start()
 
-    def GSR_rec(self, pat, id):
-        main = GSR_rec2.Record(pat, id)
+    def GSR_rec(self, pat, id,type):
+        main = GSR_rec2.Record(pat, id,type)
         main.create_stream()
         main.on_rec()
 
@@ -342,13 +344,37 @@ class NavigationBar(tk.Frame):
             #self.enable = 1
             print("loading time end")
             self.chrono_countdown(self.websites['exp_duration'])
+            if self.type == 1:
 
-            cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3))
-            cam1.start()
-            sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3))
-            sc.start()
-            gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3))
-            gsr.start()
+                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3,1))
+                cam1.start()
+                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3,1))
+                sc.start()
+                gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3,1))
+                gsr.start()
+            elif self.type == 2:
+                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3,2))
+                cam1.start()
+                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3,2))
+                sc.start()
+                gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3,2))
+                gsr.start()
+            elif self.type == 3:
+                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3,3))
+                cam1.start()
+                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3,3))
+                sc.start()
+                gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3,3))
+                gsr.start()
+            elif self.type == 4:
+                cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3,4))
+                cam1.start()
+                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3,4))
+                sc.start()
+                gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3,4))
+                gsr.start()
+            else:
+                print("no experiment!")
             im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
             im_timer.start()
 

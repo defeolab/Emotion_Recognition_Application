@@ -26,7 +26,7 @@ class Record:
 
     stream = None
 
-    def __init__(self, id, exp_type):
+    def __init__(self, id, exp_type, type):
         self.input_overflows = 0
         self.recording = self.previously_recording = False
         self.audio_q = queue.Queue()
@@ -37,6 +37,7 @@ class Record:
         self.filename = None
         self.name = None
         self.flag = True
+        self.type = type
 
         fp = open('ffmpeg.txt', 'r')
         data_file = json.load(fp)
@@ -100,16 +101,55 @@ class Record:
                     print("No file exist")
 
         elif self.exp_type == 3:
-            self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(self.ParticipantID) + "_GSR1_rec.wav"
-            file_path = "data/Browser/" + str(self.ParticipantID) + "/"
-            if len(os.listdir(file_path)) == 0:
-                print("Directory is empty")
-            else:
-                if os.path.exists(self.filename):
-                    print("file removed")
-                    os.remove(self.filename)
+            if self.type == 1:
+                self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(self.ParticipantID) + "_GSR1_web1_rec.wav"
+                file_path = "data/Browser/" + str(self.ParticipantID) + "/"
+                if len(os.listdir(file_path)) == 0:
+                    print("Directory is empty")
                 else:
-                    print("No file exist")
+                    if os.path.exists(self.filename):
+                        print("file removed")
+                        os.remove(self.filename)
+                    else:
+                        print("No file exist")
+            elif self.type == 2:
+                self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(
+                    self.ParticipantID) + "_GSR1_web2_rec.wav"
+                file_path = "data/Browser/" + str(self.ParticipantID) + "/"
+                if len(os.listdir(file_path)) == 0:
+                    print("Directory is empty")
+                else:
+                    if os.path.exists(self.filename):
+                        print("file removed")
+                        os.remove(self.filename)
+                    else:
+                        print("No file exist")
+            elif self.type == 3:
+                self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(
+                    self.ParticipantID) + "_GSR1_web3_rec.wav"
+                file_path = "data/Browser/" + str(self.ParticipantID) + "/"
+                if len(os.listdir(file_path)) == 0:
+                    print("Directory is empty")
+                else:
+                    if os.path.exists(self.filename):
+                        print("file removed")
+                        os.remove(self.filename)
+                    else:
+                        print("No file exist")
+            elif self.type == 4:
+                self.filename = "data/Browser/" + str(self.ParticipantID) + "/" + str(
+                    self.ParticipantID) + "_GSR1_web4_rec.wav"
+                file_path = "data/Browser/" + str(self.ParticipantID) + "/"
+                if len(os.listdir(file_path)) == 0:
+                    print("Directory is empty")
+                else:
+                    if os.path.exists(self.filename):
+                        print("file removed")
+                        os.remove(self.filename)
+                    else:
+                        print("No file exist")
+            else:
+                print("no experiment")
         else:
             print("ID is undefined!")
         self.thread1 = threading.Thread(target=self.create_stream, args=(), daemon=True)
