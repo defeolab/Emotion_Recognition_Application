@@ -8,6 +8,7 @@ import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
 import GSR_rec2
 import ffmpeg_video_audio
+import patientWindow
 import webBrowser
 
 try:
@@ -323,6 +324,11 @@ class NavigationBar(tk.Frame):
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
+        file = open('ffmpeg.txt', 'r')
+        self.duration = json.load(file)
+        file.close()
+        (h, m, s) = self.duration['duration'].split(':')
+        self.result = int(h) * 3600 + int(m) * 60 + int(s)
         #self.loading_countdown(self.websites['loading_time'])
         loading_time = threading.Thread(target=self.loading_countdown, args=(self.websites['loading_time'],))
         loading_time.start()
@@ -336,14 +342,13 @@ class NavigationBar(tk.Frame):
         if time == -1:
             self.enable = 1
             self.root.destroy()
-            #self.master.destroy()
         else:
             self.root.after(1000, self.countdown, time - 1)
     def loading_countdown(self, time):
         if time == -1:
             #self.enable = 1
             print("loading time end")
-            self.chrono_countdown(self.websites['exp_duration'])
+            self.chrono_countdown(self.result)
             if self.type == 1:
 
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3,1))
@@ -375,7 +380,7 @@ class NavigationBar(tk.Frame):
                 gsr.start()
             else:
                 print("no experiment!")
-            im_timer = threading.Thread(target=self.countdown, args=(self.websites['exp_duration'],))
+            im_timer = threading.Thread(target=self.countdown, args=(self.result,))
             im_timer.start()
 
             #self.root.destroy()

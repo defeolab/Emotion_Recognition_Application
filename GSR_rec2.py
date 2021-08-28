@@ -45,7 +45,10 @@ class Record:
 
         self.input_device = data_file['gsr']
         self.sample_rate = data_file['samplingrate']
-        self.seconds = data_file['gsr_duration']
+        self.seconds = data_file['duration']
+        (h, m, s) = self.seconds.split(':')
+        self.result = int(h) * 3600 + int(m) * 60 + int(s)
+        #print(result)
 
         self.ParticipantID = id
         self.exp_type = exp_type
@@ -165,7 +168,7 @@ class Record:
                 q=self.audio_q,
             ), daemon=True,
         )
-        self.thread2 = threading.Thread(target=self.handler, args=(self.seconds,), )
+        self.thread2 = threading.Thread(target=self.handler, args=(self.result,), )
         self.thread.start()
         self.thread1.start()
         self.thread2.start()
