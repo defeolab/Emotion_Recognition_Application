@@ -6,7 +6,7 @@ from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
-import GSR_rec2
+import GSR_rec
 import ffmpeg_video_audio
 import patientWindow
 import webBrowser
@@ -334,7 +334,7 @@ class NavigationBar(tk.Frame):
         loading_time.start()
 
     def GSR_rec(self, pat, id,type):
-        main = GSR_rec2.Record(pat, id,type)
+        main = GSR_rec.Record(pat, id,type)
         main.create_stream()
         main.on_rec()
 

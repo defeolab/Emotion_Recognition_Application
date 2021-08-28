@@ -1,7 +1,7 @@
 import ctypes
 import tkinter as tk
 import threading
-import GSR_rec2
+import GSR_rec
 import ScreenRecording
 import ffmpeg
 import ffmpeg_video_audio
@@ -171,14 +171,18 @@ class PatientWindow:
             Label(self.root, text=self.websites['website4'], font='Times 14').grid(row=10, column=2, pady=20)
             Label(self.root, text="To change website configuration please edit 'websites.txt' file", font='Times 16').grid(row=12, column=2, pady=20)
 
-            #def on_closing():
-            #    self.root.destroy()
+            def on_closing():
+                self.root.destroy()
             def close():
                 self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
             def stop():
                 print("stop")
                 finish = Label(self.root, text="Finish", font='Times 14')
                 finish.grid(row=11, column=2, pady=20)
+
+            close_but = Button(self.root, text="Close", command=close)
+            close_but.grid(row=13, column=2, padx=10,pady=20)
+
             #if self.disable == 1:
             #    stop()
             self.parent.columnconfigure(6)
@@ -499,7 +503,7 @@ class PatientWindow:
             self.settings = 'lab'
 
     def GSR_rec(self, pat, id, type):
-        main = GSR_rec2.Record(pat, id, type)
+        main = GSR_rec.Record(pat, id, type)
         main.create_stream()
         main.on_rec()
 
