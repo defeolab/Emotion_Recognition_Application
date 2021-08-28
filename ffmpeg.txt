@@ -8,4 +8,5 @@
 "duration":"00:00:05",
 "dur": "5",
 "framerate":"60",
-"samplingrate":"44100"}
+"channels" : 2,
+"samplingrate":300000}
