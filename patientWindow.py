@@ -150,7 +150,11 @@ class PatientWindow:
         if (self.settings == 'lab') | (self.settings == 'home'):
             self.root = Tk()
             self.root.title("Enter URL")
-            self.root.geometry("800x800")
+            self.sw, self.sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+            # Root
+            self.root.geometry('%sx%s' % (self.sw, self.sh))
+
+            #self.root.geometry("800x800")
             fp = open('websites.txt', 'r')
             self.websites = json.load(fp)
             fp.close()
@@ -172,19 +176,11 @@ class PatientWindow:
             Label(self.root, text="To change website configuration please edit 'websites.txt' file", font='Times 16').grid(row=12, column=2, pady=20)
 
             def on_closing():
-                self.root.destroy()
-            def close():
-                self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
-            def stop():
-                print("stop")
-                finish = Label(self.root, text="Finish", font='Times 14')
-                finish.grid(row=11, column=2, pady=20)
+               self.root.destroy()
 
-            close_but = Button(self.root, text="Close", command=close)
+            close_but = Button(self.root, text="Close", command=on_closing)
             close_but.grid(row=13, column=2, padx=10,pady=20)
 
-            #if self.disable == 1:
-            #    stop()
             self.parent.columnconfigure(6)
             self.parent.bind("<Return>", lambda e: self.web1())
 
@@ -193,8 +189,8 @@ class PatientWindow:
             #print("No Mode Selected!")
 
     #def stop(self):
-    #    finish = Label(self.root, text="Finish", font='Times 14')
-    #    finish.grid(row=11, column=2, pady=20)
+        self.finish = Label(self.root, text="Start", font='Times 14')
+        self.finish.grid(row=11, column=2, pady=20)
 
     def website1(self):
 
@@ -208,12 +204,10 @@ class PatientWindow:
             #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
             eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root, self.camera_on)
         elif self.settings == "home":
-            #if self.camera_on == True:
             self.experiment = True
             webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root,self.frame)
         else:
             self.no_participant1.config(text="No mode selected!")
-            #print("No mode selected!")
 
     def website2(self):
 
@@ -286,7 +280,15 @@ class PatientWindow:
         elif self.settings == "home":
             self.inst_win = tk.Toplevel()
             self.inst_win.title("Instruction")
-            self.inst_win.geometry("1400x1100")
+            fp = open('ffmpeg.txt', 'r')
+            self.reso = json.load(fp)
+            fp.close()
+
+            # print(reso['video_size'][0])
+            self.sw, self.sh = self.inst_win.winfo_screenwidth(), self.inst_win.winfo_screenheight()
+            # Root
+            self.inst_win.geometry(
+                '%sx%s+%s+%s' % (self.reso['tobii_width'], self.reso['tobii_hight'], -self.sw + self.reso['screen_shift'], 0))
 
             fp = open('Images.txt', 'r')
             image_inst = json.load(fp)
@@ -296,16 +298,11 @@ class PatientWindow:
 
 
             img_5 = ImageTk.PhotoImage(master=self.inst_win, image=Image.open(img5))
-            #img_5.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
-
-            #Label(inst_win, text="Instruction \n" + image_inst['inst'], font='Times 14').grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S, padx=30, pady=15)
 
             label1 = tk.Label(self.inst_win, image=img_5)
             label1.pack()
-            #label1.grid(row=1, column=1, padx=10, pady=10,sticky = tk.W)
 
             start_but = ttk.Button(self.inst_win, text="Start Experiment!", command=self.start_image_exp)
-            #start_but.grid(row=2, column=1, padx=10, pady=10)
             start_but.pack()
 
 
@@ -337,7 +334,12 @@ class PatientWindow:
         self.inst_win.destroy()
         self.top = tk.Tk()
         self.top.title("Image Experiment")
-        self.top.geometry("1100x900")
+        #self.top.geometry("1100x900")
+        self.sw, self.sh = self.top.winfo_screenwidth(), self.top.winfo_screenheight()
+        # Root
+        self.top.geometry(
+            '%sx%s+%s+%s' % (
+            self.duration['tobii_width'], self.duration['tobii_hight'], -self.sw + self.duration['screen_shift'], 0))
 
         frame_1 = tk.Frame(self.top)
         frame_1.columnconfigure(0, weight=1)
