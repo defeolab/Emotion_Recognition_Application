@@ -16,7 +16,6 @@ def file_writing_thread(*, q, **soundfile_args):
     with sf.SoundFile(**soundfile_args) as f:
         while True:
             cdata = q.get()
-            print(cdata)
             if cdata is None:
                 break
             f.write(cdata)
@@ -46,6 +45,7 @@ class Record:
         self.input_device = data_file['gsr']
         self.sample_rate = data_file['samplingrate']
         self.seconds = data_file['duration']
+        self.channels = data_file['channels']
         (h, m, s) = self.seconds.split(':')
         self.result = int(h) * 3600 + int(m) * 60 + int(s)
         #print(result)
@@ -56,12 +56,12 @@ class Record:
     def create_stream(self,):
         if self.stream is not None:
             self.stream.close()
-        self.stream = sd.InputStream(samplerate=self.sample_rate, device=self.input_device, channels=1, callback=self.audio_callback)
+        self.stream = sd.InputStream(samplerate=self.sample_rate, device=self.input_device, channels=self.channels,
+                                     callback=self.audio_callback)
         self.stream.start()
 
     def handler(self, seconds):
         for i in range(seconds+1):
-            print(i)
             time.sleep(1)
         self.flag = False
         self.stream.close()
@@ -164,7 +164,7 @@ class Record:
                 file=self.filename,
                 mode='x',
                 samplerate=self.sample_rate,
-                channels=1,
+                channels=self.channels,
                 q=self.audio_q,
             ), daemon=True,
         )

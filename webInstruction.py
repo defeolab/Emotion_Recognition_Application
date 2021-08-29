@@ -43,7 +43,16 @@ class MainFrame(tk.Frame):
         self.old_root = old_root
 
         # Root
-        root.geometry("900x640")
+        #root.geometry("900x640")
+        fp = open('ffmpeg.txt', 'r')
+        reso = json.load(fp)
+        fp.close()
+
+        # print(reso['video_size'][0])
+        self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
+        # Root
+        root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
 
@@ -315,6 +324,7 @@ class NavigationBar(tk.Frame):
         self.websites = json.load(fp)
         fp.close()
 
+
         if self.type == 1:
             webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
         elif self.type == 2:
@@ -325,6 +335,7 @@ class NavigationBar(tk.Frame):
             webBrowser.launch_browser(self.websites['website4'], 4, self.id, self.old_window, self.old_root, self.frame)
         else:
             print("no browser!")
+        #return self.old_root
     def go_forward(self):
         if self.master.get_browser():
             self.master.get_browser().GoForward()

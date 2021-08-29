@@ -36,6 +36,7 @@ from tkinter import filedialog
 ###Titta imports
 import pickle
 import pandas as pd
+import time
 
 import GSR_rec
 import ScreenRecording
@@ -70,7 +71,11 @@ def runexpImage(participantId):
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    im_name = os.getcwd() + "/Image/beer_positioning.jpg"
+    im_name1 = os.getcwd() + "/Image/beer_positioning.jpg"
+    im_name2 = os.getcwd() + "/Image/Capture.png"
+    im_name3 = os.getcwd() + "/Image/beer_positioning.jpg"
+    im_name4 = os.getcwd() + "/Image/Capture.png"
+
     #im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
     # %%  ET settings
@@ -95,7 +100,10 @@ def runexpImage(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
+    image1 = visual.ImageStim(win, image=im_name1, units='norm', size=(2, 2))
+    image2 = visual.ImageStim(win, image=im_name2, units='norm', size=(2, 2))
+    image3 = visual.ImageStim(win, image=im_name3, units='norm', size=(2, 2))
+    image4 = visual.ImageStim(win, image=im_name4, units='norm', size=(2, 2))
 
     #  Calibrate
     """if bimonocular_calibration:
@@ -122,10 +130,12 @@ def runexpImage(participantId):
 
     for i in range(30 * monitor_refresh_rate):
         if i == 0:
-            tracker.send_message(''.join(['stim on: ', im_name]))
-        image.draw()
+            tracker.send_message(''.join(['stim on: ', im_name1]))
+        image1.draw()
+        time.sleep(2)
+        image2.draw()
         t = win.flip()
-    tracker.send_message(''.join(['stim off: ', im_name]))
+    tracker.send_message(''.join(['stim off: ', im_name1]))
     win.flip()
 
     #rec.on_stop()
