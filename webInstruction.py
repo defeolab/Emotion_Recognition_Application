@@ -1,13 +1,9 @@
 import json
 import threading
-import datetime
 
 from cefpython3 import cefpython as cef
 import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
-import ScreenRecording
-import GSR_rec
-import ffmpeg_video_audio
 import webBrowser
 
 try:
@@ -17,7 +13,6 @@ except ImportError:
 import sys
 import platform
 import logging as _logging
-import patientWindow as pw
 
 # Fix for PyCharm hints warnings
 WindowUtils = cef.WindowUtils()
@@ -41,22 +36,25 @@ class MainFrame(tk.Frame):
         self.id = id
         self.old_window = old_window
         self.old_root = old_root
+        self.frame = frame  #frame for lab setting enable
 
         # Root
-        #root.geometry("900x640")
-        fp = open('ffmpeg.txt', 'r')
-        reso = json.load(fp)
-        fp.close()
+        if self.frame == True:
+            fp = open('ffmpeg.txt', 'r')
+            reso = json.load(fp)
+            fp.close()
 
-        # print(reso['video_size'][0])
-        self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
+            self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-        root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+            root.attributes('-fullscreen', True)
+        else:
+            root.geometry("900x640")
 
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
 
-        self.frame = frame
+
 
         # MainFrame
         tk.Frame.__init__(self, root)
@@ -278,9 +276,6 @@ class NavigationBar(tk.Frame):
         self.old_root = old_root
         self.frame = frame
 
-        fp = open('ffmpeg.txt', 'r')
-        dur = json.load(fp)
-        fp.close()
 
         #self.duration = dur['dur']
 

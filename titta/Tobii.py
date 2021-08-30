@@ -956,7 +956,7 @@ class myTobii(object):
         # nCalibrations = len(self.deviations) + 1
         fname = 'calibration_image' + str(self.selected_calibration)+'.png'
         self.win.getMovieFrame(buffer='back')
-        self.win.saveMovieFrames(fname)
+        #self.win.saveMovieFrames(fname)
 
         # Clear the back buffer without flipping the window
         self.win.clearBuffer()
@@ -1212,7 +1212,7 @@ class myTobii(object):
         # nCalibrations = len(self.deviations)
         fname = 'validation_image' + str(self.selected_calibration) + '.png'
         self.win.getMovieFrame(buffer='back')
-        self.win.saveMovieFrames(fname)
+        #self.win.saveMovieFrames(fname)
 
         # Clear the back buffer without flipping the window
         self.win.clearBuffer()

@@ -167,10 +167,7 @@ class userWindow():
     def createWindow(self):
         self.window = Tk()
         self.window.title("User personal page")
-        #self.window.geometry("1200x1000")
-        self.sw, self.sh = self.window.winfo_screenwidth(), self.window.winfo_screenheight()
-        # Root
-        self.window.geometry('%sx%s' % (self.sw,self.sh))
+        self.window.geometry("1200x1000")
         self.window.columnconfigure(1, weight=1)
 
         Label(self.window, text=self.name + " " + self.surname, font='Times 25').grid(row=0, column=0, pady=40, padx = 20 )

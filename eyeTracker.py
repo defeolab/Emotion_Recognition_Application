@@ -71,10 +71,7 @@ def runexpImage(participantId):
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    im_name1 = os.getcwd() + "/Image/beer_positioning.jpg"
-    im_name2 = os.getcwd() + "/Image/Capture.png"
-    im_name3 = os.getcwd() + "/Image/beer_positioning.jpg"
-    im_name4 = os.getcwd() + "/Image/Capture.png"
+    im_name = os.getcwd() + "/Image/beer_positioning.jpg"
 
     #im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
@@ -100,10 +97,7 @@ def runexpImage(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    image1 = visual.ImageStim(win, image=im_name1, units='norm', size=(2, 2))
-    image2 = visual.ImageStim(win, image=im_name2, units='norm', size=(2, 2))
-    image3 = visual.ImageStim(win, image=im_name3, units='norm', size=(2, 2))
-    image4 = visual.ImageStim(win, image=im_name4, units='norm', size=(2, 2))
+    image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
 
     #  Calibrate
     """if bimonocular_calibration:
@@ -130,12 +124,10 @@ def runexpImage(participantId):
 
     for i in range(30 * monitor_refresh_rate):
         if i == 0:
-            tracker.send_message(''.join(['stim on: ', im_name1]))
-        image1.draw()
-        time.sleep(2)
-        image2.draw()
+            tracker.send_message(''.join(['stim on: ', im_name]))
+        image.draw()
         t = win.flip()
-    tracker.send_message(''.join(['stim off: ', im_name1]))
+    tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
     #rec.on_stop()
@@ -156,7 +148,6 @@ def runexpImage(participantId):
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-    #postprocessing.process(settings.FILENAME)
 
 
 def runexpVideo(participantId):
@@ -212,10 +203,7 @@ def runexpVideo(participantId):
         top.title("Experiment VLC media player")
         top.state('zoomed')
         player = None
-        #player = vp.Player(top, title="tkinter vlc", type="gsr", path=GSRpath)
         player = vp.Player(top, title="tkinter vlc") #no gsr recorded this way
-        #player = threading.Thread(target = vp.Player, args=(top,"tkinter vlc", ))
-        #player.start()
 
         def closeTop():
             player.OnStop()
@@ -250,7 +238,7 @@ def runexpVideo(participantId):
 
     createVideoFrame()
 
-def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start):
+def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -301,18 +289,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    fp = open('websites.txt', 'r')
-    websites = json.load(fp)
-    fp.close()
-
-    #if (type == 1):
-        #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, exptype="gsr", path=GSRpath)
-        #webBrowser.launch_browser(search_key_var, 1, participantId, parent, root, frame = None) #no gsr recorded
-    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame = None)
-    #else:
-        #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, exptype="gsr", path=GSRpath)
-        #webBrowser.launch_browser(search_key_var, 2, participantId, parent, root, frame = None) #no gsr recorded
-    #    webInstruction.launch_browser(search_key_var, 1, participantId, parent, root, frame = None)
+    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame = frame)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object
@@ -327,6 +304,5 @@ def runexpBrowser(search_key_var, type, participantId, parent, root,camera_start
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-    #postprocessing.process(settings.FILENAME)
 
     print("saved")
