@@ -194,8 +194,8 @@ class MyVideoCapture:
 
             #heatmap in the end of the use of the camera
             x, y = my_df["left_pupil_x"], my_df["left_pupil_y"]
-            plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
-            plt.savefig('heatmap.png')
+            #plt.hist2d(x, y, bins=(50, 50), cmap=plt.cm.jet)
+            #plt.savefig('heatmap.png')
             self.vid.release()
             #self.out.release()
             cv2.destroyAllWindows()

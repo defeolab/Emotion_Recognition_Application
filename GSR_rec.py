@@ -41,10 +41,13 @@ class Record:
         fp = open('ffmpeg.txt', 'r')
         data_file = json.load(fp)
         fp.close()
+        fp1 = open('websites.txt', 'r')
+        data_file1 = json.load(fp1)
+        fp1.close()
 
         self.input_device = data_file['gsr']
         self.sample_rate = data_file['samplingrate']
-        self.seconds = data_file['duration']
+        self.seconds = data_file1['duration']
         self.channels = data_file['channels']
         (h, m, s) = self.seconds.split(':')
         self.result = int(h) * 3600 + int(m) * 60 + int(s)

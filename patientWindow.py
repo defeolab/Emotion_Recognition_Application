@@ -1,4 +1,3 @@
-import ctypes
 import tkinter as tk
 import threading
 import GSR_rec
@@ -11,13 +10,9 @@ from tkinter import filedialog
 from tkinter import ttk
 import eyeTracker
 import webInstruction
-import webcam
-import sys, os
-import webBrowser
+import os
 import json
-import cv2
 from PIL import Image, ImageTk
-import time
 
 
 
@@ -42,7 +37,7 @@ class PatientWindow:
         self.widgets = self.addWidgets()
         self.settings = None #possible settings : 'lab' or 'home'
 
-        self.frame = None
+        self.frame = None       #to enable lab setting frame in the experiment
         self.camera_on = False
         self.experiment = False
         self.timer = 0
@@ -54,24 +49,7 @@ class PatientWindow:
         Label(top, text=' Webcam ', font='Times 25').grid(row=1, column=3, pady=40)
 
     def browseFiles(self):
-        #print("Mark is our friend.")
         self.no_participant1.config(text="Mark is our friend!")
-        #filename = filedialog.askopenfile(initialdir=os.getcwd() + "/data/" + str(self.patientId),
-        #                                  title="Select a File",
-        #                                  filetypes=(("csv files",
-        #                                              "*.csv"),
-        #                                             ("all files",
-        #                                              "*.*")))
-
-        #if filename is not None:
-
-        #    comand = "start " + filename.name
-        #    try:
-        #        os.system(comand)
-        #    except:
-        #        print(comand)
-
-
 
 
     def addWidgets(self, neuro_frame=None):
@@ -83,7 +61,6 @@ class PatientWindow:
         self.x = IntVar()
         self.x.set(0)
 
-        #self.parent.columnconfigure(1, weight=2)
 
         experiments_frame = ttk.LabelFrame(self.parent)
         experiments_frame.columnconfigure(1, weight=1)
@@ -95,7 +72,6 @@ class PatientWindow:
         but_frame.columnconfigure(2, weight=1)
 
         but_frame.grid(row=1, column=2, pady=1, padx=50, sticky=tk.E + tk.W + tk.N + tk.S)
-        ##ttk.Label(but_frame, text="Participant " + self.patientId, font='Times 18').grid(row=0, column=1)
 
         start_camera_button = ttk.Button(but_frame, command=self.start_camera, text="Start Recording")
         start_camera_button.grid(row=0, column=1,pady=10)
@@ -150,11 +126,7 @@ class PatientWindow:
         if (self.settings == 'lab') | (self.settings == 'home'):
             self.root = Tk()
             self.root.title("Enter URL")
-            self.sw, self.sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
-            # Root
-            self.root.geometry('%sx%s' % (self.sw, self.sh))
-
-            #self.root.geometry("800x800")
+            self.root.geometry("800x800")
             fp = open('websites.txt', 'r')
             self.websites = json.load(fp)
             fp.close()
@@ -186,9 +158,7 @@ class PatientWindow:
 
         else:
             self.no_participant1.config(text="No mode selected!")
-            #print("No Mode Selected!")
 
-    #def stop(self):
         self.finish = Label(self.root, text="Start", font='Times 14')
         self.finish.grid(row=11, column=2, pady=20)
 
@@ -197,15 +167,11 @@ class PatientWindow:
         self.web1 = self.websites['website1']
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
-        #    if self.camera_on is False:
-        #        print("You need to turn the camera on")
-        #    else:
             self.experiment = True
-            #eyeTracker.runexpBrowser(self.web1, 1, self.patientId, self.parent, self.root,self.camera_on)
-            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root, self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -216,31 +182,22 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            #if self.camera_on is False:
-            #    print("You need to turn the camera on")
-            #else:
-            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            #webBrowser.launch_browser(self.web5, 2,self.patientId,self.parent,self.root,self.frame)
-            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.frame)
+            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, False)
         else:
             self.no_participant1.config(text="No mode selected!")
-            #print("No mode selected!")
 
     def website3(self):
         self.web3 = self.websites['website3']
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            #if self.camera_on is False:
-            #    print("You need to turn the camera on")
-            #else:
-
-            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -251,16 +208,13 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            #if self.camera_on is False:
-            #    print("You need to turn the camera on")
-            #else:
-
-            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,self.camera_on)
+            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.frame)
+            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,False)
         else:
             self.no_participant1.config(text="No mode selected!")
+
 
     def run_expimage(self):
         self.imag_exp = 1
@@ -278,17 +232,14 @@ class PatientWindow:
                 "https://docs.google.com/forms/d/e/1FAIpQLSfZ89WXRbBi00SrtwIb7W_FLGMzkd9IkS8Ot5McfHF137sCqA/viewform")
 
         elif self.settings == "home":
-            self.inst_win = tk.Toplevel()
+            self.inst_win = Toplevel()
             self.inst_win.title("Instruction")
+            self.inst_win.attributes('-fullscreen', True)
+
+
             fp = open('ffmpeg.txt', 'r')
             self.reso = json.load(fp)
             fp.close()
-
-            # print(reso['video_size'][0])
-            self.sw, self.sh = self.inst_win.winfo_screenwidth(), self.inst_win.winfo_screenheight()
-            # Root
-            self.inst_win.geometry(
-                '%sx%s+%s+%s' % (self.reso['tobii_width'], self.reso['tobii_hight'], -self.sw + self.reso['screen_shift'], 0))
 
             fp = open('Images.txt', 'r')
             image_inst = json.load(fp)
@@ -313,6 +264,9 @@ class PatientWindow:
         else:
             self.no_participant1.config(text="No mode selected!")
 
+    #def quitFullScreen(self):
+    #    self.inst_win.attributes('-fullscreen', False)
+
     def countdown(self, remaining=None):
         if remaining is not None:
             self.remaining = remaining
@@ -328,23 +282,22 @@ class PatientWindow:
     def start_image_exp(self):
 
         fp1 = open('ffmpeg.txt', 'r')
-        self.duration = json.load(fp1)
+        self.size = json.load(fp1)
         fp1.close()
 
         self.inst_win.destroy()
-        self.top = tk.Tk()
+        self.top = Toplevel()
         self.top.title("Image Experiment")
-        #self.top.geometry("1100x900")
-        self.sw, self.sh = self.top.winfo_screenwidth(), self.top.winfo_screenheight()
-        # Root
-        self.top.geometry(
-            '%sx%s+%s+%s' % (
-            self.duration['tobii_width'], self.duration['tobii_hight'], -self.sw + self.duration['screen_shift'], 0))
+        self.top.geometry("1100x900")
+        self.top.attributes('-fullscreen', True)
 
         frame_1 = tk.Frame(self.top)
         frame_1.columnconfigure(0, weight=1)
         frame_1.pack()
 
+        fp1 = open('websites.txt', 'r')
+        self.duration = json.load(fp1)
+        fp1.close()
         (h, m, s) = self.duration['duration'].split(':')
         result = int(h) * 3600 + int(m) * 60 + int(s)
 
@@ -358,8 +311,6 @@ class PatientWindow:
         frame_2.columnconfigure(1, weight=2)
         frame_2.pack()
 
-        #frame_2.grid(row=1, column=2, pady=3, padx=5, sticky=tk.E + tk.W + tk.N + tk.S)
-
         fp = open('Images.txt', 'r')
         image = json.load(fp)
         fp.close()
@@ -368,8 +319,6 @@ class PatientWindow:
         cam1.start()
         sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 1,0))
         sc.start()
-        gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId, 1,0))
-        gsr.start()
 
 
         img1 = os.getcwd() + image['img1']
@@ -382,8 +331,7 @@ class PatientWindow:
         count_4 = image['count_4']
 
         #path = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
-        # path = os.getcwd() + "/Image/Capture.PNG"
-        # if path is not None:
+
         image1 = Image.open(img1)
         image1 = image1.resize((1000, 600), Image.ANTIALIAS)
         image2 = Image.open(img2)
@@ -398,7 +346,6 @@ class PatientWindow:
         img_4 = ImageTk.PhotoImage(master=frame_2, image=image4)
 
         label1 = tk.Label(frame_2, image=img_1)
-        #label1.pack(side="top", fill="both", expand="yes")
         label1.pack()
 
         def countdown_4(counter):
@@ -542,22 +489,18 @@ class PatientWindow:
                 cam1.start()
                 sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,1,0))
                 sc.start()
-                gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId,1,0))
-                gsr.start()
+
             elif self.imag_exp == 2:
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,2,0))
                 cam1.start()
                 sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,2,0))
                 sc.start()
-                gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId,2,0))
-                gsr.start()
+
             elif self.imag_exp == 3:
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,3,1))
                 cam1.start()
                 sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3,1))
                 sc.start()
-                gsr = threading.Thread(target=self.GSR_rec, args=(self.patientId,3,1))
-                gsr.start()
 
         else:
             self.no_participant1.config(text="experiment is not started yet!")

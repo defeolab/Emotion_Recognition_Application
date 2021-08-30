@@ -4,7 +4,6 @@ Using ffmpeg to capture video and audio
 
 import os
 import json
-import subprocess
 
 
 class Camera_recording:
@@ -17,10 +16,13 @@ class Camera_recording:
         fp = open('ffmpeg.txt', 'r')
         mic = json.load(fp)
         fp.close()
+        fp1 = open('websites.txt', 'r')
+        dur = json.load(fp1)
+        fp1.close()
 
         audio = mic['mic']
         video = mic['video']
-        duration = mic['duration']
+        duration = dur['duration']
         framerate = mic['framerate']
 
         if self.exp_type == 1:
@@ -103,5 +105,4 @@ class Camera_recording:
 
 #ffmpeg -list_devices true -f dshow -i dummy
 
-#Camera_recording()
 

@@ -11,11 +11,17 @@ class ScreenRec:
         fp = open('ffmpeg.txt', 'r')
         mic = json.load(fp)
         fp.close()
+
+        fp1 = open('websites.txt', 'r')
+        dur = json.load(fp1)
+        fp1.close()
+
         audio = mic['mic']
         video_size = mic['video_size']
         x = mic['x']
         y = mic['y']
-        duration = mic['duration']
+        duration = dur['duration']
+
         frame_rate = mic['framerate']
         if self.exp_type == 1:
             filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_rec.mp4"
