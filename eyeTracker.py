@@ -149,6 +149,107 @@ def runexpImage(participantId):
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
+class run_video_experiment:
+    def __init__(self,search_key_var, type, participantId, parent, root, frame):
+        self.website = search_key_var
+        self.type = type
+        self.id = participantId
+        self.parent = parent
+        self.root = root
+        self.frame = frame
+        #self.cal = cal
+
+    def runexpweb(self):
+        print(self.id)
+        self.tmp = get_monitors()
+        self.new_width = self.tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+        self.new_height = self.tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+        print("Schermo rilevato: " + str(self.new_width) + " x " + str(self.new_height))
+
+        self.MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
+        self.FULLSCREEN = True
+        # SCREEN_RES = [tmp[0].width, tmp[0].height]
+        # SCREEN_WIDTH = 52.7  # cm
+        self.SCREEN_RES = [1280, 1024]
+        self.SCREEN_WIDTH = 33.8  # cm
+        self.VIEWING_DIST = 63  # distance from eye to center of screen (cm) #TODO : measure the actual distance
+        self.monitor_refresh_rate = 60  # frames per second (fps)
+        self.mon = monitors.Monitor(self.MY_MONITOR)  # Defined in defaults file
+        self.mon.setWidth(self.SCREEN_WIDTH)  # Width of screen (cm)
+        self.mon.setDistance(self.VIEWING_DIST)  # Distance eye / monitor (cm)
+        self.mon.setSizePix(self.SCREEN_RES)
+
+        # %%  ET settings
+        self.et_name = 'Tobii T60'
+        self.dummy_mode = False
+        bimonocular_calibration = False
+
+        self.settings = Titta.get_defaults(self.et_name)
+        self.settings.FILENAME = 'data/Video/' + str(self.id) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/Video/' + str(self.id) + '/GSR_data/'
+        print(self.settings.FILENAME)
+        self.settings.N_CAL_TARGETS = 3
+
+        self.tracker = Titta.Connect(self.settings)
+
+        if self.dummy_mode:
+            self.tracker.set_dummy_mode()
+        self.tracker.init()
+
+        # Window set-up (this color will be used for calibration)
+
+        win = visual.Window(monitor=self.mon, fullscr=self.FULLSCREEN,
+                            screen=1, size=self.SCREEN_RES, units='deg')
+        fixation_point = helpers.MyDot2(win)
+
+        self.tracker.calibrate(win)
+        win.close()
+        webInstruction.launch_browser(self.website, type, self.id, self.parent, self.root, self.frame)
+
+    def start_exp_rec(self):
+
+        self.tracker.start_recording(gaze_data=True, store_data=True)
+
+        def createVideoFrame():
+            top = tk.Toplevel()
+            top.title("Experiment VLC media player")
+            top.state('zoomed')
+            player = None
+            player = vp.Player(top, title="tkinter vlc")  # no gsr recorded this way
+
+            def closeTop():
+                player.OnStop()
+                player.quit()
+                top.destroy()
+
+                # save file
+                self.tracker.stop_recording(gaze_data=True)
+                # Close window and save data
+                self.tracker.save_data(self.mon)  # Also save screen geometry from the monitor object
+
+                # %% Open pickle and write et-data and messages to tsv-files.
+                f = open(self.settings.FILENAME[:-4] + '.pkl', 'rb')
+                gaze_data = pickle.load(f)
+                msg_data = pickle.load(f)
+
+                #  Save data and messages
+                df = pd.DataFrame(gaze_data, columns=self.tracker.header)
+                df.to_csv(self.settings.FILENAME[:-4] + '.tsv', sep='\t')
+                df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+                df_msg.to_csv(self.settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+                # postprocessing.process(settings.FILENAME)
+                os.startfile(
+                    "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+
+            top.protocol("WM_DELETE_WINDOW", closeTop)
+
+            def pause():
+                player.OnPause()
+
+            top.bind('<space>', pause)
+
+        createVideoFrame()
+
 
 def runexpVideo(participantId):
     print(participantId)

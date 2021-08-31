@@ -236,6 +236,7 @@ class userWindow():
         pat = str.split()[1]
         self.patient = pw.PatientWindow(self.window, pat)
 
+
     def search_participant(self):
         self.search_key_var = self.search.get()
         if self.search_key_var is not None:

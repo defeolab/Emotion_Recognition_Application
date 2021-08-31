@@ -8,8 +8,7 @@ import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
 import GSR_rec
 import ffmpeg_video_audio
-import patientWindow
-import webBrowser
+import eyeTracker as ey
 
 try:
     import tkinter as tk
@@ -333,6 +332,8 @@ class NavigationBar(tk.Frame):
         if self.frame == True:
             if self.type == 1:
 
+                a = ey.run_video_experiment(self.websites['website5'], 1, self.id, self.old_window, self.root, True)
+                a.start_exp_rec()
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1))
                 cam1.start()
                 sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1))

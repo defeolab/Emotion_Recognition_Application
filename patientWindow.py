@@ -8,7 +8,7 @@ import videoPlayer as vp
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
-import eyeTracker
+import eyeTracker as ey
 import webInstruction
 import os
 import json
@@ -159,7 +159,7 @@ class PatientWindow:
         else:
             self.no_participant1.config(text="No mode selected!")
 
-        self.finish = Label(self.root, text="Start", font='Times 14')
+        self.finish = Label(self.root, text="", font='Times 14')
         self.finish.grid(row=11, column=2, pady=20)
 
     def website1(self):
@@ -168,7 +168,10 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a.runexpweb()
+
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, False)
@@ -182,7 +185,7 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, False)
@@ -194,7 +197,7 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,False)
@@ -208,7 +211,7 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,False)
