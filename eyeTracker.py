@@ -51,6 +51,29 @@ import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 #import postprocessing
 
+conf = []
+
+def choose_tobii():
+    fp = open('tobii.txt', 'r')
+    setups = json.load(fp) #Possibility to choose between 2 different setups according to the tobii chosen
+    fp.close()
+    if setups.tobii=='Tobii T60':
+        conf.SCREEN_RES = [1280, 1024]
+        conf.SCREEN_WIDTH = 33.8  # cm
+        conf.VIEWING_DIST = 63  # distance from eye to center of screen (cm)
+        conf.monitor_refresh_rate = 60  # frames per second (fps)
+        conf.et_name = 'Tobii T60'
+
+    if setup.tobii=='Tobii Pro Nano': # values must be changed according to how we use the tobii pro nano
+        conf.SCREEN_RES = [1280, 1024]
+        conf.SCREEN_WIDTH = 33.8  # cm
+        conf.VIEWING_DIST = 63  # distance from eye to center of screen (cm)
+        conf.monitor_refresh_rate = 60  # frames per second (fps)
+        conf.et_name = 'Tobii Pro Nano'
+
+    return conf
+
+choose_tobii()
 
 def runexpImage(participantId):
     print(participantId)
@@ -63,10 +86,10 @@ def runexpImage(participantId):
     FULLSCREEN = True
     #SCREEN_RES = [tmp[1].width, tmp[1].height]
     #SCREEN_WIDTH = tmp[1].width  # cm
-    SCREEN_RES = [1280, 1024]
-    SCREEN_WIDTH = 33.8  # cm
-    VIEWING_DIST = 63  # distance from eye to center of screen (cm)
-    monitor_refresh_rate = 60  # frames per second (fps)
+    SCREEN_RES = conf.SCREEN_RES
+    SCREEN_WIDTH = conf.SCREEN_WIDTH
+    VIEWING_DIST = conf.VIEWING_DIST
+    monitor_refresh_rate = conf.monitor_refresh_rate
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
@@ -76,7 +99,7 @@ def runexpImage(participantId):
     #im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
     # %%  ET settings
-    et_name = 'Tobii T60'
+    ##et_name = 'Tobii T60'
     dummy_mode = False
     bimonocular_calibration = False
 
@@ -160,6 +183,7 @@ class run_video_experiment:
         #self.cal = cal
 
     def runexpweb(self):
+        choose_tobii()
         print(self.id)
         self.tmp = get_monitors()
         self.new_width = self.tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -170,17 +194,17 @@ class run_video_experiment:
         self.FULLSCREEN = True
         # SCREEN_RES = [tmp[0].width, tmp[0].height]
         # SCREEN_WIDTH = 52.7  # cm
-        self.SCREEN_RES = [1280, 1024]
-        self.SCREEN_WIDTH = 33.8  # cm
-        self.VIEWING_DIST = 63  # distance from eye to center of screen (cm) #TODO : measure the actual distance
-        self.monitor_refresh_rate = 60  # frames per second (fps)
+        self.SCREEN_RES = conf.SCREEN_RES
+        self.SCREEN_WIDTH = conf.SCREEN_WIDTH
+        self.VIEWING_DIST = conf.VIEWING_DIST  # distance from eye to center of screen (cm)
+        self.monitor_refresh_rate = conf.monitor_refresh_rate  # frames per second (fps)
         self.mon = monitors.Monitor(self.MY_MONITOR)  # Defined in defaults file
         self.mon.setWidth(self.SCREEN_WIDTH)  # Width of screen (cm)
         self.mon.setDistance(self.VIEWING_DIST)  # Distance eye / monitor (cm)
         self.mon.setSizePix(self.SCREEN_RES)
 
         # %%  ET settings
-        self.et_name = 'Tobii T60'
+        self.et_name = conf.et_name
         self.dummy_mode = False
         bimonocular_calibration = False
 
@@ -262,17 +286,17 @@ def runexpVideo(participantId):
     FULLSCREEN = True
     #SCREEN_RES = [tmp[0].width, tmp[0].height]
     #SCREEN_WIDTH = 52.7  # cm
-    SCREEN_RES = [1280, 1024]
-    SCREEN_WIDTH = 33.8  # cm
-    VIEWING_DIST = 63  # distance from eye to center of screen (cm) #TODO : measure the actual distance
-    monitor_refresh_rate = 60  # frames per second (fps)
+    SCREEN_RES = conf.SCREEN_RES
+    SCREEN_WIDTH = conf.SCREEN_WIDTH
+    VIEWING_DIST = conf.VIEWING_DIST
+    monitor_refresh_rate = conf.monitor_refresh_rate
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
 
     # %%  ET settings
-    et_name = 'Tobii T60'
+    et_name = conf.et_name
     dummy_mode = False
     bimonocular_calibration = False
 
@@ -350,17 +374,17 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     FULLSCREEN = True
     #SCREEN_RES = [tmp[0].width, tmp[0].height]
     #SCREEN_WIDTH = 52.7  # cm
-    SCREEN_RES = [1280, 1024]
-    SCREEN_WIDTH = 33.8  # cm
-    VIEWING_DIST = 63  # distance from eye to center of screen (cm)
-    monitor_refresh_rate = 60  # frames per second (fps)
+    SCREEN_RES = conf.SCREEN_RES
+    SCREEN_WIDTH = conf.SCREEN_WIDTH
+    VIEWING_DIST = conf.VIEWING_DIST
+    monitor_refresh_rate = conf.monitor_refresh_rate
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
 
     # %%  ET settings
-    et_name = 'Tobii T60'
+    et_name = conf.et_name
     dummy_mode = False
 
     settings = Titta.get_defaults(et_name)
