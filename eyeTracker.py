@@ -51,7 +51,6 @@ import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 #import postprocessing
 
-conf = []
 
 def choose_tobii():
     fp = open('tobii.txt', 'r')
@@ -64,7 +63,7 @@ def choose_tobii():
         conf.monitor_refresh_rate = 60  # frames per second (fps)
         conf.et_name = 'Tobii T60'
 
-    if setup.tobii=='Tobii Pro Nano': # values must be changed according to how we use the tobii pro nano
+    if setups.tobii=='Tobii Pro Nano': # values must be changed according to how we use the tobii pro nano
         conf.SCREEN_RES = [1280, 1024]
         conf.SCREEN_WIDTH = 33.8  # cm
         conf.VIEWING_DIST = 63  # distance from eye to center of screen (cm)
@@ -73,7 +72,7 @@ def choose_tobii():
 
     return conf
 
-choose_tobii()
+conf = choose_tobii()
 
 def runexpImage(participantId):
     print(participantId)
@@ -103,7 +102,7 @@ def runexpImage(participantId):
     dummy_mode = False
     bimonocular_calibration = False
 
-    settings = Titta.get_defaults(et_name)
+    settings = Titta.get_defaults(conf.et_name)
     settings.FILENAME = 'data/Image/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
     GSRpath = 'data/Image/' + str(participantId) + '/GSR_data/'
     print(settings.FILENAME)
