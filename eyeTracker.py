@@ -158,14 +158,6 @@ class run_video_experiment:
         self.root = root
         self.frame = frame
         #self.cal = cal
-
-    def runexpweb(self):
-        print(self.id)
-        self.tmp = get_monitors()
-        self.new_width = self.tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
-        self.new_height = self.tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
-        print("Schermo rilevato: " + str(self.new_width) + " x " + str(self.new_height))
-
         self.MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
         self.FULLSCREEN = True
         # SCREEN_RES = [tmp[0].width, tmp[0].height]
@@ -185,12 +177,17 @@ class run_video_experiment:
         bimonocular_calibration = False
 
         self.settings = Titta.get_defaults(self.et_name)
-        self.settings.FILENAME = 'data/Video/' + str(self.id) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/Video/' + str(self.id) + '/GSR_data/'
+        self.settings.FILENAME = 'data/Browser/' + str(self.id) + '/' + data.getDateStr() + '_web' + str(self.type) + '.tsv'
         print(self.settings.FILENAME)
         self.settings.N_CAL_TARGETS = 3
 
         self.tracker = Titta.Connect(self.settings)
+
+    def runexpweb(self):
+        #self.tmp = get_monitors()
+        #self.new_width = self.tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+        #self.new_height = self.tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+        #print("Schermo rilevato: " + str(self.new_width) + " x " + str(self.new_height))
 
         if self.dummy_mode:
             self.tracker.set_dummy_mode()
@@ -204,10 +201,59 @@ class run_video_experiment:
 
         self.tracker.calibrate(win)
         win.close()
-        webInstruction.launch_browser(self.website, type, self.id, self.parent, self.root, self.frame)
+        cal_tracker = self.tracker
+        #return cal_tracker
 
-    def start_exp_rec(self):
+        fp = open('websites.txt', 'r')
+        self.websites = json.load(fp)
+        fp.close()
+        if self.type == 1:
+            webInstruction.launch_browser(self.websites['website5'], 1, self.id, self.parent, self.root, True, cal_tracker = cal_tracker)
+        elif self.type == 2:
+            webInstruction.launch_browser(self.websites['website5'], 2, self.id, self.parent, self.root, True, cal_tracker=cal_tracker)
+        elif self.type == 3:
+            webInstruction.launch_browser(self.websites['website5'], 3, self.id, self.parent, self.root, True, cal_tracker=cal_tracker)
+        elif self.type == 4:
+            webInstruction.launch_browser(self.websites['website5'], 4, self.id, self.parent, self.root, True, cal_tracker=cal_tracker)
 
+    def start_exp_rec(self, cal_tracker):
+        self.tracker = cal_tracker
+        self.tracker.start_recording(gaze_data=True, store_data=True)
+
+
+    def stop_exp_rec(self, cal_tracker):
+        self.tracker = cal_tracker
+        self.tracker.stop_recording(gaze_data=True)
+        self.tracker.save_data(self.mon)  # Also save screen geometry from the monitor object
+
+        # %% Open pickle and write et-data and messages to tsv-files.
+        file_path = "data/Browser/" + str(self.id) + "/"
+        for file in os.listdir(file_path):
+            if file.endswith(".pkl"):
+                print(file)
+                f = open(file_path + file, "rb")
+
+        #f = open(self.settings.FILENAME[:-4] + '.pkl', 'rb')
+        #data = pickle.load(open(file_path, "rb"))
+        # loads : get the data from var
+        #data = pickle.load(var)
+        #f = open(self.settings.FILENAME[:-4] + '.pkl', 'rb')
+        gaze_data = pickle.load(f)
+        msg_data = pickle.load(f)
+        #  Save data and messages
+        df = pd.DataFrame(gaze_data, columns=self.tracker.header)
+        df.to_csv(self.settings.FILENAME[:-4] + '.tsv', sep='\t')
+        df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
+        df_msg.to_csv(self.settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+        print("saved")
+
+
+'''class start_browser_recording:
+    def __init__(self, cal_tracker, settings, mom):
+
+    def start_exp_rec(self, cal_tracker):
+        self.tracker = cal_tracker
         self.tracker.start_recording(gaze_data=True, store_data=True)
 
         def createVideoFrame():
@@ -250,9 +296,9 @@ class run_video_experiment:
 
         createVideoFrame()
 
+'''
 
 def runexpVideo(participantId):
-    print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -339,8 +385,7 @@ def runexpVideo(participantId):
 
     createVideoFrame()
 
-def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
-    print(participantId)
+'''def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
@@ -406,4 +451,4 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
-    print("saved")
+    print("saved")'''

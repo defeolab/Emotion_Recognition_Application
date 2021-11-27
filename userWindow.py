@@ -100,20 +100,14 @@ class userWindow():
             data['IDs'].append(id)
 
             try:
-                id_path = os.getcwd()+'/data/'+str(id)
-                os.mkdir(id_path)
+                #id_path = os.getcwd()+'/data/'+str(id)
+                #os.mkdir(id_path)
                 Image_path = os.getcwd()+'/data/Image/'+str(id)
                 os.mkdir(Image_path)
-                GSRPath1 = os.getcwd()+'/data/Image/'+str(id) + '/GSR_data/'
-                os.mkdir(GSRPath1)
                 Video_path = os.getcwd() + '/data/Video/' + str(id)
                 os.mkdir(Video_path)
-                GSRPath2 = os.getcwd() + '/data/Video/' + str(id) + '/GSR_data/'
-                os.mkdir(GSRPath2)
                 Browser_path = os.getcwd() + '/data/Browser/' + str(id)
                 os.mkdir(Browser_path)
-                GSRPath3 = os.getcwd() + '/data/Browser/' + str(id) + '/GSR_data/'
-                os.mkdir(GSRPath3)
                 temp = str(id)
             except OSError:
                 print("Creation of the directory %s failed")

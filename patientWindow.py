@@ -169,9 +169,9 @@ class PatientWindow:
         if self.settings == "lab":
             self.experiment = True
             #eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
-            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
-            a.runexpweb()
-
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root, True)
+            cal_tracker = a.runexpweb()
+            #webInstruction.launch_browser(self.web5, 1, self.patientId, self.parent, self.root, True, cal_tracker = cal_tracker)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, False)
@@ -185,6 +185,8 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
+            a = ey.run_video_experiment(self.web5, 2, self.patientId, self.parent, self.root, True)
+            cal_tracker = a.runexpweb()
             #eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
@@ -197,6 +199,8 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
+            a = ey.run_video_experiment(self.web5, 3, self.patientId, self.parent, self.root, True)
+            cal_tracker = a.runexpweb()
             #eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
@@ -212,6 +216,8 @@ class PatientWindow:
         if self.settings == "lab":
             self.experiment = True
             #eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 4, self.patientId, self.parent, self.root, True)
+            cal_tracker = a.runexpweb()
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,False)
