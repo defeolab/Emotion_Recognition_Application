@@ -1,7 +1,7 @@
-{"website1":"https://www.lavazza.it/it.html",
-"website2":"https://www.nespresso.com/it/it/our-choices/esperienza-caffe/lean-in-and-listen-stories-behind-nespresso-fairtrade-coffee",
-"website3":"https://www.spain.info/it/",
-"website4":"https://www.visitnorway.it/",
-"website5":"file:///C:/Users/zeel9/PycharmProjects/Emotion_Recognition_Application_3/instruction.html",
-"exp_duration":10,
-"loading_time":3}
+{"website1":"https://www.neuracognition.com/",
+"website2":"https://www.bfmultimedial.com/neura/",
+"website3":"https://www.google.com/",
+"website4":"https://www.google.com/",
+"website5":"/instruction.html",
+"duration":"00:03:00",
+"loading_time":7}

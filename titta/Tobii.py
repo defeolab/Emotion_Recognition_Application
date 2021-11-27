@@ -412,7 +412,7 @@ class myTobii(object):
         if self.settings.eye_tracker_name == 'Tobii Pro Spectrum':
             self.calibration = tr.ScreenBasedMonocularCalibration(self.tracker)
             if 'both' in eye:
-    #            self.calibration = tr.ScreenBasedCalibration(self.tracker)
+               # self.calibration = tr.ScreenBasedCalibration(self.tracker)
                 self.eye_to_calibrate = tr.SELECTED_EYE_BOTH
             elif 'left' in eye:
                 self.eye_to_calibrate = tr.SELECTED_EYE_LEFT
@@ -956,7 +956,7 @@ class myTobii(object):
         # nCalibrations = len(self.deviations) + 1
         fname = 'calibration_image' + str(self.selected_calibration)+'.png'
         self.win.getMovieFrame(buffer='back')
-        #self.win.saveMovieFrames(fname)
+        self.win.saveMovieFrames(fname)
 
         # Clear the back buffer without flipping the window
         self.win.clearBuffer()
@@ -1212,7 +1212,7 @@ class myTobii(object):
         # nCalibrations = len(self.deviations)
         fname = 'validation_image' + str(self.selected_calibration) + '.png'
         self.win.getMovieFrame(buffer='back')
-        #self.win.saveMovieFrames(fname)
+        self.win.saveMovieFrames(fname)
 
         # Clear the back buffer without flipping the window
         self.win.clearBuffer()

@@ -49,60 +49,66 @@ import os
 import tkinter as tk
 import videoPlayer as vp
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
-#import postprocessing
+
+
+# import postprocessing
 
 
 def choose_tobii():
+    conf = {}
     fp = open('tobii.txt', 'r')
-    setups = json.load(fp) #Possibility to choose between 2 different setups according to the tobii chosen
+    setups = json.load(fp)  # Possibility to choose between 2 different setups according to the tobii chosen
     fp.close()
-    if setups.tobii=='Tobii T60':
-        conf.SCREEN_RES = [1280, 1024]
-        conf.SCREEN_WIDTH = 33.8  # cm
-        conf.VIEWING_DIST = 63  # distance from eye to center of screen (cm)
-        conf.monitor_refresh_rate = 60  # frames per second (fps)
-        conf.et_name = 'Tobii T60'
+    if setups['tobii'] == 'Tobii T60':
+        conf['SCREEN_RES'] = [1280, 1024]
+        conf['SCREEN_WIDTH'] = 33.8  # cm
+        conf['VIEWING_DIST'] = 63  # distance from eye to center of screen (cm)
+        conf['monitor_refresh_rate'] = 60  # frames per second (fps)
+        conf['et_name'] = 'Tobii T60'
 
-    if setups.tobii=='Tobii Pro Nano': # values must be changed according to how we use the tobii pro nano
-        conf.SCREEN_RES = [1280, 1024]
-        conf.SCREEN_WIDTH = 33.8  # cm
-        conf.VIEWING_DIST = 63  # distance from eye to center of screen (cm)
-        conf.monitor_refresh_rate = 60  # frames per second (fps)
-        conf.et_name = 'Tobii Pro Nano'
+    if setups['tobii'] == 'Tobii Pro Nano':  # values must be changed according to how we use the tobii pro nano
+        conf['SCREEN_RES'] = [1920, 1080]
+        conf['SCREEN_WIDTH'] = 60.4  # cm
+        conf['VIEWING_DIST'] = 80  # distance from eye to center of screen (cm)
+        conf['monitor_refresh_rate'] = 60  # frames per second (fps)
+        conf['et_name'] = 'Tobii Pro Nano'
 
     return conf
 
+
 conf = choose_tobii()
+
 
 def runexpImage(participantId):
     print(participantId)
     tmp = get_monitors()
     new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
     new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
-    #print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
+    # print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    #SCREEN_RES = [tmp[1].width, tmp[1].height]
-    #SCREEN_WIDTH = tmp[1].width  # cm
-    SCREEN_RES = conf.SCREEN_RES
-    SCREEN_WIDTH = conf.SCREEN_WIDTH
-    VIEWING_DIST = conf.VIEWING_DIST
-    monitor_refresh_rate = conf.monitor_refresh_rate
+    # SCREEN_RES = [tmp[0].width, tmp[0].height]
+    # SCREEN_WIDTH = tmp[1].width  # cm
+    SCREEN_RES = conf['SCREEN_RES']
+    SCREEN_WIDTH = conf['SCREEN_WIDTH']
+    VIEWING_DIST = conf['VIEWING_DIST']
+    monitor_refresh_rate = conf['monitor_refresh_rate']
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    im_name = os.getcwd() + "/Image/beer_positioning.jpg"
+    # im_name = os.getcwd() + "/Image/beer_positioning.jpg"
+    im_name = "C:/Users/defeo/PycharmProjects/Emotion_Recognition_Application/Image/beer_positioning.jpg"
 
-    #im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
+    # im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
     # %%  ET settings
-    ##et_name = 'Tobii T60'
+    et_name = conf['et_name']
     dummy_mode = False
     bimonocular_calibration = False
 
-    settings = Titta.get_defaults(conf.et_name)
+    settings = Titta.get_defaults(et_name)
     settings.FILENAME = 'data/Image/' + str(participantId) + '/' + data.getDateStr() + '.tsv'
     GSRpath = 'data/Image/' + str(participantId) + '/GSR_data/'
     print(settings.FILENAME)
@@ -131,8 +137,8 @@ def runexpImage(participantId):
     tracker.calibrate(win)
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    #rec = gsr.Record()
-    #rec.on_rec(GSRpath)
+    # rec = gsr.Record()
+    # rec.on_rec(GSRpath)
 
     # Present fixation dot and wait for one second
     for i in range(monitor_refresh_rate):
@@ -152,7 +158,7 @@ def runexpImage(participantId):
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
-    #rec.on_stop()
+    # rec.on_stop()
     tracker.stop_recording(gaze_data=True)
 
     # Close window and save data
@@ -171,15 +177,16 @@ def runexpImage(participantId):
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
 
+
 class run_video_experiment:
-    def __init__(self,search_key_var, type, participantId, parent, root, frame):
+    def __init__(self, search_key_var, type, participantId, parent, root, frame):
         self.website = search_key_var
         self.type = type
         self.id = participantId
         self.parent = parent
         self.root = root
         self.frame = frame
-        #self.cal = cal
+        # self.cal = cal
 
     def runexpweb(self):
         choose_tobii()
@@ -191,19 +198,19 @@ class run_video_experiment:
 
         self.MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
         self.FULLSCREEN = True
-        # SCREEN_RES = [tmp[0].width, tmp[0].height]
+        # conf['SCREEN_RES'] = [tmp[0].width, tmp[0].height]
         # SCREEN_WIDTH = 52.7  # cm
-        self.SCREEN_RES = conf.SCREEN_RES
-        self.SCREEN_WIDTH = conf.SCREEN_WIDTH
-        self.VIEWING_DIST = conf.VIEWING_DIST  # distance from eye to center of screen (cm)
-        self.monitor_refresh_rate = conf.monitor_refresh_rate  # frames per second (fps)
+        self.SCREEN_RES = conf['SCREEN_RES']
+        self.SCREEN_WIDTH = conf['SCREEN_WIDTH']
+        self.VIEWING_DIST = conf['VIEWING_DIST']  # distance from eye to center of screen (cm)
+        self.monitor_refresh_rate = conf['monitor_refresh_rate']  # frames per second (fps)
         self.mon = monitors.Monitor(self.MY_MONITOR)  # Defined in defaults file
         self.mon.setWidth(self.SCREEN_WIDTH)  # Width of screen (cm)
         self.mon.setDistance(self.VIEWING_DIST)  # Distance eye / monitor (cm)
         self.mon.setSizePix(self.SCREEN_RES)
 
         # %%  ET settings
-        self.et_name = conf.et_name
+        self.et_name = conf['et_name']
         self.dummy_mode = False
         bimonocular_calibration = False
 
@@ -230,7 +237,6 @@ class run_video_experiment:
         webInstruction.launch_browser(self.website, type, self.id, self.parent, self.root, self.frame)
 
     def start_exp_rec(self):
-
         self.tracker.start_recording(gaze_data=True, store_data=True)
 
         def createVideoFrame():
@@ -283,19 +289,19 @@ def runexpVideo(participantId):
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    #SCREEN_RES = [tmp[0].width, tmp[0].height]
-    #SCREEN_WIDTH = 52.7  # cm
-    SCREEN_RES = conf.SCREEN_RES
-    SCREEN_WIDTH = conf.SCREEN_WIDTH
-    VIEWING_DIST = conf.VIEWING_DIST
-    monitor_refresh_rate = conf.monitor_refresh_rate
+    # SCREEN_RES = [tmp[0].width, tmp[0].height]
+    # SCREEN_WIDTH = 52.7  # cm
+    SCREEN_RES = conf['SCREEN_RES']
+    SCREEN_WIDTH = conf['SCREEN_WIDTH']
+    VIEWING_DIST = conf['VIEWING_DIST']
+    monitor_refresh_rate = conf['monitor_refresh_rate']
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
 
     # %%  ET settings
-    et_name = conf.et_name
+    et_name = conf['et_name']
     dummy_mode = False
     bimonocular_calibration = False
 
@@ -327,7 +333,7 @@ def runexpVideo(participantId):
         top.title("Experiment VLC media player")
         top.state('zoomed')
         player = None
-        player = vp.Player(top, title="tkinter vlc") #no gsr recorded this way
+        player = vp.Player(top, title="tkinter vlc")  # no gsr recorded this way
 
         def closeTop():
             player.OnStop()
@@ -349,7 +355,7 @@ def runexpVideo(participantId):
             df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
             df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
             df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-            #postprocessing.process(settings.FILENAME)
+            # postprocessing.process(settings.FILENAME)
             os.startfile(
                 "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
@@ -362,6 +368,7 @@ def runexpVideo(participantId):
 
     createVideoFrame()
 
+
 def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     print(participantId)
     tmp = get_monitors()
@@ -371,19 +378,19 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
     FULLSCREEN = True
-    #SCREEN_RES = [tmp[0].width, tmp[0].height]
-    #SCREEN_WIDTH = 52.7  # cm
-    SCREEN_RES = conf.SCREEN_RES
-    SCREEN_WIDTH = conf.SCREEN_WIDTH
-    VIEWING_DIST = conf.VIEWING_DIST
-    monitor_refresh_rate = conf.monitor_refresh_rate
+    # SCREEN_RES = [tmp[0].width, tmp[0].height]
+    # SCREEN_WIDTH = 52.7  # cm
+    SCREEN_RES = conf['SCREEN_RES']
+    SCREEN_WIDTH = conf['SCREEN_WIDTH']
+    VIEWING_DIST = conf['VIEWING_DIST']
+    monitor_refresh_rate = conf['monitor_refresh_rate']
     mon = monitors.Monitor(MY_MONITOR)  # Defined in defaults file
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
 
     # %%  ET settings
-    et_name = conf.et_name
+    et_name = conf['et_name']
     dummy_mode = False
 
     settings = Titta.get_defaults(et_name)
@@ -413,7 +420,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame = frame)
+    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame=frame)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object

@@ -46,7 +46,7 @@ class MainFrame(tk.Frame):
 
             self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'],0))
             root.attributes('-fullscreen', True)
         else:
             root.geometry("900x640")
@@ -318,7 +318,6 @@ class NavigationBar(tk.Frame):
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
-
 
         if self.type == 1:
             webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)

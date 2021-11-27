@@ -2,6 +2,7 @@ import tkinter as tk
 import threading
 import GSR_rec
 import ScreenRecording
+import eyeTracker
 import ffmpeg
 import ffmpeg_video_audio
 import videoPlayer as vp
@@ -220,7 +221,7 @@ class PatientWindow:
 
 
     def run_expimage(self):
-        self.imag_exp = 1
+        self.img_exp = 1
         if self.settings == "lab":
             """
             if self.camera_on is False:

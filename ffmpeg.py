@@ -8,7 +8,7 @@ import os
 import subprocess
 
 def start():
-    cmd = ('ffmpeg -f dshow -t 00:00:10 -i video="Integrated Webcam":audio="Microphone Array (Realtek Audio)" out.MP4 ')
+    cmd = ('ffmpeg -f dshow -t 00:03:00 -i video="USB 2.0 Camera":audio="Realtek HD Audio 2nd output (Realtek High Definition Audio)" out.MP4 ')
     proc = subprocess.Popen(cmd, shell=True, stderr=subprocess.STDOUT)
 
 
