@@ -8,10 +8,10 @@ import gaze_tracking
 import pandas as pd
 import matplotlib.pyplot as plt
 import patientWindow as pw
-"""from keras.models import Sequential
-from keras.layers.core import Dense, Dropout, Flatten
-from keras.layers.convolutional import Conv2D
-from keras.layers.pooling import MaxPooling2D"""
+#from keras.models import Sequential
+#from keras.layers.core import Dense, Dropout, Flatten
+#from keras.layers.convolutional import Conv2D
+#from keras.layers.pooling import MaxPooling2D
 
 
 class App:
