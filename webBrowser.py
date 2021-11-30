@@ -33,7 +33,8 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame = None, cal_tracker = None):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root, settings, frame = None, cal_tracker = None):
+        self.settings = settings #home or lab if we are on home settings or not
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -77,7 +78,7 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root, frame = self.frame, cal_tracker = self.cal_tracker)
+        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root, settings=self.settings, frame = self.frame, cal_tracker = self.cal_tracker)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -272,8 +273,9 @@ class launch_browser:
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None, cal_tracker = None):
+    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,settings, frame = None, cal_tracker = None):
         #self.countdown = None
+        self.settings=settings
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -338,7 +340,7 @@ class NavigationBar(tk.Frame):
         main.create_stream()
         main.on_rec()
 
-    def countdown(self, time):
+    def countdown_lab(self, time):
         if time == -1:
             self.enable = 1
             self.root.destroy()
@@ -346,13 +348,26 @@ class NavigationBar(tk.Frame):
             finish = tk.Label(self.old_root, text ="Experiment finished! press the close Button.",font='Times 14')
             finish.grid(row=14,column=1)
         else:
-            self.root.after(1000, self.countdown, time - 1)
+            self.root.after(1000, self.countdown_lab, time - 1)
+
+    def countdown_home(self, time):
+        if time == -1:
+            self.enable = 1
+            self.root.destroy()
+            finish = tk.Label(self.old_root, text ="Experiment finished! press the close Button.",font='Times 14')
+            finish.grid(row=14,column=1)
+        else:
+            self.root.after(1000, self.countdown_home, time - 1)
 
     def loading_countdown(self, time):
         if time == -1:
             #self.enable = 1
             print("loading time end")
             self.chrono_countdown(self.result)
+            if self.settings == "home":
+                self.countdown = self.countdown_home
+            else:
+                self.countdown = self.countdown_lab
             im_timer = threading.Thread(target=self.countdown, args=(self.result,))
             im_timer.start()
 

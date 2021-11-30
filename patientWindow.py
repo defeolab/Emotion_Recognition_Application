@@ -174,7 +174,7 @@ class PatientWindow:
             #webInstruction.launch_browser(self.web5, 1, self.patientId, self.parent, self.root, True, cal_tracker = cal_tracker)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, False)
+            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -190,7 +190,7 @@ class PatientWindow:
             #eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, False)
+            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -204,7 +204,7 @@ class PatientWindow:
             #eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,False)
+            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.settings,False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -220,7 +220,7 @@ class PatientWindow:
             cal_tracker = a.runexpweb()
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,False)
+            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.settings,False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
