@@ -1,5 +1,10 @@
 import tkinter as tk
 import threading
+
+from psychopy import monitors, __all__, visual
+from psychopy.visual import helpers
+from screeninfo import get_monitors
+
 import GSR_rec
 import ScreenRecording
 import eyeTracker
@@ -128,6 +133,13 @@ class PatientWindow:
             self.root = Tk()
             self.root.title("Enter URL")
             self.root.geometry("800x800")
+            '''
+            fp = open('ffmpeg.txt', 'r')
+            self.reso = json.load(fp)
+            fp.close()
+            self.sw, self.sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+            self.root.geometry('%sx%s+%s+%s' % (self.reso['tobii_width'], self.reso['tobii_hight'], -self.sw + self.reso['screen_shift'], 0))
+            '''
             fp = open('websites.txt', 'r')
             self.websites = json.load(fp)
             fp.close()
@@ -169,13 +181,13 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            #eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
-            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
-            a.runexpweb()
+            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
+           # a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+           # a.runexpweb()
 
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 1,self.patientId,self.parent,self.root, self.settings, False)
+            webInstruction.launch_browser(self.web5, 1, self.patientId, self.parent, self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -186,7 +198,7 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            #eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
+            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.settings, False)
@@ -198,7 +210,7 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            #eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
+            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.settings,False)
@@ -212,7 +224,7 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            #eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
+            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
         elif self.settings == "home":
             self.experiment = True
             webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.settings,False)
@@ -304,6 +316,7 @@ class PatientWindow:
         fp1.close()
         (h, m, s) = self.duration['duration'].split(':')
         result = int(h) * 3600 + int(m) * 60 + int(s)
+
 
         self.chronometer = tk.Label(frame_1, text=" ", width=20)
         self.chronometer.grid(row=0, column=2)

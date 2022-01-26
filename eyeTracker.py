@@ -192,8 +192,8 @@ class run_video_experiment:
         choose_tobii()
         print(self.id)
         self.tmp = get_monitors()
-        self.new_width = self.tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
-        self.new_height = self.tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+        self.new_width = self.tmp[1].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+        self.new_height = self.tmp[1].height  # 0 for resolution of main screen, 1 for resolution of the second screen
         print("Schermo rilevato: " + str(self.new_width) + " x " + str(self.new_height))
 
         self.MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
@@ -278,6 +278,8 @@ class run_video_experiment:
             top.bind('<space>', pause)
 
         createVideoFrame()
+
+
 
 
 def runexpVideo(participantId):

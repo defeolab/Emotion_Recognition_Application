@@ -48,21 +48,21 @@ class MainFrame(tk.Frame):
         #def quitfullscreen():
         #    self.root.attributes('-fullscreen', False)
 
-        if self.frame == True:
-            fp = open('ffmpeg.txt', 'r')
-            reso = json.load(fp)
-            fp.close()
+        #if self.frame == True:
+        fp = open('ffmpeg.txt', 'r')
+        reso = json.load(fp)
+        fp.close()
 
-            self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+        self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
+        root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 640))
 
                     # Root
             #root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
             #root.attributes('-fullscreen', True)
             #root.bind("<Escape>", quitfullscreen)
 
-        else:
-            root.geometry("900x640")
+        #else:
+            #root.geometry("900x640")
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
 
@@ -273,7 +273,7 @@ class launch_browser:
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,settings, frame = None, cal_tracker = None):
+    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,settings, frame = None, cal_tracker = True):
         #self.countdown = None
         self.settings=settings
         self.back_state = tk.NONE
@@ -344,7 +344,7 @@ class NavigationBar(tk.Frame):
         if time == -1:
             self.enable = 1
             self.root.destroy()
-            self.eye_track_file.stop_exp_rec(self.cal_tracker)
+            #self.eye_track_file.stop_exp_rec(self.cal_tracker)
             finish = tk.Label(self.old_root, text ="Experiment finished! press the close Button.",font='Times 14')
             finish.grid(row=14,column=1)
         else:
@@ -442,7 +442,6 @@ class NavigationBar(tk.Frame):
 
                 else:
                     print("no experiment!")
-
 
         else:
             self.root.after(1000, self.loading_countdown, time - 1)

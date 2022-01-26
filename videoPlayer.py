@@ -81,7 +81,7 @@ class Player(Tk.Frame):
 
         self.type = type
         self.path = path
-        self.rec = gsr.Record()
+        #self.rec = gsr.Record()
 
         self.frame = frame
         #self.flag_frame = flag_frame

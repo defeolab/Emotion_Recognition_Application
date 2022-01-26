@@ -10,6 +10,12 @@ class loginWindow:
         self.window = Tk()
         self.window.title('Vibe')
         self.window.geometry("600x400")
+        #fp = open('ffmpeg.txt', 'r')
+        #self.reso = json.load(fp)
+        #fp.close()
+        #self.sw, self.sh = self.window.winfo_screenwidth(), self.window.winfo_screenheight()
+        #self.window.geometry('%sx%s+%s+%s' % (1020, 960, -self.sw + self.reso['screen_shift'], 700))
+
 
         Label(text=' Login ', font='Times 25').grid(row=1, column=3, pady=40)
 

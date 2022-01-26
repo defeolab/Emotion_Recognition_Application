@@ -20,6 +20,7 @@ class ScreenRec:
         video_size = mic['video_size']
         x = mic['x']
         y = mic['y']
+
         duration = dur['duration']
 
         frame_rate = mic['framerate']
