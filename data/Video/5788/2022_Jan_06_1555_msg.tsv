@@ -1,0 +1,13 @@
+	system_time_stamp	msg
+0	159083045583	Calibration_start
+1	159083052461	calibration point 0 at position -17.30163276997995 9.732168433113722
+2	159085550022	calibration point 1 at position 0.0 -0.0
+3	159087700017	calibration point 2 at position 17.30163276997995 -9.732168433113722
+4	159090704191	Calibration_stop
+5	159090804476	Validation_start
+6	159091300227	validation point 0 at position -12.976224577484961 -0.0
+7	159092954519	validation point 1 at position 0.0 -7.299126324835292
+8	159094620855	validation point 2 at position 12.976224577484963 -0.0
+9	159096333456	validation point 3 at position 0.0 7.2991263248352904
+10	159097616930	Validation_end
+11	159097681621	validation data quality Dev_L: 0.87, Dev_R: 1.19 RMS_L: 0.28, RMS_R: 0.25, SD_L: 0.23, SD_R: 0.15, LOSS_L: 0.00, LOSS_R: 0.00

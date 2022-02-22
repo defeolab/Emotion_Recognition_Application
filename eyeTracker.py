@@ -82,8 +82,8 @@ conf = choose_tobii()
 def runexpImage(participantId):
     print(participantId)
     tmp = get_monitors()
-    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
-    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_width = tmp[1].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[1].height  # 0 for resolution of main screen, 1 for resolution of the second screen
     # print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
@@ -234,7 +234,8 @@ class run_video_experiment:
 
         self.tracker.calibrate(win)
         win.close()
-        webInstruction.launch_browser(self.website, type, self.id, self.parent, self.root, self.frame)
+
+        webInstruction.launch_browser(self.website, self.type, self.id, self.parent, self.root, self.frame)
 
     def start_exp_rec(self):
         self.tracker.start_recording(gaze_data=True, store_data=True)
@@ -285,8 +286,8 @@ class run_video_experiment:
 def runexpVideo(participantId):
     print(participantId)
     tmp = get_monitors()
-    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
-    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_width = tmp[1].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[1].height  # 0 for resolution of main screen, 1 for resolution of the second screen
     print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
@@ -374,8 +375,8 @@ def runexpVideo(participantId):
 def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     print(participantId)
     tmp = get_monitors()
-    new_width = tmp[0].width  # 0 for resolution of main screen, 1 for resolution of the second screen
-    new_height = tmp[0].height  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_width = tmp[1].width  # 0 for resolution of main screen, 1 for resolution of the second screen
+    new_height = tmp[1].height  # 0 for resolution of main screen, 1 for resolution of the second screen
     print("Schermo rilevato: " + str(new_width) + " x " + str(new_height))
 
     MY_MONITOR = 'testMonitor'  # needs to exists in PsychoPy monitor center
@@ -422,7 +423,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame=frame)
+    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object

@@ -7,8 +7,10 @@ import ctypes
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 import ScreenRecording
 import GSR_rec
+import Screen_recording_home
 import ffmpeg_video_audio
 import eyeTracker as ey
+import ffmpeg_video_audio_home
 
 try:
     import tkinter as tk
@@ -414,27 +416,27 @@ class NavigationBar(tk.Frame):
             """
             if self.type == 1:
 
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio_home.Camera_recording, args=(self.id, 3, 1))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1))
+                    sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.id, 3, 1))
                     sc.start()
 
             elif self.type == 2:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 2))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio_home.Camera_recording, args=(self.id, 3, 2))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 2))
+                    sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.id, 3, 2))
                     sc.start()
 
             elif self.type == 3:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 3))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio_home.Camera_recording, args=(self.id, 3, 3))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 3))
+                    sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.id, 3, 3))
                     sc.start()
 
             elif self.type == 4:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 4))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio_home.Camera_recording, args=(self.id, 3, 4))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 4))
+                    sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.id, 3, 4))
                     sc.start()
 
             else:
@@ -515,5 +517,3 @@ class NavigationBar(tk.Frame):
                 self.forward_button.config(state=tk.DISABLED)
                 self.forward_state = tk.DISABLED
         self.after(100, self.update_state)
-
-

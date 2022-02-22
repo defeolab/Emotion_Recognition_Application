@@ -7,7 +7,6 @@ class ScreenRec:
         self.exp_type = exp_type
         self.type = type
 
-    #def screen_record(self):
         fp = open('ffmpeg.txt', 'r')
         mic = json.load(fp)
         fp.close()
@@ -17,7 +16,7 @@ class ScreenRec:
         fp1.close()
 
         audio = mic['mic']
-        video_size = mic['video_tobii']
+        video_size = mic['video_size']
         x = mic['x']
         y = mic['y']
 
@@ -99,8 +98,7 @@ class ScreenRec:
             else:
                 print("No experiment")
 
-        #os.system(f"""ffmpeg -f gdigrab -t {duration} -framerate {frame_rate} -video_size {video_size} -offset_x {x} -offset_y {y} -i desktop -f dshow -t {duration} -i audio="{audio}" "{filename}" """)
 
-        os.system(f"""ffmpeg -f gdigrab -t {duration} -framerate {frame_rate} -video_size {video_size} -offset_x {x} -offset_y {y} -i desktop -f dshow -t {duration} -i audio="{audio}" -rtbufsize 100M "{filename}" """)
 
-    #screen_record(self)
+        os.system(f"""ffmpeg -f gdigrab -t {duration} -framerate {frame_rate} -video_size {video_size} -offset_x {0} -offset_y {0} -i desktop -f dshow -t {duration} -i audio="{audio}" -rtbufsize 100M "{filename}" """)
+

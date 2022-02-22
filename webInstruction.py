@@ -28,7 +28,7 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame = None):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -39,17 +39,15 @@ class MainFrame(tk.Frame):
         self.frame = frame  #frame for lab setting enable
 
         # Root
-        #if self.frame == True:
-        fp = open('ffmpeg.txt', 'r')
-        self.reso = json.load(fp)
-        fp.close()
-
-        self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
+        if self.frame == True:
+            fp = open('ffmpeg.txt', 'r')
+            reso = json.load(fp)
+            fp.close()
+            self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-        root.geometry('%sx%s+%s+%s' % (900, 640, -self.sw + self.reso['screen_shift'],0))
-        root.attributes('-fullscreen', True)
-        #else:
-            #root.geometry("900x640")
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 680))
+        else:
+            root.geometry("900x640")
 
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
@@ -243,7 +241,7 @@ class launch_browser:
         assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
         sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
         self.root = tk.Toplevel()
-        sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+        sw, sh = 1920, 1080
         app = MainFrame(self.root, url, type, id, window, old_root, frame)
         rec = None
         if exptype == "gsr":
@@ -257,6 +255,8 @@ class launch_browser:
         t1 = threading.Thread(target=app.browser_frame.mainloop())
         t1.start()
         cef.Shutdown()
+
+
 
 
 

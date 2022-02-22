@@ -7,9 +7,11 @@ from screeninfo import get_monitors
 
 import GSR_rec
 import ScreenRecording
+import Screen_recording_home
 import eyeTracker
 import ffmpeg
 import ffmpeg_video_audio
+import ffmpeg_video_audio_home
 import videoPlayer as vp
 from tkinter import *
 from tkinter import filedialog
@@ -23,6 +25,7 @@ from PIL import Image, ImageTk
 
 
 # from PyQt5.QtWebEngineWidgets import QWebEngineView
+import webInstruction_home
 from GSR.GSR_RECORD_SIGNAL import gsr_thread_record
 
 
@@ -181,13 +184,14 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
-           # a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
-           # a.runexpweb()
+        #eyeTracker.runexpBrowser(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a.runexpweb()
 
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 1, self.patientId, self.parent, self.root, self.settings, False)
+            webInstruction_home.launch_browser(self.web5, 1, self.patientId, self.parent, self.root, self.settings, False)
+
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -198,10 +202,12 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 2, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a.runexpweb()
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.settings, False)
+            webInstruction_home.launch_browser(self.web5, 2, self.patientId, self.parent, self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -210,10 +216,12 @@ class PatientWindow:
         self.web5 = os.getcwd() + self.websites['website5']
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 3, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a.runexpweb()
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.settings,False)
+            webInstruction_home.launch_browser(self.web5, 3,self.patientId,self.parent,self.root,self.settings,False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -224,10 +232,12 @@ class PatientWindow:
 
         if self.settings == "lab":
             self.experiment = True
-            eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
+            #eyeTracker.runexpBrowser(self.web5, 4, self.patientId, self.parent, self.root,True)
+            a = ey.run_video_experiment(self.web5, 1, self.patientId, self.parent, self.root,True)
+            a.runexpweb()
         elif self.settings == "home":
             self.experiment = True
-            webInstruction.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.settings,False)
+            webInstruction_home.launch_browser(self.web5, 4,self.patientId,self.parent,self.root,self.settings,False)
         else:
             self.no_participant1.config(text="No mode selected!")
 
@@ -332,9 +342,9 @@ class PatientWindow:
         image = json.load(fp)
         fp.close()
 
-        cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.patientId, 1,0))
+        cam1 = threading.Thread(target=ffmpeg_video_audio_home.Camera_recording, args=(self.patientId, 1,0))
         cam1.start()
-        sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId, 1,0))
+        sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.patientId, 1,0))
         sc.start()
 
 
@@ -504,19 +514,19 @@ class PatientWindow:
             if self.imag_exp == 1:
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,1,0))
                 cam1.start()
-                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,1,0))
+                sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.patientId,1,0))
                 sc.start()
 
             elif self.imag_exp == 2:
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,2,0))
                 cam1.start()
-                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,2,0))
+                sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.patientId,2,0))
                 sc.start()
 
             elif self.imag_exp == 3:
                 cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording,args=(self.patientId,3,1))
                 cam1.start()
-                sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.patientId,3,1))
+                sc = threading.Thread(target=Screen_recording_home.ScreenRec, args=(self.patientId,3,1))
                 sc.start()
 
         else:

@@ -1,0 +1,17 @@
+	system_time_stamp	msg
+0	95803404306	Calibration_start
+1	95803408386	calibration point 0 at position -17.30163276997995 9.732168433113722
+2	95805955350	calibration point 1 at position 0.0 -0.0
+3	95808088621	calibration point 2 at position 17.30163276997995 -9.732168433113722
+4	95810642095	Calibration_stop
+5	95810742442	Validation_start
+6	95811222162	validation point 0 at position 0.0 -7.299126324835292
+7	95813122143	validation point 1 at position 0.0 7.2991263248352904
+8	95814988696	validation point 2 at position 12.976224577484963 -0.0
+9	95816705312	validation point 3 at position -12.976224577484961 -0.0
+10	95818005416	Validation_end
+11	95818065499	validation data quality Dev_L: 0.94, Dev_R: 0.88 RMS_L: 0.21, RMS_R: 0.11, SD_L: 0.13, SD_R: 0.08, LOSS_L: 0.00, LOSS_R: 0.00
+12	95819981189	fix on
+13	95820955294	fix off
+14	95820955537	stim on: C:/Users/defeo/PycharmProjects/Emotion_Recognition_Application/Image/beer_positioning.jpg
+15	95850955300	stim off: C:/Users/defeo/PycharmProjects/Emotion_Recognition_Application/Image/beer_positioning.jpg

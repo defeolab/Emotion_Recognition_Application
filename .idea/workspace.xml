@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="xiaoyi finished">
-      <change afterPath="$PROJECT_DIR$/Image/Instructions.png" afterDir="false" />
+    <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="new version">
+      <change afterPath="$PROJECT_DIR$/Screen_recording_home.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_1928.pkl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_1928.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_1928_msg.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_2007.pkl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_2007.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2021_Dec_30_2007_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2000.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2000.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2000_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2107.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2107.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2107_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2137.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2137.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2137_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2146.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2146.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_12_2146_msg.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Jan_06_1548.pkl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Jan_06_1548.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Jan_06_1548_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/5788_Camera_output.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/Image/5788/5788_Screen_rec.mp4" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Video/5788/2022_Jan_06_1555.pkl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Video/5788/2022_Jan_06_1555.tsv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/Video/5788/2022_Jan_06_1555_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ffmpeg_video_audio_home.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webBrowser_home.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/webInstruction_home.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1.bin" beforeDir="false" afterPath="$PROJECT_DIR$/1.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ScreenRecording.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScreenRecording.py" afterDir="false" />
@@ -25,10 +42,8 @@
       <change beforePath="$PROJECT_DIR$/data/Browser/5788/5788_Screen_web1_rec.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/data/Browser/5788/5788_Screen_web1_rec.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eyeTracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTracker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ffmpeg.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ffmpeg.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/loginWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/loginWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/patientWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/patientWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/validation_image1.png" beforeDir="false" afterPath="$PROJECT_DIR$/validation_image1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/videoPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/videoPlayer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/webBrowser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webInstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/webInstruction.py" afterDir="false" />
     </list>
@@ -36,6 +51,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PUSH_TAGS">
@@ -66,7 +88,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -141,8 +163,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.eyeTracker" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.patientWindow" />
     </list>
     <recent_temporary>
@@ -183,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638306976949</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="new version">
+      <created>1643236528456</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1643236528456</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -203,7 +232,8 @@
     <MESSAGE value="changed screen resolution, now it calibrates, but the test img path gone wrong" />
     <MESSAGE value="need to fix the browser issue" />
     <MESSAGE value="xiaoyi finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="xiaoyi finished" />
+    <MESSAGE value="new version" />
+    <option name="LAST_COMMIT_MESSAGE" value="new version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -214,9 +244,9 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/patientWindow.py</url>
-          <line>183</line>
-          <option name="timeStamp" value="13" />
+          <url>file://$USER_HOME$/Desktop/orignial version/webInstruction.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
