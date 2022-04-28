@@ -28,7 +28,7 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame):
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame = None,cal_tracker=None):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -37,6 +37,7 @@ class MainFrame(tk.Frame):
         self.old_window = old_window
         self.old_root = old_root
         self.frame = frame  #frame for lab setting enable
+        self.cal_tracker=cal_tracker
 
         # Root
         if self.frame == True:
@@ -45,7 +46,7 @@ class MainFrame(tk.Frame):
             fp.close()
             self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 680))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], reso['screen_shift_y']))
         else:
             root.geometry("900x640")
 
@@ -64,7 +65,7 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root,self.frame)
+        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root,self.frame,self.cal_tracker)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -228,7 +229,7 @@ class FocusHandler(object):
 
 
 class launch_browser:
-    def __init__(self,url, type, id, window, old_root, frame, path=None, exptype=None):
+    def __init__(self,url, type, id, window, old_root, frame, path=None, exptype=None,cal_tracker=None):
         logger.setLevel(_logging.INFO)
         stream_handler = _logging.StreamHandler()
         formatter = _logging.Formatter("[%(filename)s] %(message)s")
@@ -242,7 +243,7 @@ class launch_browser:
         sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
         self.root = tk.Toplevel()
         sw, sh = 1920, 1080
-        app = MainFrame(self.root, url, type, id, window, old_root, frame)
+        app = MainFrame(self.root, url, type, id, window, old_root, frame,cal_tracker)
         rec = None
         if exptype == "gsr":
             rec = gsr.Record()
@@ -261,7 +262,7 @@ class launch_browser:
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None):
+    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None,cal_tracker=None):
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -275,6 +276,8 @@ class NavigationBar(tk.Frame):
         self.old_window = old_window
         self.old_root = old_root
         self.frame = frame
+        self.cal_tracker=cal_tracker
+
 
 
         #self.duration = dur['dur']
@@ -320,13 +323,13 @@ class NavigationBar(tk.Frame):
         fp.close()
 
         if self.type == 1:
-            webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website1'], 1, self.id, self.old_window, self.old_root, self.frame,cal_tracker=self.cal_tracker)
         elif self.type == 2:
-            webBrowser.launch_browser(self.websites['website2'], 2, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website2'], 2, self.id, self.old_window, self.old_root, self.frame,cal_tracker=self.cal_tracker)
         elif self.type == 3:
-            webBrowser.launch_browser(self.websites['website3'], 3, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website3'], 3, self.id, self.old_window, self.old_root, self.frame,cal_tracker=self.cal_tracker)
         elif self.type == 4:
-            webBrowser.launch_browser(self.websites['website4'], 4, self.id, self.old_window, self.old_root, self.frame)
+            webBrowser.launch_browser(self.websites['website4'], 4, self.id, self.old_window, self.old_root, self.frame,cal_tracker=self.cal_tracker)
         else:
             print("no browser!")
         #return self.old_root

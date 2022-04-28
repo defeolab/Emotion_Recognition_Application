@@ -55,7 +55,6 @@ class Record:
 
         self.ParticipantID = id
         self.exp_type = exp_type
-
     def create_stream(self,):
         if self.stream is not None:
             self.stream.close()

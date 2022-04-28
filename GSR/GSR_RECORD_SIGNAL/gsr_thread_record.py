@@ -103,24 +103,24 @@ class Record(tk.Tk):
         self.thread.join()
         self.thread1.join()
 
-#main = Record()
-
-
-#def quit():
+# main = Record()
+#
+#
+# def quit():
 #    root.destroy()
-
-
-#def start():
+#
+#
+# def start():
 #    main.create_stream()
 #    main.on_rec(path)
 #    btn1.config(state=tk.DISABLED)
 #    btn2.configure(state=tk.NORMAL)
-
-
-#filename = None
-
-
-#def stop():
+#
+#
+# filename = None
+#
+#
+# def stop():
 #    global filename
 #    filename = main.on_stop()
 #    print('Closing streaming')
@@ -129,22 +129,22 @@ class Record(tk.Tk):
 #    print(filename)
 #    printAfterStop()
 #    return filename
-
-
-#def printAfterStop():
+#
+#
+# def printAfterStop():
 #    print("Filename after stop: " + str(filename))
 #    return filename
-
-
-#root = tk.Tk()
-#frame = tk.Frame(root)
-#btn1 = tk.Button(frame, text='Start Record', command=start)
-#btn2 = tk.Button(frame, text="Stop Record", command=stop, state=tk.DISABLED)
-#btn3 = tk.Button(frame, text="Exit", command=quit)
-#btn1.pack()
-#btn2.pack()
-#btn3.pack()
-#frame.pack()
-#root.mainloop()
+#
+#
+# root = tk.Tk()
+# frame = tk.Frame(root)
+# btn1 = tk.Button(frame, text='Start Record', command=start)
+# btn2 = tk.Button(frame, text="Stop Record", command=stop, state=tk.DISABLED)
+# btn3 = tk.Button(frame, text="Exit", command=quit)
+# btn1.pack()
+# btn2.pack()
+# btn3.pack()
+# frame.pack()
+# root.mainloop()
 
 

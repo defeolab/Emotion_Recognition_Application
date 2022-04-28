@@ -35,7 +35,7 @@ def file_writing_thread(*, q, **soundfile_args):
             f.write(data)
 
 
-class Record():
+class Record:
 
     stream = None
 
@@ -52,7 +52,7 @@ class Record():
         if self.stream is not None:
             self.stream.close()
         self.stream = sd.InputStream(
-            device=device, channels=2, callback=self.audio_callback)
+            device=device, channels=2, callback=self.audio_callback)#changed from 2 to 1, callback function has error and can't find mic,if doesnt change, invalid channels,tried to change mic same as gsr record, got error opeinging data.wav
         self.stream.start()
 
     def audio_callback(self, indata, frames, time, status):

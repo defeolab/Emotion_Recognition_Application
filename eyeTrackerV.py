@@ -98,8 +98,8 @@ def runexpImage(participantId):
     mon.setWidth(SCREEN_WIDTH)  # Width of screen (cm)
     mon.setDistance(VIEWING_DIST)  # Distance eye / monitor (cm)
     mon.setSizePix(SCREEN_RES)
-    # im_name = os.getcwd() + "/Image/beer_positioning.jpg"
-    im_name = "C:/Users/defeo/PycharmProjects/Emotion_Recognition_Application/Image/beer_positioning.jpg"
+    im_name = os.getcwd() + "/Image/beer_positioning.jpg"
+    #im_name = "C:/Users/defeo/PycharmProjects/Emotion_Recognition_Application/Image/beer_positioning.jpg"
 
     # im_name = filedialog.askopenfilename(initialdir=os.getcwd() + "/Image/")
 
@@ -135,6 +135,10 @@ def runexpImage(participantId):
         tracker.calibrate(win)"""
 
     tracker.calibrate(win)
+    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(participantId, 1, 0))
+    cam1.start()
+    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(participantId, 1, 0))
+    sc.start()
 
     tracker.start_recording(gaze_data=True, store_data=True)
     # rec = gsr.Record()
@@ -158,7 +162,7 @@ def runexpImage(participantId):
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
 
-    # rec.on_stop()
+    #rec.on_stop()
     tracker.stop_recording(gaze_data=True)
 
     # Close window and save data
@@ -176,6 +180,7 @@ def runexpImage(participantId):
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
 
 
 class run_video_experiment:
@@ -215,9 +220,11 @@ class run_video_experiment:
         bimonocular_calibration = False
 
         self.settings = Titta.get_defaults(self.et_name)
-        self.settings.FILENAME = 'data/Video/' + str(self.id) + '/' + data.getDateStr() + '.tsv'
-        GSRpath = 'data/Video/' + str(self.id) + '/GSR_data/'
-        print(self.settings.FILENAME)
+        self.settings.FILENAME = 'data/Browser/' + str(self.id) + '/' + data.getDateStr() + '.tsv'
+        GSRpath = 'data/Browser/' + str(self.id) + '/GSR_data/'
+
+        print("Video path : ",self.settings.FILENAME)
+
         self.settings.N_CAL_TARGETS = 3
 
         self.tracker = Titta.Connect(self.settings)
@@ -238,7 +245,7 @@ class run_video_experiment:
         webInstruction.launch_browser(self.website, self.type, self.id, self.parent, self.root, self.frame)
 
     def start_exp_rec(self):
-        self.tracker.start_recording(gaze_data=True, store_data=True)
+        self.tracker.start_recording(gaze_data=True)
 
         def createVideoFrame():
             top = tk.Toplevel()
@@ -252,24 +259,25 @@ class run_video_experiment:
                 player.quit()
                 top.destroy()
 
-                # save file
+                    # save file
                 self.tracker.stop_recording(gaze_data=True)
-                # Close window and save data
+                    # Close window and save data
                 self.tracker.save_data(self.mon)  # Also save screen geometry from the monitor object
 
-                # %% Open pickle and write et-data and messages to tsv-files.
+                    # %% Open pickle and write et-data and messages to tsv-files.
                 f = open(self.settings.FILENAME[:-4] + '.pkl', 'rb')
                 gaze_data = pickle.load(f)
                 msg_data = pickle.load(f)
 
-                #  Save data and messages
+                    #  Save data and messages
                 df = pd.DataFrame(gaze_data, columns=self.tracker.header)
+
                 df.to_csv(self.settings.FILENAME[:-4] + '.tsv', sep='\t')
                 df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
                 df_msg.to_csv(self.settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
-                # postprocessing.process(settings.FILENAME)
+                    # postprocessing.process(settings.FILENAME)
                 os.startfile(
-                    "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+                        "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
 
             top.protocol("WM_DELETE_WINDOW", closeTop)
 
@@ -279,8 +287,6 @@ class run_video_experiment:
             top.bind('<space>', pause)
 
         createVideoFrame()
-
-
 
 
 def runexpVideo(participantId):
@@ -438,5 +444,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     df.to_csv(settings.FILENAME[:-4] + '.tsv', sep='\t')
     df_msg = pd.DataFrame(msg_data, columns=['system_time_stamp', 'msg'])
     df_msg.to_csv(settings.FILENAME[:-4] + '_msg.tsv', sep='\t')
+
+
 
     print("saved")

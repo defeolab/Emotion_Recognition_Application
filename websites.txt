@@ -3,5 +3,5 @@
 "website3":"https://www.google.com/",
 "website4":"https://www.google.com/",
 "website5":"/instruction.html",
-"duration":"00:00:10",
+"duration":"00:01:00",
 "loading_time":2}

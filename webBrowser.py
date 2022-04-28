@@ -33,8 +33,7 @@ logger = _logging.getLogger("tkinter_.py")
 
 class MainFrame(tk.Frame):
 
-    def __init__(self, root, starting_url, type_exp,id, old_window,old_root, settings, frame = None, cal_tracker = None):
-        self.settings = settings #home or lab if we are on home settings or not
+    def __init__(self, root, starting_url, type_exp,id, old_window,old_root,frame = None, cal_tracker = None):
         self.browser_frame = None
         self.navigation_bar = None
         self.instruction_frame = None
@@ -48,12 +47,17 @@ class MainFrame(tk.Frame):
         #def quitfullscreen():
         #    self.root.attributes('-fullscreen', False)
 
-        if self.settings == True:
+        if self.frame == True:
             fp = open('ffmpeg.txt', 'r')
             reso = json.load(fp)
             fp.close()
+
             self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 640))
+            #root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], reso['screen_shift_y']))
+            #root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], reso['screen_shift']))
+                    # Root
+            #root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], 0))
             #root.attributes('-fullscreen', True)
             #root.bind("<Escape>", quitfullscreen)
 
@@ -74,7 +78,7 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root, settings=self.settings, frame = self.frame, cal_tracker = self.cal_tracker)
+        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root, frame = self.frame, cal_tracker = self.cal_tracker)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -249,7 +253,7 @@ class launch_browser:
             ver=platform.python_version(), arch=platform.architecture()[0]))
         logger.info("Tk {ver}".format(ver=tk.Tcl().eval('info patchlevel')))
         assert cef.__version__ >= "55.3", "CEF Python v55.3+ required to run this"
-        sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on error
+        sys.excepthook = cef.ExceptHook  # To shutdown all CEF processes on er ror
         self.root = tk.Toplevel()
         app = MainFrame(self.root, url, type, id, window, old_root, frame, cal_tracker)
         rec = None
@@ -269,9 +273,8 @@ class launch_browser:
 
 
 class NavigationBar(tk.Frame):
-    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,settings, frame=None, cal_tracker = True):
+    def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None, cal_tracker = None):
         #self.countdown = None
-        self.settings = settings
         self.back_state = tk.NONE
         self.forward_state = tk.NONE
         self.back_image = None
@@ -332,113 +335,100 @@ class NavigationBar(tk.Frame):
         loading_time.start()
 
     def GSR_rec(self, pat, id,type):
-        main = GSR_rec.Record(pat, id,type)
+        main = GSR_rec.Record(pat, id,type)#passing the id, exp type and type
         main.create_stream()
         main.on_rec()
 
-    def countdown_lab(self, time):
+    def countdown(self, time):
         if time == -1:
             self.enable = 1
             self.root.destroy()
-            #self.eye_track_file.stop_exp_rec(self.cal_tracker)
+            self.eye_track_file.stop_exp_rec(self.cal_tracker)
             finish = tk.Label(self.old_root, text ="Experiment finished! press the close Button.",font='Times 14')
             finish.grid(row=14,column=1)
         else:
-            self.root.after(1000, self.countdown_lab, time - 1)
-
-    def countdown_home(self, time):
-        if time == -1:
-            self.enable = 1
-            self.root.destroy()
-            finish = tk.Label(self.old_root, text ="Experiment finished! press the close Button.",font='Times 14')
-            finish.grid(row=14,column=1)
-        else:
-            self.root.after(1000, self.countdown_home, time - 1)
+            self.root.after(1000, self.countdown, time - 1)
 
     def loading_countdown(self, time):
         if time == -1:
             #self.enable = 1
             print("loading time end")
             self.chrono_countdown(self.result)
-            if self.settings == "home":
-                self.countdown = self.countdown_home
-            else:
-                self.countdown = self.countdown_lab
             im_timer = threading.Thread(target=self.countdown, args=(self.result,))
             im_timer.start()
-#hided
-            """if self.frame == True:
+
+            if self.frame == True:
                 if self.type == 1:
-                    self.eye_track_file = ey.run_video_experiment(self.websites['website1'], 1, self.id,
+                    self.eye_track_file = ey.run_browser_experiment(self.websites['website1'], 1, self.id,
                                                                   self.old_window, self.root, True)
                     self.eye_track_file.start_exp_rec(self.cal_tracker)
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1,self.frame))
                     sc.start()
-                    gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 1))
-                    gsr.start()
+                    Gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 1))
+                    Gsr.start()
                 elif self.type == 2:
-                    self.eye_track_file = ey.run_video_experiment(self.websites['website2'], 2, self.id,
+                    self.eye_track_file = ey.run_browser_experiment(self.websites['website2'], 2, self.id,
                                                                   self.old_window, self.root, True)
                     self.eye_track_file.start_exp_rec(self.cal_tracker)
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 2))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 2,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 2))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 2,self.frame))
                     sc.start()
-                    gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 2))
-                    gsr.start()
+                    Gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 2))
+                    Gsr.start()
                 elif self.type == 3:
-                    self.eye_track_file = ey.run_video_experiment(self.websites['website3'], 3, self.id,
+                    self.eye_track_file = ey.run_browser_experiment(self.websites['website3'], 3, self.id,
                                                                   self.old_window, self.root, True)
                     self.eye_track_file.start_exp_rec(self.cal_tracker)
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 3))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 3,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 3))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 3,self.frame))
                     sc.start()
-                    gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 3))
-                    gsr.start()
+                    Gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 3))
+                    Gsr.start()
                 elif self.type == 4:
-                    self.eye_track_file = ey.run_video_experiment(self.websites['website4'], 4, self.id,
+                    self.eye_track_file = ey.run_browser_experiment(self.websites['website4'], 4, self.id,
                                                                   self.old_window, self.root, True)
                     self.eye_track_file.start_exp_rec(self.cal_tracker)
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 4))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 4,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 4))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 4,self.frame))
                     sc.start()
-                    gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 4))
-                    gsr.start()
+                    Gsr = threading.Thread(target=self.GSR_rec, args=(self.id, 3, 4))
+                    Gsr.start()
                 else:
                     print("no experiment!")
             else:
-            """
-            if self.type == 1:
+                if self.type == 1:
 
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1))
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 1,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 1,self.frame))
                     sc.start()
 
-            elif self.type == 2:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 2))
+                elif self.type == 2:
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 2,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 2))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 2,self.frame))
                     sc.start()
 
-            elif self.type == 3:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 3))
+                elif self.type == 3:
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 3,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 3))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 3,self.frame))
                     sc.start()
 
-            elif self.type == 4:
-                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 4))
+                elif self.type == 4:
+                    cam1 = threading.Thread(target=ffmpeg_video_audio.Camera_recording, args=(self.id, 3, 4,self.frame))
                     cam1.start()
-                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 4))
+                    sc = threading.Thread(target=ScreenRecording.ScreenRec, args=(self.id, 3, 4,self.frame))
                     sc.start()
 
-            else:
+                else:
                     print("no experiment!")
+
 
         else:
             self.root.after(1000, self.loading_countdown, time - 1)
