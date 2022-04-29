@@ -1,4 +1,4 @@
-{"mic":"Microphone (Realtek High Definition Audio)",
+{"mic":"Mic in at rear panel (Blue) (Realtek High Definition Audio)",
 "mic_caserta":"Microphone (High Definition Audio Device)",
 "mic_essexlab":"Microphone (USB Microphone)",
 "mic_victor":"Microphone (Sound Blaster Recon3Di)",

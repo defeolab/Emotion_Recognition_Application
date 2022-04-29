@@ -350,6 +350,8 @@ class PatientWindow:
         img2 = os.getcwd() + image['img2']
         img3 = os.getcwd() + image['img3']
         img4 = os.getcwd() + image['img4']
+
+
         count_1 = image['count_1']
         count_2 = image['count_2']
         count_3 = image['count_3']
