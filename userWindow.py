@@ -15,9 +15,9 @@ class userWindow():
     def __init__(self, name, surname, id):
         self.name = name
         self.surname = surname
-        self.patientId = id
+        self.participantId = id
         self.window = None
-        self.patient = None
+        self.participant = None
         fp = open('anagraphicData.txt', 'r')
         data = json.load(fp)
         self.ids = data['IDs']
@@ -39,7 +39,7 @@ class userWindow():
         for string in self.participants:
             self.dropdown["menu"].add_command(label=string, command=_setit(self.tkvar, string))
 
-    def add_patient(self):
+    def add_participant(self):
         top = Toplevel()
         top.title("Add a new Patient")
         top.geometry("600x1000")
@@ -193,7 +193,7 @@ class userWindow():
 
         self.dropdown.grid(row=3, column=1, sticky=(N, W, E, S))
 
-        add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_patient).grid(row=4, column=1,
+        add_but = ttk.Button(mainframe, text="Add new Participant", command=self.add_participant).grid(row=4, column=1,
                                                                                                  padx=10, pady=20)
 
         del_but = ttk.Button(mainframe, text="Delete Participant", command=lambda: self.my_remove_sel())
@@ -211,36 +211,36 @@ class userWindow():
         no_participant.grid(row=1, column=1, padx= 30, pady= 20)
 
 
-        def selectPatient(str):
-            if self.patient is not None:
+        def selectparticipant(str):
+            if self.participant is not None:
                 no_participant.destroy()
-                for w in self.patient.widgets:
+                for w in self.participant.widgets:
                     w.destroy()
 
 
             pat = str.get().split()[1]
-            self.patient = pw.PatientWindow(self.window, pat)
+            self.participant = pw.PatientWindow(self.window, pat)
 
         # on change dropdown value
         def change_dropdown(*args):
-            selectPatient(self.tkvar)
+            selectparticipant(self.tkvar)
 
         # link function to change dropdown
         self.tkvar.trace('w', change_dropdown)
 
-    def searchPatient(self, str):
-        if self.patient is not None:
-            for w in self.patient.widgets:
+    def searchparticipant(self, str):
+        if self.participant is not None:
+            for w in self.participant.widgets:
                 w.destroy()
 
         pat = str.split()[1]
-        self.patient = pw.PatientWindow(self.window, pat)
+        self.participant = pw.PatientWindow(self.window, pat)
 
 
     def search_participant(self):
         self.search_key_var = self.search.get()
         if self.search_key_var is not None:
-            self.searchPatient(self.search_key_var)
+            self.searchparticipant(self.search_key_var)
         else:
             print("No participant exist")
 

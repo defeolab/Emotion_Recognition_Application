@@ -2,11 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="full version, with no errors">
-      <change afterPath="$PROJECT_DIR$/data/Browser/5788/5788_Camera_web3_output.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Browser/5788/5788_Screen_web3_rec.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_22_2045.pkl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_22_2045.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/Image/5788/2022_Feb_22_2045_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Instructions.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WebsiteExperiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Images.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScreenRecording.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScreenRecording.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Browser/5788/5788_Camera_web1_output.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Browser/5788/5788_Screen_web1_rec.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Image/5788/5788_Camera_output.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Image/5788/5788_Screen_rec.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eyeTracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ffmpeg_video_audio.py" beforeDir="false" afterPath="$PROJECT_DIR$/ffmpeg_video_audio.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/patientWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/patientWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/userWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/webBrowser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webInstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/webInstruction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/websites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/websites.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +49,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="21BIaoqHkwDVJ22nDrm2adPZW0j" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -49,6 +64,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/neuromdeskapp.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -56,7 +72,7 @@
       <recent name="C:\Users\defeo\PycharmProjects\Emotion_Recognition_Application\Image" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.neuromdeskapp">
     <configuration type="CompoundRunConfigurationType">
       <method v="2" />
     </configuration>
@@ -81,7 +97,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="neuromdeskapp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Emotion_Recognition_Application" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -93,7 +109,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/neuromdeskapp.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -114,7 +130,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/patientWindow.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\admin\PycharmProjects\Emotion_Recognition_Application_updated\patientWindow.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -125,12 +141,12 @@
     </configuration>
     <list>
       <item itemvalue="Python.eyeTracker" />
-      <item itemvalue="Python.main" />
+      <item itemvalue="Python.neuromdeskapp" />
       <item itemvalue="Python.patientWindow" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
+        <item itemvalue="Python.neuromdeskapp" />
         <item itemvalue="Python.patientWindow" />
         <item itemvalue="Python.eyeTracker" />
       </list>
@@ -193,7 +209,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

@@ -40,6 +40,7 @@ import time
 
 import GSR_rec
 import ScreenRecording
+import WebsiteExperiment
 import ffmpeg_video_audio
 import webBrowser
 import webInstruction
@@ -124,7 +125,7 @@ def runexpImage(participantId):
     win = visual.Window(monitor=mon, fullscr=FULLSCREEN,
                         screen=1, size=SCREEN_RES, units='deg')
     fixation_point = helpers.MyDot2(win)
-    #image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
+    # image = visual.ImageStim(win, image=im_name, units='norm', size=(2, 2))
     #  Calibrate
     """if bimonocular_calibration:
         tracker.calibrate(win, eye='left', calibration_number='first')
@@ -158,7 +159,6 @@ def runexpImage(participantId):
     tracker.send_message(''.join(['stim off: ', im_name]))
     win.flip()
     """
-
 
     # new block to iterate images with times.
     fp1 = open('images.txt', 'r')
@@ -246,13 +246,12 @@ class run_browser_experiment:
 
         # Window set-up (this color will be used for calibration)
 
-        win = visual.Window(monitor=self.mon, fullscr=self.FULLSCREEN,
-                            screen=1, size=self.SCREEN_RES, units='deg')
+        win = visual.Window(monitor=self.mon, fullscr=self.FULLSCREEN, screen=1, size=self.SCREEN_RES, units='deg')
         fixation_point = helpers.MyDot2(win)
 
         self.tracker.calibrate(win)
         win.close()
-        cal_tracker = self.tracker
+        # cal_tracker = self.tracker
         cal_tracker = self.tracker
         # return cal_tracker
 
@@ -260,17 +259,17 @@ class run_browser_experiment:
         self.websites = json.load(fp)
         fp.close()
         if self.type == 1:
-            webInstruction.launch_browser(self.website, 1, self.id, self.parent, self.root, True,
-                                          cal_tracker=cal_tracker)
+            WebsiteExperiment.launch_browser(self.website, 1, self.id, self.parent, self.root, True,
+                                             cal_tracker=cal_tracker)
         elif self.type == 2:
-            webInstruction.launch_browser(self.website, 2, self.id, self.parent, self.root, True,
-                                          cal_tracker=cal_tracker)
+            WebsiteExperiment.launch_browser(self.website, 2, self.id, self.parent, self.root, True,
+                                             cal_tracker=cal_tracker)
         elif self.type == 3:
-            webInstruction.launch_browser(self.website, 3, self.id, self.parent, self.root, True,
-                                          cal_tracker=cal_tracker)
+            WebsiteExperiment.launch_browser(self.website, 3, self.id, self.parent, self.root, True,
+                                             cal_tracker=cal_tracker)
         elif self.type == 4:
-            webInstruction.launch_browser(self.website, 4, self.id, self.parent, self.root, True,
-                                          cal_tracker=cal_tracker)
+            WebsiteExperiment.launch_browser(self.website, 4, self.id, self.parent, self.root, True,
+                                             cal_tracker=cal_tracker)
 
     def start_exp_rec(self, cal_tracker):
         self.tracker = cal_tracker

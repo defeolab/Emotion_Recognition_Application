@@ -46,14 +46,13 @@ class MainFrame(tk.Frame):
             fp.close()
             self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], reso['screen_shift_y']))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'],
+                                           reso['screen_shift_y']))
         else:
             root.geometry("900x640")
 
         tk.Grid.rowconfigure(root, 0, weight=1)
         tk.Grid.columnconfigure(root, 0, weight=1)
-
-
 
         # MainFrame
         tk.Frame.__init__(self, root)
@@ -65,7 +64,8 @@ class MainFrame(tk.Frame):
         self.bind("<FocusOut>", self.on_focus_out)
 
         # NavigationBar
-        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root,self.frame,self.cal_tracker)
+        self.navigation_bar = NavigationBar(self, root,self.type, starting_url,self.id,self.old_window, self.old_root,
+                                            self.frame,self.cal_tracker)
         self.navigation_bar.grid(row=0, column=0,
                                  sticky=(tk.N + tk.S + tk.E + tk.W))
         tk.Grid.rowconfigure(self, 0, weight=0)
@@ -249,17 +249,12 @@ class launch_browser:
             rec = gsr.Record()
             rec.on_rec(path)
 
-
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
         cef.Initialize()
 
         t1 = threading.Thread(target=app.browser_frame.mainloop())
         t1.start()
         cef.Shutdown()
-
-
-
-
 
 class NavigationBar(tk.Frame):
     def __init__(self, master, root,type_exp, starting_url, id, old_window,old_root,frame = None,cal_tracker=None):
@@ -277,8 +272,6 @@ class NavigationBar(tk.Frame):
         self.old_root = old_root
         self.frame = frame
         self.cal_tracker=cal_tracker
-
-
 
         #self.duration = dur['dur']
 
@@ -314,10 +307,9 @@ class NavigationBar(tk.Frame):
         if self.master.get_browser():
             self.master.get_browser().GoBack()
 
-
     def start_experiment(self):
         #tk.Frame.destroy(self.master)
-        self.root.destroy()
+        # self.root.destroy()
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
@@ -332,7 +324,9 @@ class NavigationBar(tk.Frame):
             webBrowser.launch_browser(self.websites['website4'], 4, self.id, self.old_window, self.old_root, self.frame,cal_tracker=self.cal_tracker)
         else:
             print("no browser!")
+
         #return self.old_root
+
     def go_forward(self):
         if self.master.get_browser():
             self.master.get_browser().GoForward()

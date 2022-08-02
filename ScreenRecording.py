@@ -2,11 +2,12 @@ import os
 import json
 
 class ScreenRec:
-    def __init__(self, id, exp_type,type,frame):
-        self.PatientID = id
+    def __init__(self, id, exp_type,type,frame, duration):
+        self.participantID = id
         self.exp_type = exp_type
         self.type = type
         self.frame = frame
+        self.duration = duration
 
     #def screen_record(self):
         if self.exp_type == 1:
@@ -23,11 +24,13 @@ class ScreenRec:
             x = ffmpegsettings['x']
             y = ffmpegsettings['y']
 
-            duration = dur['duration']
+            duration = self.duration
+            print('existing duration ', self.duration)
+            print('new duration ', dur['duration'])
 
             frame_rate = ffmpegsettings['framerate']
-            filename = "data/Image/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_rec.mp4"
-            file_path = "data/Image/" + str(self.PatientID) + "/"
+            filename = "data/Image/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_rec.mp4"
+            file_path = "data/Image/" + str(self.participantID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
             else:
@@ -36,6 +39,7 @@ class ScreenRec:
                     os.remove(filename)
                 else:
                     print("No file exist")
+
         if self.exp_type == 2:
             fp = open('ffmpeg.txt', 'r')
             ffmpegsettings = json.load(fp)
@@ -53,8 +57,8 @@ class ScreenRec:
             duration = dur['duration']
 
             frame_rate = ffmpegsettings['framerate']
-            filename = "data/Video/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_rec.mp4"
-            file_path = "data/Video/" + str(self.PatientID) + "/"
+            filename = "data/Video/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_rec.mp4"
+            file_path = "data/Video/" + str(self.participantID) + "/"
             if len(os.listdir(file_path)) == 0:
                 print("Directory is empty")
             else:
@@ -82,8 +86,8 @@ class ScreenRec:
 
             frame_rate = ffmpegsettings['framerate']
             if self.type == 1:
-                filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_web1_rec.mp4"
-                file_path = "data/Browser/" + str(self.PatientID) + "/"
+                filename = "data/Browser/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_web1_rec.mp4"
+                file_path = "data/Browser/" + str(self.participantID) + "/"
                 if len(os.listdir(file_path)) == 0:
                     print("Directory is empty")
                 else:
@@ -94,8 +98,8 @@ class ScreenRec:
                         print("No file exist")
 
             elif self.type == 2:
-                filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_web2_rec.mp4"
-                file_path = "data/Browser/" + str(self.PatientID) + "/"
+                filename = "data/Browser/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_web2_rec.mp4"
+                file_path = "data/Browser/" + str(self.participantID) + "/"
                 if len(os.listdir(file_path)) == 0:
                     print("Directory is empty")
                 else:
@@ -106,8 +110,8 @@ class ScreenRec:
                         print("No file exist")
 
             elif self.type == 3:
-                filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_web3_rec.mp4"
-                file_path = "data/Browser/" + str(self.PatientID) + "/"
+                filename = "data/Browser/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_web3_rec.mp4"
+                file_path = "data/Browser/" + str(self.participantID) + "/"
                 if len(os.listdir(file_path)) == 0:
                     print("Directory is empty")
                 else:
@@ -118,8 +122,8 @@ class ScreenRec:
                         print("No file exist")
 
             elif self.type == 4:
-                filename = "data/Browser/" + str(self.PatientID) + "/" + str(self.PatientID) + "_Screen_web4_rec.mp4"
-                file_path = "data/Browser/" + str(self.PatientID) + "/"
+                filename = "data/Browser/" + str(self.participantID) + "/" + str(self.participantID) + "_Screen_web4_rec.mp4"
+                file_path = "data/Browser/" + str(self.participantID) + "/"
                 if len(os.listdir(file_path)) == 0:
                     print("Directory is empty")
                 else:
