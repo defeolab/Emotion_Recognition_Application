@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="full version, with no errors">
-      <change afterPath="$PROJECT_DIR$/Instructions.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebsiteExperiment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Images.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreenRecording.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScreenRecording.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Browser/5788/5788_Camera_web1_output.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Browser/5788/5788_Screen_web1_rec.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Image/5788/5788_Camera_output.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Image/5788/5788_Screen_rec.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/eyeTracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ffmpeg_video_audio.py" beforeDir="false" afterPath="$PROJECT_DIR$/ffmpeg_video_audio.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/patientWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/patientWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/userWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/webBrowser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webInstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/webInstruction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/websites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/websites.txt" afterDir="false" />
-    </list>
+    <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="full version, with no errors" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -196,7 +178,21 @@
       <option name="project" value="LOCAL" />
       <updated>1645563078906</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="full version, with no errors">
+      <created>1659437568554</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1659437568554</updated>
+    </task>
+    <task id="LOCAL-00007" summary="full version, with no errors">
+      <created>1659437660673</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1659437660673</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
