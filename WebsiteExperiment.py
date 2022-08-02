@@ -131,12 +131,12 @@ class MainFrame(tk.Frame):
     def on_focus_out(self, _):
         logger.debug("MainFrame.on_focus_out")
 
-    # def on_close(self):
-    #     if self.browser_frame:
-    #         self.browser_frame.on_root_close()
-    #     self.master.destroy()
-    #     if self.frame is not None:
-    #         self.frame.stop()
+    def on_close(self):
+        if self.browser_frame:
+            self.browser_frame.on_root_close()
+        self.master.destroy()
+        if self.frame is not None:
+            self.frame.stop()
 
     def get_browser(self):
         if self.browser_frame:
