@@ -2,8 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="full version, with no errors">
+      <change afterPath="$PROJECT_DIR$/GSR_rec.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/play.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/upload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/volume.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/Capture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/beer_positioning.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral5#.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WebsiteExperiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebsiteExperiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eyeTracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eyeTrackerV.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTrackerV.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/patientWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/patientWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/videoPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/videoPlayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webBrowser.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/webInstruction.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +54,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="21BIaoqHkwDVJ22nDrm2adPZW0j" />
   <component name="ProjectLevelVcsManager">
@@ -202,7 +223,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659447598080</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="full version, with no errors">
+      <created>1659448965694</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1659448965694</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -237,6 +265,11 @@
           <url>file://$USER_HOME$/Desktop/orignial version/webInstruction.py</url>
           <line>41</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/patientWindow.py</url>
+          <line>131</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

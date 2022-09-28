@@ -42,8 +42,8 @@ import GSR_rec
 import ScreenRecording
 import WebsiteExperiment
 import ffmpeg_video_audio
-import webBrowser
-import webInstruction
+# import webBrowser
+# import webInstruction
 from titta import Titta, helpers_tobii as helpers
 import os
 
@@ -251,9 +251,7 @@ class run_browser_experiment:
 
         self.tracker.calibrate(win)
         win.close()
-        # cal_tracker = self.tracker
         cal_tracker = self.tracker
-        # return cal_tracker
 
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)

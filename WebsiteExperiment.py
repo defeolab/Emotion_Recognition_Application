@@ -77,7 +77,8 @@ class MainFrame(tk.Frame):
             fp.close()
             self.sw, self.sh = root.winfo_screenwidth(), root.winfo_screenheight()
         # Root
-            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'], reso['screen_shift_y']))
+            root.geometry('%sx%s+%s+%s' % (reso['tobii_width'], reso['tobii_hight'], -self.sw + reso['screen_shift'],
+                                           reso['screen_shift_y']))
         else:
             root.geometry("900x640")
 

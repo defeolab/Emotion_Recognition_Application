@@ -40,9 +40,8 @@ import time
 
 import GSR_rec
 import ScreenRecording
+import WebsiteExperiment
 import ffmpeg_video_audio
-import webBrowser
-import webInstruction
 from titta import Titta, helpers_tobii as helpers
 import os
 
@@ -242,7 +241,7 @@ class run_video_experiment:
         self.tracker.calibrate(win)
         win.close()
 
-        webInstruction.launch_browser(self.website, self.type, self.id, self.parent, self.root, self.frame)
+        WebsiteExperiment.launch_browser(self.website, self.type, self.id, self.parent, self.root, self.frame)
 
     def start_exp_rec(self):
         self.tracker.start_recording(gaze_data=True)
@@ -259,7 +258,7 @@ class run_video_experiment:
                 player.quit()
                 top.destroy()
 
-                    # save file
+                # save file
                 self.tracker.stop_recording(gaze_data=True)
                     # Close window and save data
                 self.tracker.save_data(self.mon)  # Also save screen geometry from the monitor object
@@ -429,7 +428,7 @@ def runexpBrowser(search_key_var, type, participantId, parent, root, frame):
     win.close()
 
     tracker.start_recording(gaze_data=True, store_data=True)
-    webInstruction.launch_browser(search_key_var, type, participantId, parent, root, frame)
+    WebsiteExperiment.launch_browser(search_key_var, type, participantId, parent, root, frame)
 
     tracker.stop_recording(gaze_data=True)
     tracker.save_data(mon)  # Also save screen geometry from the monitor object

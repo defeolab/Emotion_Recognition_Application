@@ -1,35 +1,5 @@
-#! /usr/bin/python
-# -*- coding: utf-8 -*-
-
-#
-# tkinter example for VLC Python bindings
-# Copyright (C) 2009-2010 the VideoLAN team
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
-#
-"""
-A simple example for VLC python bindings using tkinter. Uses python 3.4
-
-Author: Patrick Fay
-Date: 23-09-2015
-"""
-
-# import external libraries
 import vlc
-import sys
-import webcam
+
 
 import tkinter as Tk
 from tkinter import ttk
@@ -38,19 +8,14 @@ from tkinter.filedialog import askopenfilename
 
 # import standard libraries
 import os
-import pathlib
 from threading import Timer, Thread, Event
 import time
-import platform
 from tkinter import filedialog
 
-
-import patientWindow as pw
 import GSR.GSR_RECORD_SIGNAL.recordgsr as gsr
 
 class ttkTimer(Thread):
-    """a class serving same function as wxTimer... but there may be better ways to do this
-    """
+    """a class serving same function as wxTimer... but there may be better ways to do this"""
 
     def __init__(self, callback, tick):
         Thread.__init__(self)
@@ -71,63 +36,81 @@ class ttkTimer(Thread):
         return self.iters
 
 class Player(Tk.Frame):
-    """The main window has to deal with events.
-    """
 
-    def __init__(self, parent, frame = None, title=None, type=None, path=None, sec=None):
+    def __init__(self, parent, frame=None, title=None, type=None, path=None, sec=None):
         Tk.Frame.__init__(self, parent)
-
+        self.videoPath = None
         self.parent = parent
-
         self.type = type
         self.path = path
+        self.forward_music_image = None
+        self.player = None
         self.rec = gsr.Record()
-
         self.frame = frame
-        #self.flag_frame = flag_frame
 
-        self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/videos/")
-        self.firstTime = True
-
-        if title == None:
-            title = "tk_vlc"
-        self.parent.title(title)
+        self.parent.title("tk_vlc")
+        self.parent.protocol("WM_DELETE_WINDOW", self.closeTop)
+        self.parent.bind('<space>', self.OnPause)
 
         # Menu Bar
         menubar = Tk.Menu(self.parent)
         self.parent.config(menu=menubar)
 
-        # The second panel holds controls
-        self.player = None
+        # Upload
+        # upload = 'resources/upload.png'
+        # self.upload_image = Tk.PhotoImage(file=upload)
+        ttk.Button(self.parent, text="Upload", command=self.load_video).pack()
+
+        # Panel 2: Video Frame
         self.videopanel = ttk.Frame(self.parent)
         self.canvas = Tk.Canvas(self.videopanel).pack(fill=Tk.BOTH, expand=1)
         self.videopanel.pack(fill=Tk.BOTH, expand=1)
 
+        # Panel 3: Play/pause, Volume
         ctrlpanel = ttk.Frame(self.parent)
-        pause = ttk.Button(ctrlpanel, text="Pause", command=self.OnPause)
-        play = ttk.Button(ctrlpanel, text="Play", command=self.OnPlay)
-        volume = ttk.Button(ctrlpanel, text="Volume", command=self.OnSetVolume)
-        pause.pack(side=Tk.LEFT)
-        play.pack(side=Tk.LEFT)
-        volume.pack(side=Tk.LEFT)
+
+        # Play
+        play = 'resources/play.png'
+        self.play_image = Tk.PhotoImage(file=play)
+        self.play_button = ttk.Button(ctrlpanel, image=self.play_image, command=self.OnPlay)
+        self.play_button.grid(row=0, column=0)
+
+        pause = 'resources/pause.png'
+        self.pause_image = Tk.PhotoImage(file=pause)
+        self.pause_button = ttk.Button(ctrlpanel, image=self.pause_image, command=self.OnPause)
+        self.pause_button.grid(row=0, column=1)
+
+        # Rewind
+        rewind = 'resources/rewind_music.png'
+        self.rewind_image = Tk.PhotoImage(file=rewind)
+        self.rewind_button = ttk.Button(ctrlpanel, image=self.rewind_image, command=self.OnPlay)
+        self.rewind_button.grid(row=0, column=2)
+
+        # Forward
+        forward = 'resources/forward_music.png'
+        self.forward_image = Tk.PhotoImage(file=forward)
+        self.forward_button = Tk.Button(ctrlpanel, image=self.forward_image, command=self.OnPlay)
+        self.forward_button.grid(row=0, column=3)
+
         self.volume_var = Tk.IntVar()
         self.volslider = Tk.Scale(ctrlpanel, variable=self.volume_var, command=self.volume_sel,
                                   from_=0, to=100, orient=Tk.HORIZONTAL, length=100)
         self.volslider.set(100)
-
-        self.volslider.pack(side=Tk.LEFT)
-
+        self.volslider.grid(row=0, column=5)
 
         ctrlpanel.pack(side=Tk.BOTTOM)
 
-        ctrlpanel2 = ttk.Frame(self.parent)
+        # Panel 4:
+        TimeSliderpanel = ttk.Frame(self.parent)
+
         self.scale_var = Tk.DoubleVar()
         self.timeslider_last_val = ""
-        self.timeslider = Tk.Scale(ctrlpanel2, variable=self.scale_var, command=self.scale_sel,
+        self.timeslider = Tk.Scale(TimeSliderpanel, variable=self.scale_var, command=self.scale_sel,
                                    from_=0, to=1000, orient=Tk.HORIZONTAL, length=500)
         self.timeslider.pack(side=Tk.BOTTOM, fill=Tk.X, expand=1)
         self.timeslider_last_update = time.time()
-        ctrlpanel2.pack(side=Tk.BOTTOM, fill=Tk.X)
+
+        TimeSliderpanel.pack(side=Tk.BOTTOM, fill=Tk.X)
 
         # VLC player controls
         self.Instance = vlc.Instance()
@@ -136,16 +119,36 @@ class Player(Tk.Frame):
         self.timer.start()
         self.parent.update()
 
-        ##########################################################################
         # if a file is already running, then stop it.
         self.OnStop()
 
-        self.Media = self.Instance.media_new(self.videoPath)
-        self.player.set_media(self.Media)
+        if not hasattr(self, "events"):
+            self.events = self.player.event_manager()
+            self.events.event_attach(vlc.EventType.MediaPlayerEndReached, self.EventManager)
 
-        # set the window id where to render VLC's video output
+    def EventManager(self, event):
+        if event.type == vlc.EventType.MediaPlayerEndReached:
+            self.closeTop()
 
-        self.player.set_hwnd(self.GetHandle())
+    def closeTop(self):
+        self.timer.stop()
+        self.parent.destroy()
+        os.startfile(
+            "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
+        self.OnStop()
+
+    # loads the video
+    def load_video(self):
+        self.videoPath = filedialog.askopenfilename(initialdir=os.getcwd() + "/videos/", parent=self.parent)
+
+        if self.videoPath:
+            self.Media = self.Instance.media_new(self.videoPath)
+            self.player.set_media(self.Media)
+            self.player.set_hwnd(self.GetHandle())
+
+            self.OnPlay()
+        else:
+            self.errorDialog("File Error.")
 
     def OnPlay(self):
 
@@ -170,25 +173,20 @@ class Player(Tk.Frame):
     def GetHandle(self):
         return self.videopanel.winfo_id()
 
-    # def OnPause(self, evt):
     def OnPause(self):
-
-        #Pause the player.
+        # Pause the player.
         self.player.pause()
         self.rec.on_stop()
 
     def OnStop(self):
 
-        #Stop the player
+        # Stop the player
         self.player.stop()
-
         # reset the time slider
         self.timeslider.set(0)
 
     def OnTimer(self):
-
-        """Update the time slider according to the current movie time.
-        """
+        """Update the time slider according to the current movie time."""
 
         if self.player == None:
             return
@@ -223,8 +221,7 @@ class Player(Tk.Frame):
         nval = self.scale_var.get()
         sval = str(nval)
         if self.timeslider_last_val != sval:
-
-        ######################################################################################################
+            ######################################################################################################
 
             # this is a hack. The timer updates the time slider.
             # This change causes this rtn (the 'slider has changed' rtn) to be invoked.
@@ -242,7 +239,7 @@ class Player(Tk.Frame):
             # selection = "Value, last = " + sval + " " + str(self.timeslider_last_val)
             # print("selection= ", selection)
 
-        ####################################################################################################
+            ####################################################################################################
 
             self.timeslider_last_update = time.time()
             mval = "%.0f" % (nval * 1000)
@@ -258,8 +255,7 @@ class Player(Tk.Frame):
         self.player.audio_set_volume(volume)
 
     def OnToggleVolume(self, evt):
-        """Mute/Unmute according to the audio button.
-        """
+        """Mute/Unmute according to the audio button."""
         is_mute = self.player.audio_get_mute()
 
         self.player.audio_set_mute(not is_mute)

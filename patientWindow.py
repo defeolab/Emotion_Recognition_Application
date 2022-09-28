@@ -5,10 +5,10 @@ from psychopy import monitors, __all__, visual
 from psychopy.visual import helpers
 from screeninfo import get_monitors
 
-import numpy as np
 from datetime import timedelta
 import GSR_rec
 import ScreenRecording
+import eyeTracker
 import eyeTrackerV
 import ffmpeg
 import ffmpeg_video_audio
@@ -23,7 +23,6 @@ import WebsiteExperiment
 from PIL import Image, ImageTk
 
 # from PyQt5.QtWebEngineWidgets import QWebEngineView
-
 from GSR.GSR_RECORD_SIGNAL import gsr_thread_record
 
 
@@ -185,6 +184,7 @@ class PatientWindow():
                                              self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")
+    #-------------------------------------Image Experiment-------------------------------------------
 
     def run_expimage(self):
         if self.settings == "lab":
@@ -233,10 +233,6 @@ class PatientWindow():
             self.top.after(1000, self.countdown)
 
     def start_image_exp(self):
-
-        fp1 = open('ffmpeg.txt', 'r')
-        self.size = json.load(fp1)
-        fp1.close()
 
         self.inst_win.destroy()
         self.top = Toplevel()
@@ -322,52 +318,49 @@ class PatientWindow():
             elif self.count_number == 3:
                 img_count(0)
             else:
-                print("No images!")
                 self.top.destroy()
 
         ttk.Button(frame_1, command=next_image, text="Skip").grid(row=0, column=10, pady=5)
 
         self.top.mainloop()
 
+    # ------------------------------------------- END -----------------------------------------------
+    # -------------------------------------Video Experiment-------------------------------------------
+
     def run_expvideo(self):
-        self.video_ep = 1
+        # self.video_ep = 1
         # little test here (should be reworked) (make the experiment INSIDE expgiulia.py)
         if self.settings == "lab":
-            eyeTrackerV.runexpVideo(self.participantId)
-            """
+            # eyeTrackerV.runexpVideo(self.participantId)
+
             if self.camera_on is False:
                 print("You need to turn the camera on")
             else:
-                eyeTracker.runexpVideo(self.participantId)"""
+                eyeTrackerV.runexpVideo(self.participantId)
 
         elif self.settings == "home":
-            # to be run after calibration
-            top = tk.Toplevel()
-            top.title("Experiment VLC media player")
-            top.state('zoomed')
-            player = None
-            self.frame = True
-            player = vp.Player(top, self.frame, title="tkinter vlc")
+            self.video_win = Toplevel()
+            self.video_win.title("Instruction")
 
-            def closeTop():
-                player.timer.stop()
-                if player.frame is not None:
-                    player.frame.stop()
-                top.destroy()
-                os.startfile(
-                    "https://docs.google.com/forms/d/e/1FAIpQLScyO5BiSStjkT3pBeV3PApzsOnxHwuhw0DiSszZZEKstdUUEg/viewform")
-                player.OnStop()
+            img_5 = ImageTk.PhotoImage(master=self.video_win, image=Image.open(os.getcwd() + '/Instructions.png'))
+            tk.Label(self.video_win, image=img_5).pack()
+            ttk.Button(self.video_win, text="Start Experiment!", command=self.start_video_exp).pack()
 
-            top.protocol("WM_DELETE_WINDOW", closeTop)
-
-            def pause(arg):
-                player.OnPause()
-
-            top.bind('<space>', pause)
+            self.video_win.mainloop()
 
         else:
             self.no_participant1.config(text="No mode selected!")
 
+    def start_video_exp(self):
+        self.video_win.destroy()
+        self.video_win = tk.Toplevel()
+        self.video_win.title("Experiment VLC media player")
+        # top.geometry('700x500')
+        self.frame = True
+        vp.Player(self.video_win, self.frame, title="tkinter vlc")
+
+
+    # ------------------------------------------- END -----------------------------------------------
     def switch_lab(self):
         if (self.settings == 'lab'):
             self.no_participant1.config(text="Already in the lab setting Mode!")
@@ -381,7 +374,6 @@ class PatientWindow():
         main.on_rec()
 
     def start_camera(self):
-
         if (self.settings == 'lab') & (self.experiment == True):
             self.camera_on = True
             if self.imag_exp == 1:
