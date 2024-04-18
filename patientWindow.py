@@ -144,43 +144,58 @@ class PatientWindow():
             fp.close()
 
             Label(self.root, text="Select Experiment", font='Times 16').grid(row=5, column=1, pady=20)
+            Button(self.root, text="web1", command=lambda: self.run_websiteExp1(1)).grid(row=7, column=1, padx=10, pady=20)
+            #Button(self.root, text="web1", command=self.run_websiteExp1(1)).grid(row=7, column=1, padx=10, pady=20)
+            Button(self.root, text="web2",  command=lambda: self.run_websiteExp1(2)).grid(row=8, column=1, padx=10, pady=20)
+            Button(self.root, text="web3",  command=lambda: self.run_websiteExp1(3)).grid(row=9, column=1, padx=10, pady=20)
+            Button(self.root, text="web4",  command=lambda: self.run_websiteExp1(4)).grid(row=10, column=1, padx=10, pady=20)
+            Button(self.root, text="web5",  command=lambda: self.run_websiteExp1(5)).grid(row=11, column=1, padx=10, pady=20)
+            Button(self.root, text="web6",  command=lambda: self.run_websiteExp1(6)).grid(row=12, column=1, padx=10, pady=20)
+            Button(self.root, text="web7",  command=lambda: self.run_websiteExp1(7)).grid(row=7, column=3, padx=10, pady=20)
+            Button(self.root, text="web8",  command=lambda: self.run_websiteExp1(8)).grid(row=8, column=3, padx=10, pady=20)
+            Button(self.root, text="web9",  command=lambda: self.run_websiteExp1(9)).grid(row=9, column=3, padx=10, pady=20)
+            Button(self.root, text="web10",  command=lambda: self.run_websiteExp1(10)).grid(row=10, column=3, padx=10, pady=20)
+            Button(self.root, text="web11",  command=lambda: self.run_websiteExp1(11)).grid(row=11, column=3, padx=10, pady=20)
+            Button(self.root, text="web12", command=lambda: self.run_websiteExp1(12)).grid(row=12, column=3, padx=10, pady=20)
+            Button(self.root, text="web13", command=lambda: self.run_websiteExp1(13)).grid(row=7, column=5, padx=10, pady=20)
+            Button(self.root, text="web14",  command=lambda: self.run_websiteExp1(14)).grid(row=8, column=5, padx=10, pady=20)
+            Button(self.root, text="web15",  command=lambda: self.run_websiteExp1(15)).grid(row=9, column=5, padx=10, pady=20)
+            Button(self.root, text="web16", command=lambda: self.run_websiteExp1(16)).grid(row=10, column=5, padx=10, pady=20)
+            Button(self.root, text="web17",  command=lambda: self.run_websiteExp1(17)).grid(row=11, column=5, padx=10, pady=20)
+            Button(self.root, text="web18", command=lambda: self.run_websiteExp1(18)).grid(row=12, column=5, padx=10, pady=20)
+            Button(self.root, text="web19", command=lambda: self.run_websiteExp1(19)).grid(row=7, column=6, padx=10, pady=20)
+            Button(self.root, text="web20",  command=lambda: self.run_websiteExp1(20)).grid(row=8, column=6, padx=10, pady=20)
 
-            Button(self.root, text="web1", command=self.run_websiteExp).grid(row=7, column=1, padx=10, pady=20)
-            Button(self.root, text="web2", command=self.run_websiteExp).grid(row=8, column=1, padx=10, pady=20)
-            Button(self.root, text="web3", command=self.run_websiteExp).grid(row=9, column=1, padx=10, pady=20)
-            Button(self.root, text="web4", command=self.run_websiteExp).grid(row=10, column=1, padx=10, pady=20)
-
-            Label(self.root, text=self.websites['website1'], font='Times 14').grid(row=7, column=2, pady=20)
-            Label(self.root, text=self.websites['website2'], font='Times 14').grid(row=8, column=2, pady=20)
-            Label(self.root, text=self.websites['website3'], font='Times 14').grid(row=9, column=2, pady=20)
-            Label(self.root, text=self.websites['website4'], font='Times 14').grid(row=10, column=2, pady=20)
-            Label(self.root, text="To change website configuration please edit 'websites.txt' file",
-                  font='Times 16').grid(row=12, column=2, pady=20)
+            #Label(self.root, text=self.websites['website1'], font='Times 14').grid(row=7, column=2, pady=20)
+            #Label(self.root, text=self.websites['website2'], font='Times 14').grid(row=8, column=2, pady=20)
+            #Label(self.root, text=self.websites['website3'], font='Times 14').grid(row=9, column=2, pady=20)
+            #Label(self.root, text=self.websites['website4'], font='Times 14').grid(row=10, column=2, pady=20)
+            #Label(self.root, text="To change website configuration please edit 'websites.txt' file",
+            #      font='Times 16').grid(row=14, column=2, pady=20)
 
             def on_closing():
+
                 self.root.destroy()
 
             close_but = Button(self.root, text="Close", command=on_closing)
-            close_but.grid(row=13, column=2, padx=10, pady=20)
+            close_but.grid(row=15, column=3, padx=10, pady=20)
 
             self.parent.columnconfigure(6)
             self.parent.bind("<Return>", lambda e: self.web1())
         else:
             self.no_participant1.config(text="No mode selected!")
 
-        self.finish = Label(self.root, text="", font='Times 14')
-        self.finish.grid(row=11, column=2, pady=20)
+            self.finish = Label(self.root, text="", font='Times 14')
+            self.finish.grid(row=11, column=2, pady=20)
 
-    def run_websiteExp(self):
-        self.experiment = True
-
+    def run_websiteExp1(self, type):
+        #self.experiment = True
         if self.settings == "lab":
-            labExp = ey.run_browser_experiment(os.getcwd() + self.websites['website5'], 1, self.participantId, self.parent,
+            labExp = ey.run_browser_experiment(os.getcwd() + self.websites['website21'], type, self.participantId, self.parent,
                                                self.root, True)
             labExp.runexpweb()
         elif self.settings == "home":
-
-            WebsiteExperiment.launch_browser(os.getcwd() + self.websites['website5'], 1, self.participantId,
+            WebsiteExperiment.launch_browser(os.getcwd() + self.websites['website21'], type, self.participantId,
                                              self.root, self.settings, False)
         else:
             self.no_participant1.config(text="No mode selected!")

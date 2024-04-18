@@ -226,7 +226,7 @@ class run_browser_experiment:
         bimonocular_calibration = False
 
         self.settings = Titta.get_defaults(self.et_name)
-        self.settings.FILENAME = 'data/Browser/' + str(self.id) + '/' + data.getDateStr() + '_web' + str(
+        self.settings.FILENAME = 'data/' + str(self.id) + '/' + data.getDateStr() + '_web' + str(
             self.type) + '.tsv'
         print(self.settings.FILENAME)
 
@@ -256,6 +256,9 @@ class run_browser_experiment:
         fp = open('websites.txt', 'r')
         self.websites = json.load(fp)
         fp.close()
+        WebsiteExperiment.launch_browser(self.website, self.type, self.id, self.parent, self.root, True,
+                                         cal_tracker=cal_tracker)
+        """
         if self.type == 1:
             WebsiteExperiment.launch_browser(self.website, 1, self.id, self.parent, self.root, True,
                                              cal_tracker=cal_tracker)
@@ -268,7 +271,7 @@ class run_browser_experiment:
         elif self.type == 4:
             WebsiteExperiment.launch_browser(self.website, 4, self.id, self.parent, self.root, True,
                                              cal_tracker=cal_tracker)
-
+        """
     def start_exp_rec(self, cal_tracker):
         self.tracker = cal_tracker
         self.tracker.start_recording(gaze_data=True, store_data=True)
@@ -279,7 +282,7 @@ class run_browser_experiment:
         self.tracker.save_data(self.mon)  # Also save screen geometry from the monitor object
 
         # %% Open pickle and write et-data and messages to tsv-files.
-        file_path = "data/Browser/" + str(self.id) + "/"
+        file_path = "data/" + str(self.id) + "/"
         for file in os.listdir(file_path):
             if file.endswith(".pkl"):
                 print(file)

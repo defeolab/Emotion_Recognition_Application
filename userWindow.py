@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk, _setit
-import pandas as pd
+#import pandas as pd
 
 import loginWindow as lw
 from random import randint

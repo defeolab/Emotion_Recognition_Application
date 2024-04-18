@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="56e0e2c4-fabb-45ab-85a2-e291d46c1766" name="Changes" comment="full version, with no errors">
-      <change afterPath="$PROJECT_DIR$/GSR_rec.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/pause.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/play.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/upload.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/volume.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/1.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/calibration_image2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/4743/2024_Apr_17_1432_web1.pkl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/4743/2024_Apr_17_1433_web1.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/4743/2024_Apr_17_1433_web1_msg.tsv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validation_image1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/validation_image2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/Capture.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/beer_positioning.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Image Experiment/neutral5#.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScreenRecording.py" beforeDir="false" afterPath="$PROJECT_DIR$/ScreenRecording.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WebsiteExperiment.py" beforeDir="false" afterPath="$PROJECT_DIR$/WebsiteExperiment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anagraphicData.txt" beforeDir="false" afterPath="$PROJECT_DIR$/anagraphicData.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calibration_image1.png" beforeDir="false" afterPath="$PROJECT_DIR$/calibration_image1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eyeTracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eyeTrackerV.py" beforeDir="false" afterPath="$PROJECT_DIR$/eyeTrackerV.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ffmpeg_video_audio.py" beforeDir="false" afterPath="$PROJECT_DIR$/ffmpeg_video_audio.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/patientWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/patientWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/videoPlayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/videoPlayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webBrowser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webInstruction.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/userWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/userWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/websites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/websites.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,13 +67,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/neuromdeskapp.py" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ricerca/PycharmProjects/Emotion_Recognition_Application/venv&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\defeo\PycharmProjects\Emotion_Recognition_Application\Image" />
@@ -265,11 +269,6 @@
           <url>file://$USER_HOME$/Desktop/orignial version/webInstruction.py</url>
           <line>41</line>
           <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/patientWindow.py</url>
-          <line>131</line>
-          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

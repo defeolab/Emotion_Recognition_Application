@@ -92,6 +92,24 @@ class Camera_recording:
             duration = dur['duration']
             framerate = ffmpegsettings['framerate']
 
+            filename = "data/Browser/" + str(self.participantID) + "/" + str(
+                self.participantID) + "_Camera_" + str(self.type) +"_output.mp4"
+            file_path = "data/Browser/" + str(self.participantID) + "/"
+            if len(os.listdir(file_path)) == 0:
+                print("Directory is empty")
+            else:
+                if os.path.exists(filename):
+                    print("file removed")
+                    os.remove(filename)
+                else:
+                    print("No file exist")
+
+        if self.frame == True :
+            os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -framerate {framerate} -rtbufsize 1000M -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+        else:
+            os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video_home}":audio="{audio}" -framerate {framerate} -rtbufsize 1000M -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+
+"""
             # TYpe of websites
             if self.type == 1:
                 filename = "data/Browser/" + str(self.participantID) + "/" + str(self.participantID) + "_Camera_web1_output.mp4"
@@ -143,11 +161,7 @@ class Camera_recording:
 
             else:
                 print("no experiment!")
-
-        if self.frame == True :
-            os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video}":audio="{audio}" -framerate {framerate} -rtbufsize 1000M -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
-        else:
-            os.system(f"""ffmpeg -f dshow -t {duration} -i video="{video_home}":audio="{audio}" -framerate {framerate} -rtbufsize 1000M -vcodec libx264 -r 10 -vb 512k -s 640x360 "{filename}" """)
+"""
 
 
 #ffmpeg -list_devices true -f dshow -i dummy
